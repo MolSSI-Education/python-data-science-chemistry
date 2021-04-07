@@ -3,4 +3,6 @@ matplotlib
 numpy
 ghp-import
 pandas
+statsmodels
+scikit-learn
 kaleido
