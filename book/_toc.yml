@@ -3,4 +3,28 @@
 #
 - file: intro
 - file: setup
+- file: 1-intro-objectives
+  sections:
+    - file: 1-pandas-dataframes
+    - file: 1-numpy-arrays
+    - file: 1-matplotlib
+    - file: 1-homework
+- file: 2-intro-objectives
+  sections:
+    - file: 2-ocr-tabula
+    - file: 2-pandas-datacleaning
+    - file: 2-seaborn
+    - file: 2-homework
+- file: 3-intro-objectives
+  sections:
+    - file: 3-linear-scikitlearn
+    - file: 3-regex
+    - file: 3-homework
+- file: 4-intro-objectives
+  sections:
+    - file: 4-nonlinear-scikitlearn
+    - file: 4-linear-statsmodels
+    - file: 4-interactive-visualizations
+        
+        
 
