@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Tabula &#8212; Scientific Visualization Using Python</title>
+    <title>Reading data from PDFs &#8212; Scientific Visualization Using Python</title>
     
   <link rel="stylesheet" href="_static/css/index.f658d18f9b420779cfdf24aa0a7e2d77.css">
 
@@ -146,7 +146,7 @@
   <ul class="current collapse-ul">
    <li class="toctree-l2 current active">
     <a class="current reference internal" href="#">
-     Tabula
+     Reading data from PDFs
     </a>
    </li>
    <li class="toctree-l2">
@@ -305,6 +305,26 @@
         <!-- Table of contents -->
         <div class="d-none d-md-block col-md-2 bd-toc show">
             
+        <div class="tocsection onthispage pt-5 pb-3">
+            <i class="fas fa-list"></i>
+            Contents
+        </div>
+        <nav id="bd-toc-nav">
+            <ul class="nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#reading-tables-with-tabula-py">
+   Reading Tables with
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     tabula-py
+    </span>
+   </code>
+  </a>
+ </li>
+</ul>
+
+        </nav>
+        
         </div>
     </div>
 </div>
@@ -313,8 +333,488 @@
         
               <div>
                 
-  <div class="section" id="tabula">
-<h1>Tabula<a class="headerlink" href="#tabula" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="reading-data-from-pdfs">
+<h1>Reading data from PDFs<a class="headerlink" href="#reading-data-from-pdfs" title="Permalink to this headline">¶</a></h1>
+<p>So far, we have been working with data that is fairly ‘clean’. This means that, for the most part, our data didn’t have too many missing values and had the right data type. This is more often the case when the data we are working with is prepared to be machine readable in the first place (more ‘modern’ data).</p>
+<p>Data you would like to work with, however, may not always be ‘clean’, particularly if you are working with older data. For example, you might want to work with or analyze data from published papers. In these cases, the data may be in tables in pdf.</p>
+<p>This section covers some python libraries that can be used to get data from pdfs. We will ‘clean’ the data using pandas in the next lesson.</p>
+<p>We’ll be grabbing data from the following paper, cleaning it, and fitting the data using python:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>Potts, R.O., Guy, R.H. A Predictive Algorithm for Skin Permeability: The Effects of Molecular Size and Hydrogen Bond Activity. Pharm Res 12, 1628–1633 (1995). https://doi.org/10.1023/A:1016236932339
+</pre></div>
+</div>
+<p>In this paper, the authors make a model for predicting skin permeability of molecules based on simple molecular descriptors. This paper was published in 1995, so this will definitely not be the best method. It is, however, a nice example of the kinds of things you can do with Python.</p>
+<p>Access and download the paper <a class="reference external" href="https://link.springer.com/article/10.1023/A:1016236932339">here</a>. Save the paper in a directory called <code class="docutils literal notranslate"><span class="pre">pdfs</span></code> to match what we have for this notebook.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ls</span> <span class="n">pdfs</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Potts-Guy1995_Article_APredictiveAlgorithmForSkinPer.pdf
+pottsguyocr.pdf
+</pre></div>
+</div>
+</div>
+</div>
+<p>We’re going to use a Python library called <code class="docutils literal notranslate"><span class="pre">tabula-py</span></code> to read the data in <code class="docutils literal notranslate"><span class="pre">Table</span> <span class="pre">1</span></code>. However, this pdf doesn’t have any text information in it yet. One way you can tell this is by clicking and dragging your cursor over the text in a pdf viewer. If the text is not highlighted, the pdf does not contain text information.</p>
+<p>You can get text information in a pdf by performing optical character recognition, or OCR. If you have Adobe Acrobat Pro, it has an OCR tool built in that you can use. Python also has some free libraries which can be used for OCR. We’ll be using one called <a class="reference external" href="https://ocrmypdf.readthedocs.io/en/latest/">OCRmyPDF</a>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span> ocrmypdf <span class="s2">&quot;pdfs/Potts-Guy1995_Article_APredictiveAlgorithmForSkinPer.pdf&quot;</span>  <span class="s2">&quot;pdfs/pottsguyocr.pdf&quot;</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Scanning contents: 100%|████████████████████████| 6/6 [00:00&lt;00:00, 53.46page/s]
+Start processing 6 pages concurrently
+OCR: 100%|██████████████████████████████████| 6.0/6.0 [00:13&lt;00:00,  2.22s/page]
+Postprocessing...
+PDF/A conversion: 100%|█████████████████████████| 6/6 [00:01&lt;00:00,  4.94page/s]
+JPEGs: 0image [00:00, ?image/s]
+JBIG2: 0item [00:00, ?item/s]
+Optimize ratio: 1.00 savings: -0.2%
+Image optimization did not improve the file - discarded
+Output file is a PDF/A-2B (as expected)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ls</span> <span class="n">pdfs</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Potts-Guy1995_Article_APredictiveAlgorithmForSkinPer.pdf
+pottsguyocr.pdf
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="reading-tables-with-tabula-py">
+<h2>Reading Tables with <code class="docutils literal notranslate"><span class="pre">tabula-py</span></code><a class="headerlink" href="#reading-tables-with-tabula-py" title="Permalink to this headline">¶</a></h2>
+<p>We now have two pdfs in the folder. The second one, <code class="docutils literal notranslate"><span class="pre">pottsguyocr.pdf</span></code> has text information in the pdf. We can use the library <code class="docutils literal notranslate"><span class="pre">tabula-py</span></code> to get information from table 1. The function we will be using is called <code class="docutils literal notranslate"><span class="pre">tabula.read_pdf</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">tabula</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pdf_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;pdfs&quot;</span><span class="p">,</span> <span class="s2">&quot;pottsguyocr.pdf&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>In order to read from pages other than page 1, we will need to pass another argument (<code class="docutils literal notranslate"><span class="pre">pages</span></code>) to the function to specifiy which page contains the table we want to parse</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">tables</span> <span class="o">=</span> <span class="n">tabula</span><span class="o">.</span><span class="n">read_pdf</span><span class="p">(</span><span class="n">pdf_path</span><span class="p">,</span> <span class="n">pages</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>This will return a list of pandas dataframes. Tabula will convert each table it finds on the page into a pandas dataframe. Let’s examine each of these.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">tables</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Unnamed: 0</th>
+      <th>Compound</th>
+      <th>log P</th>
+      <th>Unnamed: 1</th>
+      <th>II</th>
+      <th>Hy</th>
+      <th>H,</th>
+      <th>MV</th>
+      <th>R,</th>
+      <th>log Kou</th>
+      <th>log Kyex</th>
+      <th>Unnamed: 2</th>
+      <th>log Kpep</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>NaN</td>
+      <td>water</td>
+      <td>— 6.85</td>
+      <td>NaN</td>
+      <td>0.45</td>
+      <td>0.82</td>
+      <td>0.35</td>
+      <td>10.6</td>
+      <td>0.00</td>
+      <td>— 1.38</td>
+      <td>— 4,38</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>'</td>
+      <td>methanol</td>
+      <td>— 6.68</td>
+      <td>NaN</td>
+      <td>0.44</td>
+      <td>0.43</td>
+      <td>0.47</td>
+      <td>21.7</td>
+      <td>0.28</td>
+      <td>—0.73</td>
+      <td>— 2.42</td>
+      <td>NaN</td>
+      <td>— 2.80</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>NaN</td>
+      <td>methanoic acid</td>
+      <td>— 7.08</td>
+      <td>NaN</td>
+      <td>0.60</td>
+      <td>0.75</td>
+      <td>0.38</td>
+      <td>22.3</td>
+      <td>0.30</td>
+      <td>—0.54</td>
+      <td>— 3.93</td>
+      <td>NaN</td>
+      <td>— 3.63</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>NaN</td>
+      <td>ethanol</td>
+      <td>— 6.66</td>
+      <td>NaN</td>
+      <td>0.42</td>
+      <td>0.37</td>
+      <td>0.48</td>
+      <td>31.9</td>
+      <td>0.25</td>
+      <td>—0.32</td>
+      <td>—2.24</td>
+      <td>NaN</td>
+      <td>—2.10</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>NaN</td>
+      <td>ethanoic acid</td>
+      <td>—7.01</td>
+      <td>NaN</td>
+      <td>0.65</td>
+      <td>0.61</td>
+      <td>0.45</td>
+      <td>33.4</td>
+      <td>0.27</td>
+      <td>—0.31</td>
+      <td>— 3.28</td>
+      <td>NaN</td>
+      <td>—2.90</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">tables</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Unnamed: 0</th>
+      <th>Unnamed: 1</th>
+      <th>Unnamed: 2</th>
+      <th>Unnamed: 3</th>
+      <th>Unnamed: 4</th>
+      <th>Unnamed: 5</th>
+      <th>Unnamed: 6</th>
+      <th>coefficients show that</th>
+      <th>solutes with hydrogen-bond donating</th>
+      <th>Unnamed: 7</th>
+      <th>Unnamed: 8</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Octanol</td>
+      <td>3.80</td>
+      <td>1.19</td>
+      <td>— 5.06</td>
+      <td>0.84</td>
+      <td>88.0</td>
+      <td>37.0</td>
+      <td>ability partition least well</td>
+      <td>into alkanes.</td>
+      <td>This expected</td>
+      <td>result</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>NaN</td>
+      <td>(0.73)</td>
+      <td>(0.13)</td>
+      <td>(0.29)</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>is, of course, completely consistent with</td>
+      <td>NaN</td>
+      <td>the relative hydro-</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Heptane</td>
+      <td>nsd?</td>
+      <td>0.43</td>
+      <td>— 5.53</td>
+      <td>0.79</td>
+      <td>113.0</td>
+      <td>33.0</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>gen bond acceptor activity</td>
+      <td>of the solvent</td>
+      <td>phases</td>
+      <td>involved</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">tables</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;class &#39;pandas.core.frame.DataFrame&#39;&gt;
+RangeIndex: 37 entries, 0 to 36
+Data columns (total 13 columns):
+ #   Column      Non-Null Count  Dtype  
+---  ------      --------------  -----  
+ 0   Unnamed: 0  1 non-null      object 
+ 1   Compound    37 non-null     object 
+ 2   log P       37 non-null     object 
+ 3   Unnamed: 1  0 non-null      float64
+ 4   II          37 non-null     float64
+ 5   Hy          37 non-null     float64
+ 6   H,          37 non-null     float64
+ 7   MV          37 non-null     object 
+ 8   R,          37 non-null     float64
+ 9   log Kou     37 non-null     object 
+ 10  log Kyex    31 non-null     object 
+ 11  Unnamed: 2  0 non-null      float64
+ 12  log Kpep    25 non-null     object 
+dtypes: float64(6), object(7)
+memory usage: 3.9+ KB
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">tables</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Unnamed: 0</th>
+      <th>Unnamed: 1</th>
+      <th>Unnamed: 2</th>
+      <th>Unnamed: 3</th>
+      <th>Unnamed: 4</th>
+      <th>Unnamed: 5</th>
+      <th>Unnamed: 6</th>
+      <th>coefficients show that</th>
+      <th>solutes with hydrogen-bond donating</th>
+      <th>Unnamed: 7</th>
+      <th>Unnamed: 8</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Octanol</td>
+      <td>3.80</td>
+      <td>1.19</td>
+      <td>— 5.06</td>
+      <td>0.84</td>
+      <td>88.0</td>
+      <td>37.0</td>
+      <td>ability partition least well</td>
+      <td>into alkanes.</td>
+      <td>This expected</td>
+      <td>result</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>NaN</td>
+      <td>(0.73)</td>
+      <td>(0.13)</td>
+      <td>(0.29)</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>is, of course, completely consistent with</td>
+      <td>NaN</td>
+      <td>the relative hydro-</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Heptane</td>
+      <td>nsd?</td>
+      <td>0.43</td>
+      <td>— 5.53</td>
+      <td>0.79</td>
+      <td>113.0</td>
+      <td>33.0</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>gen bond acceptor activity</td>
+      <td>of the solvent</td>
+      <td>phases</td>
+      <td>involved</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<p>Neither of these tables are usable yet. We’ll save both as csvs and work on cleaning them in the next section.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">output_1</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">,</span> <span class="s2">&quot;potts_table1.csv&quot;</span><span class="p">)</span>
+<span class="n">output_2</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">,</span> <span class="s2">&quot;potts_table2.csv&quot;</span><span class="p">)</span>
+
+<span class="n">tables</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">output_1</span><span class="p">)</span>
+<span class="n">tables</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">output_2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
 </div>
 
     <script type="text/x-thebe-config">

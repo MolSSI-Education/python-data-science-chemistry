@@ -57,7 +57,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Plotting with seaborn" href="2-seaborn.html" />
-    <link rel="prev" title="Tabula" href="2-ocr-tabula.html" />
+    <link rel="prev" title="Reading data from PDFs" href="2-ocr-tabula.html" />
 
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="en" />
@@ -146,7 +146,7 @@
   <ul class="current collapse-ul">
    <li class="toctree-l2">
     <a class="reference internal" href="2-ocr-tabula.html">
-     Tabula
+     Reading data from PDFs
     </a>
    </li>
    <li class="toctree-l2 current active">
@@ -305,6 +305,31 @@
         <!-- Table of contents -->
         <div class="d-none d-md-block col-md-2 bd-toc show">
             
+        <div class="tocsection onthispage pt-5 pb-3">
+            <i class="fas fa-list"></i>
+            Contents
+        </div>
+        <nav id="bd-toc-nav">
+            <ul class="nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#dropping-unneccessary-data">
+   Dropping unneccessary data
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#changing-column-names">
+   Changing column names
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#fixing-data-types">
+   Fixing Data Types
+  </a>
+ </li>
+</ul>
+
+        </nav>
+        
         </div>
     </div>
 </div>
@@ -315,6 +340,913 @@
                 
   <div class="section" id="data-cleaning-with-pandas">
 <h1>Data Cleaning with Pandas<a class="headerlink" href="#data-cleaning-with-pandas" title="Permalink to this headline">¶</a></h1>
+<div class="overview">
+   <p class="overview-title">Overview</p>
+    <p>Questions</p>
+        <ul>
+            <li>Question 1
+        </ul>
+    <p>Objectives:</p>
+        <ul>
+            <li>Objective 1
+            <li>Objective 2
+        </ul>
+    <p>Keypoints:</p>
+        <ul>
+            <li>Keypoint 1</li>
+            <li>Keypoint 2</li>
+        </ul>
+    </div><div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fpath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">,</span> <span class="s2">&quot;potts_table1.csv&quot;</span><span class="p">)</span>
+<span class="n">fpath2</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">,</span> <span class="s2">&quot;potts_table2.csv&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">table1</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">fpath</span><span class="p">)</span>
+<span class="n">table2</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">fpath2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">table1</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Unnamed: 0</th>
+      <th>Unnamed: 0.1</th>
+      <th>Compound</th>
+      <th>log P</th>
+      <th>Unnamed: 1</th>
+      <th>II</th>
+      <th>Hy</th>
+      <th>H,</th>
+      <th>MV</th>
+      <th>R,</th>
+      <th>log Kou</th>
+      <th>log Kyex</th>
+      <th>Unnamed: 2</th>
+      <th>log Kpep</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0</td>
+      <td>NaN</td>
+      <td>water</td>
+      <td>— 6.85</td>
+      <td>NaN</td>
+      <td>0.45</td>
+      <td>0.82</td>
+      <td>0.35</td>
+      <td>10.6</td>
+      <td>0.00</td>
+      <td>— 1.38</td>
+      <td>— 4,38</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1</td>
+      <td>'</td>
+      <td>methanol</td>
+      <td>— 6.68</td>
+      <td>NaN</td>
+      <td>0.44</td>
+      <td>0.43</td>
+      <td>0.47</td>
+      <td>21.7</td>
+      <td>0.28</td>
+      <td>—0.73</td>
+      <td>— 2.42</td>
+      <td>NaN</td>
+      <td>— 2.80</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2</td>
+      <td>NaN</td>
+      <td>methanoic acid</td>
+      <td>— 7.08</td>
+      <td>NaN</td>
+      <td>0.60</td>
+      <td>0.75</td>
+      <td>0.38</td>
+      <td>22.3</td>
+      <td>0.30</td>
+      <td>—0.54</td>
+      <td>— 3.93</td>
+      <td>NaN</td>
+      <td>— 3.63</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>3</td>
+      <td>NaN</td>
+      <td>ethanol</td>
+      <td>— 6.66</td>
+      <td>NaN</td>
+      <td>0.42</td>
+      <td>0.37</td>
+      <td>0.48</td>
+      <td>31.9</td>
+      <td>0.25</td>
+      <td>—0.32</td>
+      <td>—2.24</td>
+      <td>NaN</td>
+      <td>—2.10</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>4</td>
+      <td>NaN</td>
+      <td>ethanoic acid</td>
+      <td>—7.01</td>
+      <td>NaN</td>
+      <td>0.65</td>
+      <td>0.61</td>
+      <td>0.45</td>
+      <td>33.4</td>
+      <td>0.27</td>
+      <td>—0.31</td>
+      <td>— 3.28</td>
+      <td>NaN</td>
+      <td>—2.90</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<div class="section" id="dropping-unneccessary-data">
+<h2>Dropping unneccessary data<a class="headerlink" href="#dropping-unneccessary-data" title="Permalink to this headline">¶</a></h2>
+<p>In some cases, we might have data in our dataframe that we don’t need. We will want to discard or “drop” this data from the dataframe. For the dataframe we just loaded, for example, we can see that the data in columns 0, 1, 4, 12 won’t be used. We could safely discard these from our dataframe.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">table1</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;class &#39;pandas.core.frame.DataFrame&#39;&gt;
+RangeIndex: 37 entries, 0 to 36
+Data columns (total 14 columns):
+ #   Column        Non-Null Count  Dtype  
+---  ------        --------------  -----  
+ 0   Unnamed: 0    37 non-null     int64  
+ 1   Unnamed: 0.1  1 non-null      object 
+ 2   Compound      37 non-null     object 
+ 3   log P         37 non-null     object 
+ 4   Unnamed: 1    0 non-null      float64
+ 5   II            37 non-null     float64
+ 6   Hy            37 non-null     float64
+ 7   H,            37 non-null     float64
+ 8   MV            37 non-null     object 
+ 9   R,            37 non-null     float64
+ 10  log Kou       37 non-null     object 
+ 11  log Kyex      31 non-null     object 
+ 12  Unnamed: 2    0 non-null      float64
+ 13  log Kpep      25 non-null     object 
+dtypes: float64(6), int64(1), object(7)
+memory usage: 4.2+ KB
+</pre></div>
+</div>
+</div>
+</div>
+<p>There are two methods you might use to drop data from a dataframe. These are <code class="docutils literal notranslate"><span class="pre">drop</span></code>, and <code class="docutils literal notranslate"><span class="pre">dropna</span></code>. Drop is used when you have specific rows or columns you want to remove from the dataframe, while <code class="docutils literal notranslate"><span class="pre">dropna</span></code> is used when you want to drop columns or rows which contain <code class="docutils literal notranslate"><span class="pre">NaN</span></code> or “not a number” values. This occurs when there are no values in a data cell.</p>
+<p>In the output of <code class="docutils literal notranslate"><span class="pre">info</span></code> above, we can see that there are two columns which contain 0 non-null values. This means that all of the values in these columns are <code class="docutils literal notranslate"><span class="pre">NaN</span></code>. We can safely discard these columns. We’ll use the <code class="docutils literal notranslate"><span class="pre">dropna</span></code> function to get rid of them.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">help</span><span class="p">(</span><span class="n">table1</span><span class="o">.</span><span class="n">dropna</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Help on method dropna in module pandas.core.frame:
+
+dropna(axis=0, how=&#39;any&#39;, thresh=None, subset=None, inplace=False) method of pandas.core.frame.DataFrame instance
+    Remove missing values.
+    
+    See the :ref:`User Guide &lt;missing_data&gt;` for more on which values are
+    considered missing, and how to work with missing data.
+    
+    Parameters
+    ----------
+    axis : {0 or &#39;index&#39;, 1 or &#39;columns&#39;}, default 0
+        Determine if rows or columns which contain missing values are
+        removed.
+    
+        * 0, or &#39;index&#39; : Drop rows which contain missing values.
+        * 1, or &#39;columns&#39; : Drop columns which contain missing value.
+    
+        .. versionchanged:: 1.0.0
+    
+           Pass tuple or list to drop on multiple axes.
+           Only a single axis is allowed.
+    
+    how : {&#39;any&#39;, &#39;all&#39;}, default &#39;any&#39;
+        Determine if row or column is removed from DataFrame, when we have
+        at least one NA or all NA.
+    
+        * &#39;any&#39; : If any NA values are present, drop that row or column.
+        * &#39;all&#39; : If all values are NA, drop that row or column.
+    
+    thresh : int, optional
+        Require that many non-NA values.
+    subset : array-like, optional
+        Labels along other axis to consider, e.g. if you are dropping rows
+        these would be a list of columns to include.
+    inplace : bool, default False
+        If True, do operation inplace and return None.
+    
+    Returns
+    -------
+    DataFrame
+        DataFrame with NA entries dropped from it.
+    
+    See Also
+    --------
+    DataFrame.isna: Indicate missing values.
+    DataFrame.notna : Indicate existing (non-missing) values.
+    DataFrame.fillna : Replace missing values.
+    Series.dropna : Drop missing values.
+    Index.dropna : Drop missing indices.
+    
+    Examples
+    --------
+    &gt;&gt;&gt; df = pd.DataFrame({&quot;name&quot;: [&#39;Alfred&#39;, &#39;Batman&#39;, &#39;Catwoman&#39;],
+    ...                    &quot;toy&quot;: [np.nan, &#39;Batmobile&#39;, &#39;Bullwhip&#39;],
+    ...                    &quot;born&quot;: [pd.NaT, pd.Timestamp(&quot;1940-04-25&quot;),
+    ...                             pd.NaT]})
+    &gt;&gt;&gt; df
+           name        toy       born
+    0    Alfred        NaN        NaT
+    1    Batman  Batmobile 1940-04-25
+    2  Catwoman   Bullwhip        NaT
+    
+    Drop the rows where at least one element is missing.
+    
+    &gt;&gt;&gt; df.dropna()
+         name        toy       born
+    1  Batman  Batmobile 1940-04-25
+    
+    Drop the columns where at least one element is missing.
+    
+    &gt;&gt;&gt; df.dropna(axis=&#39;columns&#39;)
+           name
+    0    Alfred
+    1    Batman
+    2  Catwoman
+    
+    Drop the rows where all elements are missing.
+    
+    &gt;&gt;&gt; df.dropna(how=&#39;all&#39;)
+           name        toy       born
+    0    Alfred        NaN        NaT
+    1    Batman  Batmobile 1940-04-25
+    2  Catwoman   Bullwhip        NaT
+    
+    Keep only the rows with at least 2 non-NA values.
+    
+    &gt;&gt;&gt; df.dropna(thresh=2)
+           name        toy       born
+    1    Batman  Batmobile 1940-04-25
+    2  Catwoman   Bullwhip        NaT
+    
+    Define in which columns to look for missing values.
+    
+    &gt;&gt;&gt; df.dropna(subset=[&#39;name&#39;, &#39;born&#39;])
+           name        toy       born
+    1    Batman  Batmobile 1940-04-25
+    
+    Keep the DataFrame with valid entries in the same variable.
+    
+    &gt;&gt;&gt; df.dropna(inplace=True)
+    &gt;&gt;&gt; df
+         name        toy       born
+    1  Batman  Batmobile 1940-04-25
+</pre></div>
+</div>
+</div>
+</div>
+<p>Before saving the dataframe, we’ll look at and and discuss output from this function.</p>
+<p>By default, the function <code class="docutils literal notranslate"><span class="pre">dropna</span></code> will work on <code class="docutils literal notranslate"><span class="pre">axis</span> <span class="pre">0</span></code> or the rows of the dataframe, and will drop any row which contains a <code class="docutils literal notranslate"><span class="pre">NaN</span></code>. You will see this results in a dataframe with no data.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">table1</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Unnamed: 0</th>
+      <th>Unnamed: 0.1</th>
+      <th>Compound</th>
+      <th>log P</th>
+      <th>Unnamed: 1</th>
+      <th>II</th>
+      <th>Hy</th>
+      <th>H,</th>
+      <th>MV</th>
+      <th>R,</th>
+      <th>log Kou</th>
+      <th>log Kyex</th>
+      <th>Unnamed: 2</th>
+      <th>log Kpep</th>
+    </tr>
+  </thead>
+  <tbody>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<p>Notice that <code class="docutils literal notranslate"><span class="pre">dropna</span></code> returns a dataframe and does not overwrite the original.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">table1</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;class &#39;pandas.core.frame.DataFrame&#39;&gt;
+RangeIndex: 37 entries, 0 to 36
+Data columns (total 14 columns):
+ #   Column        Non-Null Count  Dtype  
+---  ------        --------------  -----  
+ 0   Unnamed: 0    37 non-null     int64  
+ 1   Unnamed: 0.1  1 non-null      object 
+ 2   Compound      37 non-null     object 
+ 3   log P         37 non-null     object 
+ 4   Unnamed: 1    0 non-null      float64
+ 5   II            37 non-null     float64
+ 6   Hy            37 non-null     float64
+ 7   H,            37 non-null     float64
+ 8   MV            37 non-null     object 
+ 9   R,            37 non-null     float64
+ 10  log Kou       37 non-null     object 
+ 11  log Kyex      31 non-null     object 
+ 12  Unnamed: 2    0 non-null      float64
+ 13  log Kpep      25 non-null     object 
+dtypes: float64(6), int64(1), object(7)
+memory usage: 4.2+ KB
+</pre></div>
+</div>
+</div>
+</div>
+<p>We can switch to dropping columns which have <code class="docutils literal notranslate"><span class="pre">NaN</span></code> values by adding the argument <code class="docutils literal notranslate"><span class="pre">axis=1</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">table1</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;class &#39;pandas.core.frame.DataFrame&#39;&gt;
+RangeIndex: 37 entries, 0 to 36
+Data columns (total 9 columns):
+ #   Column      Non-Null Count  Dtype  
+---  ------      --------------  -----  
+ 0   Unnamed: 0  37 non-null     int64  
+ 1   Compound    37 non-null     object 
+ 2   log P       37 non-null     object 
+ 3   II          37 non-null     float64
+ 4   Hy          37 non-null     float64
+ 5   H,          37 non-null     float64
+ 6   MV          37 non-null     object 
+ 7   R,          37 non-null     float64
+ 8   log Kou     37 non-null     object 
+dtypes: float64(4), int64(1), object(4)
+memory usage: 2.7+ KB
+</pre></div>
+</div>
+</div>
+</div>
+<p>This is closer to what we want. However, you’ll notice that this has dropped some columns which have data. We can add <code class="docutils literal notranslate"><span class="pre">how=all</span></code> to drop only columns whose values are all <code class="docutils literal notranslate"><span class="pre">NaN</span></code>. Once we are sure we would like to keep this as our dataframe, we can add <code class="docutils literal notranslate"><span class="pre">inplace=True</span></code> to the function call to overwrite the dataframe.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">table1</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">table1</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;class &#39;pandas.core.frame.DataFrame&#39;&gt;
+RangeIndex: 37 entries, 0 to 36
+Data columns (total 12 columns):
+ #   Column        Non-Null Count  Dtype  
+---  ------        --------------  -----  
+ 0   Unnamed: 0    37 non-null     int64  
+ 1   Unnamed: 0.1  1 non-null      object 
+ 2   Compound      37 non-null     object 
+ 3   log P         37 non-null     object 
+ 4   II            37 non-null     float64
+ 5   Hy            37 non-null     float64
+ 6   H,            37 non-null     float64
+ 7   MV            37 non-null     object 
+ 8   R,            37 non-null     float64
+ 9   log Kou       37 non-null     object 
+ 10  log Kyex      31 non-null     object 
+ 11  log Kpep      25 non-null     object 
+dtypes: float64(4), int64(1), object(7)
+memory usage: 3.6+ KB
+</pre></div>
+</div>
+</div>
+</div>
+<p>We can drop the final two columns using the <code class="docutils literal notranslate"><span class="pre">drop</span></code> function. You can use this when you have specific rows or columns you would like to discard. Again, we use <code class="docutils literal notranslate"><span class="pre">axis=1</span></code> to drop columns, then we pass the column name.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">table1</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Unnamed: 0.1&quot;</span><span class="p">,</span> <span class="s2">&quot;Unnamed: 0&quot;</span><span class="p">],</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="changing-column-names">
+<h2>Changing column names<a class="headerlink" href="#changing-column-names" title="Permalink to this headline">¶</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">table1</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;class &#39;pandas.core.frame.DataFrame&#39;&gt;
+RangeIndex: 37 entries, 0 to 36
+Data columns (total 10 columns):
+ #   Column    Non-Null Count  Dtype  
+---  ------    --------------  -----  
+ 0   Compound  37 non-null     object 
+ 1   log P     37 non-null     object 
+ 2   II        37 non-null     float64
+ 3   Hy        37 non-null     float64
+ 4   H,        37 non-null     float64
+ 5   MV        37 non-null     object 
+ 6   R,        37 non-null     float64
+ 7   log Kou   37 non-null     object 
+ 8   log Kyex  31 non-null     object 
+ 9   log Kpep  25 non-null     object 
+dtypes: float64(4), object(6)
+memory usage: 3.0+ KB
+</pre></div>
+</div>
+</div>
+</div>
+<p>We might now want to clean up the column names and make sure they are descriptive. You can see the column names using <code class="docutils literal notranslate"><span class="pre">table1.columns</span></code>. You can either rename the columns by setting <code class="docutils literal notranslate"><span class="pre">table1.columns</span></code> to a list of the appropriate length, or you can use <code class="docutils literal notranslate"><span class="pre">table1.rename</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">table1</span><span class="o">.</span><span class="n">columns</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Index([&#39;Compound&#39;, &#39;log P&#39;, &#39;II&#39;, &#39;Hy&#39;, &#39;H,&#39;, &#39;MV&#39;, &#39;R,&#39;, &#39;log Kou&#39;,
+       &#39;log Kyex&#39;, &#39;log Kpep&#39;],
+      dtype=&#39;object&#39;)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">table1</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">{</span>
+    <span class="s2">&quot;II&quot;</span><span class="p">:</span> <span class="s2">&quot;pi&quot;</span><span class="p">,</span> 
+    <span class="s2">&quot;Hy&quot;</span><span class="p">:</span> <span class="s2">&quot;Hd&quot;</span><span class="p">,</span> 
+    <span class="s2">&quot;H,&quot;</span><span class="p">:</span> <span class="s2">&quot;Ha&quot;</span><span class="p">,</span> 
+    <span class="s2">&quot;R,&quot;</span><span class="p">:</span> <span class="s2">&quot;R_2&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;log Kou&quot;</span><span class="p">:</span> <span class="s2">&quot;log K_oct&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;log Kyex&quot;</span><span class="p">:</span> <span class="s2">&quot;log K_hex&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;log Kpep&quot;</span><span class="p">:</span> <span class="s2">&quot;log K_hep&quot;</span>
+                      
+                      <span class="p">})</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">table1</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Compound</th>
+      <th>log P</th>
+      <th>pi</th>
+      <th>Hd</th>
+      <th>Ha</th>
+      <th>MV</th>
+      <th>R_2</th>
+      <th>log K_oct</th>
+      <th>log K_hex</th>
+      <th>log K_hep</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>water</td>
+      <td>— 6.85</td>
+      <td>0.45</td>
+      <td>0.82</td>
+      <td>0.35</td>
+      <td>10.6</td>
+      <td>0.00</td>
+      <td>— 1.38</td>
+      <td>— 4,38</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>methanol</td>
+      <td>— 6.68</td>
+      <td>0.44</td>
+      <td>0.43</td>
+      <td>0.47</td>
+      <td>21.7</td>
+      <td>0.28</td>
+      <td>—0.73</td>
+      <td>— 2.42</td>
+      <td>— 2.80</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>methanoic acid</td>
+      <td>— 7.08</td>
+      <td>0.60</td>
+      <td>0.75</td>
+      <td>0.38</td>
+      <td>22.3</td>
+      <td>0.30</td>
+      <td>—0.54</td>
+      <td>— 3.93</td>
+      <td>— 3.63</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>ethanol</td>
+      <td>— 6.66</td>
+      <td>0.42</td>
+      <td>0.37</td>
+      <td>0.48</td>
+      <td>31.9</td>
+      <td>0.25</td>
+      <td>—0.32</td>
+      <td>—2.24</td>
+      <td>—2.10</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>ethanoic acid</td>
+      <td>—7.01</td>
+      <td>0.65</td>
+      <td>0.61</td>
+      <td>0.45</td>
+      <td>33.4</td>
+      <td>0.27</td>
+      <td>—0.31</td>
+      <td>— 3.28</td>
+      <td>—2.90</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+</div>
+<div class="section" id="fixing-data-types">
+<h2>Fixing Data Types<a class="headerlink" href="#fixing-data-types" title="Permalink to this headline">¶</a></h2>
+<p>When examining <code class="docutils literal notranslate"><span class="pre">.info</span></code> , you’ll notice that a lot of our columns which should be numbers are still ‘objects’ or strings. We would like <code class="docutils literal notranslate"><span class="pre">log</span> <span class="pre">P</span></code>, for example to be numeric. There are a few ways to do this, but we’ll use the pandas function <code class="docutils literal notranslate"><span class="pre">to_numeric</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">table1</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;class &#39;pandas.core.frame.DataFrame&#39;&gt;
+RangeIndex: 37 entries, 0 to 36
+Data columns (total 10 columns):
+ #   Column     Non-Null Count  Dtype  
+---  ------     --------------  -----  
+ 0   Compound   37 non-null     object 
+ 1   log P      37 non-null     object 
+ 2   pi         37 non-null     float64
+ 3   Hd         37 non-null     float64
+ 4   Ha         37 non-null     float64
+ 5   MV         37 non-null     object 
+ 6   R_2        37 non-null     float64
+ 7   log K_oct  37 non-null     object 
+ 8   log K_hex  31 non-null     object 
+ 9   log K_hep  25 non-null     object 
+dtypes: float64(4), object(6)
+memory usage: 3.0+ KB
+</pre></div>
+</div>
+</div>
+</div>
+<p>Using the <code class="docutils literal notranslate"><span class="pre">to_numeric</span></code> function without any additional inputs will fail on this data set, however, because of the characters used for minus signs.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pd</span><span class="o">.</span><span class="n">to_numeric</span><span class="p">(</span><span class="n">table1</span><span class="p">[</span><span class="s2">&quot;log P&quot;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">ValueError</span><span class="g g-Whitespace">                                </span>Traceback (most recent call last)
+<span class="nn">pandas/_libs/lib.pyx</span> in <span class="ni">pandas._libs.lib.maybe_convert_numeric</span><span class="nt">()</span>
+
+<span class="ne">ValueError</span>: Unable to parse string &quot;— 6.85&quot;
+
+<span class="n">During</span> <span class="n">handling</span> <span class="n">of</span> <span class="n">the</span> <span class="n">above</span> <span class="n">exception</span><span class="p">,</span> <span class="n">another</span> <span class="n">exception</span> <span class="n">occurred</span><span class="p">:</span>
+
+<span class="ne">ValueError</span><span class="g g-Whitespace">                                </span>Traceback (most recent call last)
+<span class="o">&lt;</span><span class="n">ipython</span><span class="o">-</span><span class="nb">input</span><span class="o">-</span><span class="mi">18</span><span class="o">-</span><span class="n">b00e34002272</span><span class="o">&gt;</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_numeric</span><span class="p">(</span><span class="n">table1</span><span class="p">[</span><span class="s2">&quot;log P&quot;</span><span class="p">])</span>
+
+<span class="nn">~/miniconda3/envs/pfizer_pt2/lib/python3.7/site-packages/pandas/core/tools/numeric.py</span> in <span class="ni">to_numeric</span><span class="nt">(arg, errors, downcast)</span>
+<span class="g g-Whitespace">    </span><span class="mi">151</span>         <span class="k">try</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">152</span>             <span class="n">values</span> <span class="o">=</span> <span class="n">lib</span><span class="o">.</span><span class="n">maybe_convert_numeric</span><span class="p">(</span>
+<span class="ne">--&gt; </span><span class="mi">153</span>                 <span class="n">values</span><span class="p">,</span> <span class="nb">set</span><span class="p">(),</span> <span class="n">coerce_numeric</span><span class="o">=</span><span class="n">coerce_numeric</span>
+<span class="g g-Whitespace">    </span><span class="mi">154</span>             <span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">155</span>         <span class="k">except</span> <span class="p">(</span><span class="ne">ValueError</span><span class="p">,</span> <span class="ne">TypeError</span><span class="p">):</span>
+
+<span class="nn">pandas/_libs/lib.pyx</span> in <span class="ni">pandas._libs.lib.maybe_convert_numeric</span><span class="nt">()</span>
+
+<span class="ne">ValueError</span>: Unable to parse string &quot;— 6.85&quot; at position 0
+</pre></div>
+</div>
+</div>
+</div>
+<p>You could choose to handle the errors differently. For example, you could set errors to be ignored (which would result in the column being unchanged, there would just be no error raised) or to “coerce” the values. Choosing “coerce” means that anything that can’t be cast as numeric will be put as <code class="docutils literal notranslate"><span class="pre">NaN</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pd</span><span class="o">.</span><span class="n">to_numeric</span><span class="p">(</span><span class="n">table1</span><span class="p">[</span><span class="s2">&quot;log P&quot;</span><span class="p">],</span> <span class="n">errors</span><span class="o">=</span><span class="s2">&quot;coerce&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0    NaN
+1    NaN
+2    NaN
+3    NaN
+4    NaN
+5    NaN
+6    NaN
+7    NaN
+8    NaN
+9    NaN
+10   NaN
+11   NaN
+12   NaN
+13   NaN
+14   NaN
+15   NaN
+16   NaN
+17   NaN
+18   NaN
+19   NaN
+20   NaN
+21   NaN
+22   NaN
+23   NaN
+24   NaN
+25   NaN
+26   NaN
+27   NaN
+28   NaN
+29   NaN
+30   NaN
+31   NaN
+32   NaN
+33   NaN
+34   NaN
+35   NaN
+36   NaN
+Name: log P, dtype: float64
+</pre></div>
+</div>
+</div>
+</div>
+<p>We have to do a little bit more processing to the values for this to work. If you examine the columns, you may notice that the negative sign is a little off. It is <code class="docutils literal notranslate"><span class="pre">—</span></code> when it should be <code class="docutils literal notranslate"><span class="pre">-</span></code>. This is very slight, and might be hard to see, but it is important to change for this data set.</p>
+<p>We will want to replace all <code class="docutils literal notranslate"><span class="pre">—</span></code> with <code class="docutils literal notranslate"><span class="pre">-</span></code>. We could accomplish this using the string method <code class="docutils literal notranslate"><span class="pre">replace</span></code>. Strings in Python have a number of methods. The <code class="docutils literal notranslate"><span class="pre">replace</span></code> method allows us to replace a substring within a string.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">test_string</span> <span class="o">=</span> <span class="s2">&quot;Hello world.&quot;</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">test_string</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="s2">&quot;!&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&#39;Hello world!&#39;
+</pre></div>
+</div>
+</div>
+</div>
+<p>The split command is another string method you are probably familiar with:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">test_string</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&#39;Hello&#39;, &#39;world.&#39;]
+</pre></div>
+</div>
+</div>
+</div>
+<p>If we want to use these on a column in a pandas dataframe, you might think to use <code class="docutils literal notranslate"><span class="pre">apply</span></code>, which we learned about in the last session. However, you will notice that the <code class="docutils literal notranslate"><span class="pre">replace</span></code> method acts on a the string and doesn’t fit into <code class="docutils literal notranslate"><span class="pre">apply</span></code>.</p>
+<p>Luckily, when pandas columns are strings, we can use string methods on the whole column by adding <code class="docutils literal notranslate"><span class="pre">.str.function</span></code>. For example, to replace the minus signs</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">table1</span><span class="p">[</span><span class="s2">&quot;log P&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;—&quot;</span><span class="p">,</span> <span class="s2">&quot;-&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0      - 6.85
+1      - 6.68
+2      - 7.08
+3      - 6.66
+4       -7.01
+5      - 6.41
+6       -7.01
+7      - 5.90
+8     -4,.5]1
+9      - 5.35
+10     - 6.16
+11     - 6.36
+12     - 5.64
+13     - 3.56
+14     - 3.75
+15     - 5.78
+16     - 5.78
+17      -6.01
+18     - 5.04
+19     - 5.00
+20     - 5.38
+21    ~- 5,36
+22     - 5.29
+23     - 5.00
+24      -5.81
+25      -5.81
+26     - 4,56
+27     - 3.48
+28      -5.45
+29      -5.44
+30      -5.11
+31     - 5.05
+32     - 5.28
+33     - 4.84
+34      -5.21
+35      -4.77
+36     - 4.66
+Name: log P, dtype: object
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">table1</span><span class="p">[</span><span class="s2">&quot;log P&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">table1</span><span class="p">[</span><span class="s2">&quot;log P&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;—&quot;</span><span class="p">,</span> <span class="s2">&quot;-&quot;</span><span class="p">)</span>
+
+<span class="c1"># We still need to get rid of spaces</span>
+<span class="n">table1</span><span class="p">[</span><span class="s2">&quot;log P&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">table1</span><span class="p">[</span><span class="s2">&quot;log P&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">table1</span><span class="p">[</span><span class="s2">&quot;log P&quot;</span><span class="p">]</span> <span class="o">=</span>  <span class="n">pd</span><span class="o">.</span><span class="n">to_numeric</span><span class="p">(</span><span class="n">table1</span><span class="p">[</span><span class="s2">&quot;log P&quot;</span><span class="p">],</span> <span class="n">errors</span><span class="o">=</span><span class="s2">&quot;coerce&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">table1</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;class &#39;pandas.core.frame.DataFrame&#39;&gt;
+RangeIndex: 37 entries, 0 to 36
+Data columns (total 10 columns):
+ #   Column     Non-Null Count  Dtype  
+---  ------     --------------  -----  
+ 0   Compound   37 non-null     object 
+ 1   log P      34 non-null     float64
+ 2   pi         37 non-null     float64
+ 3   Hd         37 non-null     float64
+ 4   Ha         37 non-null     float64
+ 5   MV         37 non-null     object 
+ 6   R_2        37 non-null     float64
+ 7   log K_oct  37 non-null     object 
+ 8   log K_hex  31 non-null     object 
+ 9   log K_hep  25 non-null     object 
+dtypes: float64(5), object(5)
+memory usage: 3.0+ KB
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">table1</span><span class="p">[</span><span class="s2">&quot;MV&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_numeric</span><span class="p">(</span><span class="n">table1</span><span class="p">[</span><span class="s2">&quot;MV&quot;</span><span class="p">],</span> <span class="n">errors</span><span class="o">=</span><span class="s2">&quot;coerce&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">table1</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s2">&quot;data/potts_table1_clean.csv&quot;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
 </div>
 
     <script type="text/x-thebe-config">
@@ -342,7 +1274,7 @@
         
         <div class='prev-next-bottom'>
             
-    <a class='left-prev' id="prev-link" href="2-ocr-tabula.html" title="previous page">Tabula</a>
+    <a class='left-prev' id="prev-link" href="2-ocr-tabula.html" title="previous page">Reading data from PDFs</a>
     <a class='right-next' id="next-link" href="2-seaborn.html" title="next page">Plotting with seaborn</a>
 
         </div>
