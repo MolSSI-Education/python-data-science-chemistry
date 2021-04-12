@@ -110,9 +110,19 @@
      Working with Pandas DataFrames
     </a>
    </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="1-pandas-dataframes.html#built-in-plotting">
+     Built-in plotting
+    </a>
+   </li>
    <li class="toctree-l2 current active">
     <a class="current reference internal" href="#">
      Working with NumPy Arrays
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="#reshaping-arrays">
+     Reshaping Arrays
     </a>
    </li>
    <li class="toctree-l2">
@@ -295,6 +305,26 @@
         <!-- Table of contents -->
         <div class="d-none d-md-block col-md-2 bd-toc show">
             
+        <div class="tocsection onthispage pt-5 pb-3">
+            <i class="fas fa-list"></i>
+            Contents
+        </div>
+        <nav id="bd-toc-nav">
+            <ul class="nav section-nav flex-column">
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#">
+   Working with NumPy Arrays
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#reshaping-arrays">
+   Reshaping Arrays
+  </a>
+ </li>
+</ul>
+
+        </nav>
+        
         </div>
     </div>
 </div>
@@ -305,6 +335,96 @@
                 
   <div class="section" id="working-with-numpy-arrays">
 <h1>Working with NumPy Arrays<a class="headerlink" href="#working-with-numpy-arrays" title="Permalink to this headline">¶</a></h1>
+<p>Pandas dataframes are built on top of a data structure known as the NumPy Array. If you completed the first MolSSI Python scripting workshop, you are already familiar with some properties of NumPy arrays.</p>
+<p>In general, you should use pandas dataframe when working with data which is:</p>
+<ul class="simple">
+<li><p>Two dimensional (rows and columns).</p></li>
+<li><p>Labeled.</p></li>
+<li><p>Mixed type.</p></li>
+<li><p>Something for which you would like to be able to easily get statistics.</p></li>
+</ul>
+<p>You should work with NumPy arrays when:</p>
+<ul class="simple">
+<li><p>You have higher dimensional data (collection of two dimensional arrays).</p></li>
+<li><p>Your data is all numerical.</p></li>
+<li><p>You are using a library which requires NumPy arrays (scikitlearn).</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">file_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">,</span> <span class="s2">&quot;PubChemElements_all.csv&quot;</span><span class="p">)</span>
+
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
+<span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df_array</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">shape</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df_array</span><span class="o">.</span><span class="n">shape</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="reshaping-arrays">
+<h1>Reshaping Arrays<a class="headerlink" href="#reshaping-arrays" title="Permalink to this headline">¶</a></h1>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">numbers</span> <span class="o">=</span> <span class="n">df</span><span class="p">[[</span><span class="s2">&quot;AtomicNumber&quot;</span><span class="p">,</span> <span class="s2">&quot;Electronegativity&quot;</span><span class="p">,</span> <span class="s2">&quot;AtomicRadius&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># reshape so each &quot;category&quot; is its own two dimensional array</span>
+<span class="n">numbers</span> <span class="o">=</span> <span class="n">numbers</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># atomic numbers</span>
+<span class="n">numbers</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># By default pandas Series are one-dimensional. We will have to reshape the arrays sometimes.</span>
+<span class="n">names</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;Name&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+<span class="n">names</span> <span class="o">=</span> <span class="n">names</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
 </div>
 
     <script type="text/x-thebe-config">
