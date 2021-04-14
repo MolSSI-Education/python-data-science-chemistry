@@ -304,6 +304,33 @@
         <!-- Table of contents -->
         <div class="d-none d-md-block col-md-2 bd-toc show">
             
+        <div class="tocsection onthispage pt-5 pb-3">
+            <i class="fas fa-list"></i>
+            Contents
+        </div>
+        <nav id="bd-toc-nav">
+            <ul class="nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#linear-regression-using-scikitlearn">
+   Linear Regression using SciKitLearn
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#scikitlearn-models">
+     SciKitLearn Models
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#multiple-linear-regression">
+   Multiple Linear Regression
+  </a>
+ </li>
+</ul>
+
+        </nav>
+        
         </div>
     </div>
 </div>
@@ -314,6 +341,838 @@
                 
   <div class="section" id="linear-fitting-with-scikit-learn">
 <h1>Linear Fitting with SciKit Learn<a class="headerlink" href="#linear-fitting-with-scikit-learn" title="Permalink to this headline">¶</a></h1>
+<div class="overview">
+   <p class="overview-title">Overview</p>
+    <p>Questions</p>
+        <ul>
+            <li>Question 1
+        </ul>
+    <p>Objectives:</p>
+        <ul>
+            <li>Objective 1
+            <li>Objective 2
+        </ul>
+    <p>Keypoints:</p>
+        <ul>
+            <li>Keypoint 1</li>
+            <li>Keypoint 2</li>
+        </ul>
+    </div>
+<p>In this lesson, we are going to use the <a class="reference external" href="https://scikit-learn.org/">scikitlearn</a> library to do a linear fit. When it comes to fitting equations in Python, you will encounter a lot of options. In this workshop, we will work with the library scikitlearn, and later the library statsmodels.</p>
+<p>Another library you might encounter when doing fitting is <a class="reference external" href="https://www.scipy.org/">scipy</a>. While functionalities available from theses libraries can be similar in some cases, each has different strengths. Statsmodels provides rigourous statics while scipy has a lot of functionalities around science and engineering applications. SciKitLearn, which we use in this section, is geared toward machine learning.</p>
+<p>For this lesson, we will just be doing linear fits. However, scikitlearrn has many different models built in, some of which we will see in the next session. SciKitLearn might not be the easiest library to use for analysis depending on your use case. However, we start with it here so we can better understand how to use the library for more complicated examples and models. <a class="reference external" href="https://scikit-learn.org/stable/developers/develop.html">API of scikitlearn</a></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ls</span> <span class="n">data</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>PubChemElements_all.csv  potts_table1_clean.csv
+potts_table1.csv         potts_table2.csv
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">,</span> <span class="s2">&quot;potts_table1_clean.csv&quot;</span><span class="p">)</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Compound</th>
+      <th>log P</th>
+      <th>pi</th>
+      <th>Hd</th>
+      <th>Ha</th>
+      <th>MV</th>
+      <th>R_2</th>
+      <th>log K_oct</th>
+      <th>log K_hex</th>
+      <th>log K_hep</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>water</td>
+      <td>-6.85</td>
+      <td>0.45</td>
+      <td>0.82</td>
+      <td>0.35</td>
+      <td>10.6</td>
+      <td>0.00</td>
+      <td>-1.38</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>methanol</td>
+      <td>-6.68</td>
+      <td>0.44</td>
+      <td>0.43</td>
+      <td>0.47</td>
+      <td>21.7</td>
+      <td>0.28</td>
+      <td>-0.73</td>
+      <td>-2.42</td>
+      <td>-2.80</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>methanoicacid</td>
+      <td>-7.08</td>
+      <td>0.60</td>
+      <td>0.75</td>
+      <td>0.38</td>
+      <td>22.3</td>
+      <td>0.30</td>
+      <td>-0.54</td>
+      <td>-3.93</td>
+      <td>-3.63</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>ethanol</td>
+      <td>-6.66</td>
+      <td>0.42</td>
+      <td>0.37</td>
+      <td>0.48</td>
+      <td>31.9</td>
+      <td>0.25</td>
+      <td>-0.32</td>
+      <td>-2.24</td>
+      <td>-2.10</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>ethanoicacid</td>
+      <td>-7.01</td>
+      <td>0.65</td>
+      <td>0.61</td>
+      <td>0.45</td>
+      <td>33.4</td>
+      <td>0.27</td>
+      <td>-0.31</td>
+      <td>-3.28</td>
+      <td>-2.90</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;class &#39;pandas.core.frame.DataFrame&#39;&gt;
+RangeIndex: 37 entries, 0 to 36
+Data columns (total 10 columns):
+ #   Column     Non-Null Count  Dtype  
+---  ------     --------------  -----  
+ 0   Compound   37 non-null     object 
+ 1   log P      34 non-null     float64
+ 2   pi         37 non-null     float64
+ 3   Hd         37 non-null     float64
+ 4   Ha         37 non-null     float64
+ 5   MV         36 non-null     float64
+ 6   R_2        37 non-null     float64
+ 7   log K_oct  36 non-null     float64
+ 8   log K_hex  30 non-null     float64
+ 9   log K_hep  24 non-null     float64
+dtypes: float64(9), object(1)
+memory usage: 3.0+ KB
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="linear-regression-using-scikitlearn">
+<h2>Linear Regression using SciKitLearn<a class="headerlink" href="#linear-regression-using-scikitlearn" title="Permalink to this headline">¶</a></h2>
+<p><a class="reference external" href="https://scikit-learn.org/stable/modules/classes.html?highlight=linear_model#module-sklearn.linear_model">linear models</a>. The purpose of this workshop is not to cover what linear models exist or in what context to use them. Rather, we are covering how to use these models in Python.</p>
+<div class="section" id="scikitlearn-models">
+<h3>SciKitLearn Models<a class="headerlink" href="#scikitlearn-models" title="Permalink to this headline">¶</a></h3>
+<p>Typically when doing fitting with scikitlearn, the first thing you will do is to import the type of model you want to use. In our case, we are importing a <code class="docutils literal notranslate"><span class="pre">LinearRegression</span></code> model. This type of model performs ordinary least squares fitting.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="kn">import</span> <span class="n">LinearRegression</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">help</span><span class="p">(</span><span class="n">LinearRegression</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Help on class LinearRegression in module sklearn.linear_model._base:
+
+class LinearRegression(sklearn.base.MultiOutputMixin, sklearn.base.RegressorMixin, LinearModel)
+ |  LinearRegression(*, fit_intercept=True, normalize=False, copy_X=True, n_jobs=None)
+ |  
+ |  Ordinary least squares Linear Regression.
+ |  
+ |  LinearRegression fits a linear model with coefficients w = (w1, ..., wp)
+ |  to minimize the residual sum of squares between the observed targets in
+ |  the dataset, and the targets predicted by the linear approximation.
+ |  
+ |  Parameters
+ |  ----------
+ |  fit_intercept : bool, default=True
+ |      Whether to calculate the intercept for this model. If set
+ |      to False, no intercept will be used in calculations
+ |      (i.e. data is expected to be centered).
+ |  
+ |  normalize : bool, default=False
+ |      This parameter is ignored when ``fit_intercept`` is set to False.
+ |      If True, the regressors X will be normalized before regression by
+ |      subtracting the mean and dividing by the l2-norm.
+ |      If you wish to standardize, please use
+ |      :class:`sklearn.preprocessing.StandardScaler` before calling ``fit`` on
+ |      an estimator with ``normalize=False``.
+ |  
+ |  copy_X : bool, default=True
+ |      If True, X will be copied; else, it may be overwritten.
+ |  
+ |  n_jobs : int, default=None
+ |      The number of jobs to use for the computation. This will only provide
+ |      speedup for n_targets &gt; 1 and sufficient large problems.
+ |      ``None`` means 1 unless in a :obj:`joblib.parallel_backend` context.
+ |      ``-1`` means using all processors. See :term:`Glossary &lt;n_jobs&gt;`
+ |      for more details.
+ |  
+ |  Attributes
+ |  ----------
+ |  coef_ : array of shape (n_features, ) or (n_targets, n_features)
+ |      Estimated coefficients for the linear regression problem.
+ |      If multiple targets are passed during the fit (y 2D), this
+ |      is a 2D array of shape (n_targets, n_features), while if only
+ |      one target is passed, this is a 1D array of length n_features.
+ |  
+ |  rank_ : int
+ |      Rank of matrix `X`. Only available when `X` is dense.
+ |  
+ |  singular_ : array of shape (min(X, y),)
+ |      Singular values of `X`. Only available when `X` is dense.
+ |  
+ |  intercept_ : float or array of shape (n_targets,)
+ |      Independent term in the linear model. Set to 0.0 if
+ |      `fit_intercept = False`.
+ |  
+ |  See Also
+ |  --------
+ |  sklearn.linear_model.Ridge : Ridge regression addresses some of the
+ |      problems of Ordinary Least Squares by imposing a penalty on the
+ |      size of the coefficients with l2 regularization.
+ |  sklearn.linear_model.Lasso : The Lasso is a linear model that estimates
+ |      sparse coefficients with l1 regularization.
+ |  sklearn.linear_model.ElasticNet : Elastic-Net is a linear regression
+ |      model trained with both l1 and l2 -norm regularization of the
+ |      coefficients.
+ |  
+ |  Notes
+ |  -----
+ |  From the implementation point of view, this is just plain Ordinary
+ |  Least Squares (scipy.linalg.lstsq) wrapped as a predictor object.
+ |  
+ |  Examples
+ |  --------
+ |  &gt;&gt;&gt; import numpy as np
+ |  &gt;&gt;&gt; from sklearn.linear_model import LinearRegression
+ |  &gt;&gt;&gt; X = np.array([[1, 1], [1, 2], [2, 2], [2, 3]])
+ |  &gt;&gt;&gt; # y = 1 * x_0 + 2 * x_1 + 3
+ |  &gt;&gt;&gt; y = np.dot(X, np.array([1, 2])) + 3
+ |  &gt;&gt;&gt; reg = LinearRegression().fit(X, y)
+ |  &gt;&gt;&gt; reg.score(X, y)
+ |  1.0
+ |  &gt;&gt;&gt; reg.coef_
+ |  array([1., 2.])
+ |  &gt;&gt;&gt; reg.intercept_
+ |  3.0000...
+ |  &gt;&gt;&gt; reg.predict(np.array([[3, 5]]))
+ |  array([16.])
+ |  
+ |  Method resolution order:
+ |      LinearRegression
+ |      sklearn.base.MultiOutputMixin
+ |      sklearn.base.RegressorMixin
+ |      LinearModel
+ |      sklearn.base.BaseEstimator
+ |      builtins.object
+ |  
+ |  Methods defined here:
+ |  
+ |  __init__(self, *, fit_intercept=True, normalize=False, copy_X=True, n_jobs=None)
+ |      Initialize self.  See help(type(self)) for accurate signature.
+ |  
+ |  fit(self, X, y, sample_weight=None)
+ |      Fit linear model.
+ |      
+ |      Parameters
+ |      ----------
+ |      X : {array-like, sparse matrix} of shape (n_samples, n_features)
+ |          Training data
+ |      
+ |      y : array-like of shape (n_samples,) or (n_samples, n_targets)
+ |          Target values. Will be cast to X&#39;s dtype if necessary
+ |      
+ |      sample_weight : array-like of shape (n_samples,), default=None
+ |          Individual weights for each sample
+ |      
+ |          .. versionadded:: 0.17
+ |             parameter *sample_weight* support to LinearRegression.
+ |      
+ |      Returns
+ |      -------
+ |      self : returns an instance of self.
+ |  
+ |  ----------------------------------------------------------------------
+ |  Data and other attributes defined here:
+ |  
+ |  __abstractmethods__ = frozenset()
+ |  
+ |  ----------------------------------------------------------------------
+ |  Data descriptors inherited from sklearn.base.MultiOutputMixin:
+ |  
+ |  __dict__
+ |      dictionary for instance variables (if defined)
+ |  
+ |  __weakref__
+ |      list of weak references to the object (if defined)
+ |  
+ |  ----------------------------------------------------------------------
+ |  Methods inherited from sklearn.base.RegressorMixin:
+ |  
+ |  score(self, X, y, sample_weight=None)
+ |      Return the coefficient of determination R^2 of the prediction.
+ |      
+ |      The coefficient R^2 is defined as (1 - u/v), where u is the residual
+ |      sum of squares ((y_true - y_pred) ** 2).sum() and v is the total
+ |      sum of squares ((y_true - y_true.mean()) ** 2).sum().
+ |      The best possible score is 1.0 and it can be negative (because the
+ |      model can be arbitrarily worse). A constant model that always
+ |      predicts the expected value of y, disregarding the input features,
+ |      would get a R^2 score of 0.0.
+ |      
+ |      Parameters
+ |      ----------
+ |      X : array-like of shape (n_samples, n_features)
+ |          Test samples. For some estimators this may be a
+ |          precomputed kernel matrix or a list of generic objects instead,
+ |          shape = (n_samples, n_samples_fitted),
+ |          where n_samples_fitted is the number of
+ |          samples used in the fitting for the estimator.
+ |      
+ |      y : array-like of shape (n_samples,) or (n_samples, n_outputs)
+ |          True values for X.
+ |      
+ |      sample_weight : array-like of shape (n_samples,), default=None
+ |          Sample weights.
+ |      
+ |      Returns
+ |      -------
+ |      score : float
+ |          R^2 of self.predict(X) wrt. y.
+ |      
+ |      Notes
+ |      -----
+ |      The R2 score used when calling ``score`` on a regressor uses
+ |      ``multioutput=&#39;uniform_average&#39;`` from version 0.23 to keep consistent
+ |      with default value of :func:`~sklearn.metrics.r2_score`.
+ |      This influences the ``score`` method of all the multioutput
+ |      regressors (except for
+ |      :class:`~sklearn.multioutput.MultiOutputRegressor`).
+ |  
+ |  ----------------------------------------------------------------------
+ |  Methods inherited from LinearModel:
+ |  
+ |  predict(self, X)
+ |      Predict using the linear model.
+ |      
+ |      Parameters
+ |      ----------
+ |      X : array_like or sparse matrix, shape (n_samples, n_features)
+ |          Samples.
+ |      
+ |      Returns
+ |      -------
+ |      C : array, shape (n_samples,)
+ |          Returns predicted values.
+ |  
+ |  ----------------------------------------------------------------------
+ |  Methods inherited from sklearn.base.BaseEstimator:
+ |  
+ |  __getstate__(self)
+ |  
+ |  __repr__(self, N_CHAR_MAX=700)
+ |      Return repr(self).
+ |  
+ |  __setstate__(self, state)
+ |  
+ |  get_params(self, deep=True)
+ |      Get parameters for this estimator.
+ |      
+ |      Parameters
+ |      ----------
+ |      deep : bool, default=True
+ |          If True, will return the parameters for this estimator and
+ |          contained subobjects that are estimators.
+ |      
+ |      Returns
+ |      -------
+ |      params : mapping of string to any
+ |          Parameter names mapped to their values.
+ |  
+ |  set_params(self, **params)
+ |      Set the parameters of this estimator.
+ |      
+ |      The method works on simple estimators as well as on nested objects
+ |      (such as pipelines). The latter have parameters of the form
+ |      ``&lt;component&gt;__&lt;parameter&gt;`` so that it&#39;s possible to update each
+ |      component of a nested object.
+ |      
+ |      Parameters
+ |      ----------
+ |      **params : dict
+ |          Estimator parameters.
+ |      
+ |      Returns
+ |      -------
+ |      self : object
+ |          Estimator instance.
+</pre></div>
+</div>
+</div>
+</div>
+<p>Before we do the fit, we first create the model. When we create this model, we specify settings for it such as if we want the linear model to have an intercept. It will have one by default, but if you wanted to do an ordinary least squares fit without an intercept, you would specify it when you create the model.</p>
+<p>After we create the model, we give it data and call the <code class="docutils literal notranslate"><span class="pre">fit</span></code> function. Then, the model will contain information about coefficients and an intercept.</p>
+<p>We will fit an equation for <code class="docutils literal notranslate"><span class="pre">log</span> <span class="pre">P</span></code> based on some other variable in the data frame. we have to get our data as numpy arrays. When we do this fit, it is also necessary to drop any values which are <code class="docutils literal notranslate"><span class="pre">NaN</span></code>. We can use the <code class="docutils literal notranslate"><span class="pre">dropna</span></code> function for this with an additional argument of <code class="docutils literal notranslate"><span class="pre">subset</span></code> which says to only consider our two columns of interest.</p>
+<p>Next,</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fit_data</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;log P&quot;</span><span class="p">,</span> <span class="s2">&quot;MV&quot;</span><span class="p">],</span> <span class="n">how</span><span class="o">=</span><span class="s2">&quot;any&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fit_data</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;class &#39;pandas.core.frame.DataFrame&#39;&gt;
+Int64Index: 33 entries, 0 to 36
+Data columns (total 10 columns):
+ #   Column     Non-Null Count  Dtype  
+---  ------     --------------  -----  
+ 0   Compound   33 non-null     object 
+ 1   log P      33 non-null     float64
+ 2   pi         33 non-null     float64
+ 3   Hd         33 non-null     float64
+ 4   Ha         33 non-null     float64
+ 5   MV         33 non-null     float64
+ 6   R_2        33 non-null     float64
+ 7   log K_oct  32 non-null     float64
+ 8   log K_hex  27 non-null     float64
+ 9   log K_hep  22 non-null     float64
+dtypes: float64(9), object(1)
+memory usage: 2.8+ KB
+</pre></div>
+</div>
+</div>
+</div>
+<p>You’ll notice that after using the <code class="docutils literal notranslate"><span class="pre">dropna</span></code> command above, we no longer have any null values in <code class="docutils literal notranslate"><span class="pre">logP</span></code> or in <code class="docutils literal notranslate"><span class="pre">MV</span></code>. We now need to get our X and Y values as numpy arrays. For this, we can use the function <code class="docutils literal notranslate"><span class="pre">to_numpy()</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">X</span> <span class="o">=</span> <span class="n">fit_data</span><span class="p">[</span><span class="s2">&quot;MV&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+<span class="n">Y</span> <span class="o">=</span> <span class="n">fit_data</span><span class="p">[</span><span class="s2">&quot;log P&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Next, we will create the linear model using <code class="docutils literal notranslate"><span class="pre">LinearRegression()</span></code>.</p>
+<p>To perform the fit, we do use the <code class="docutils literal notranslate"><span class="pre">fit</span></code> function on the linear model we created. As we have it now, it will not quite work. The error message is shown below for discussion.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">linear_model</span> <span class="o">=</span> <span class="n">LinearRegression</span><span class="p">()</span>
+<span class="n">linear_model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">ValueError</span><span class="g g-Whitespace">                                </span>Traceback (most recent call last)
+<span class="o">&lt;</span><span class="n">ipython</span><span class="o">-</span><span class="nb">input</span><span class="o">-</span><span class="mi">11</span><span class="o">-</span><span class="n">fb33fa0525dc</span><span class="o">&gt;</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
+<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="n">linear_model</span> <span class="o">=</span> <span class="n">LinearRegression</span><span class="p">()</span>
+<span class="ne">----&gt; </span><span class="mi">2</span> <span class="n">linear_model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">)</span>
+
+<span class="nn">~/miniconda3/envs/pfizer_pt2/lib/python3.7/site-packages/sklearn/linear_model/_base.py</span> in <span class="ni">fit</span><span class="nt">(self, X, y, sample_weight)</span>
+<span class="g g-Whitespace">    </span><span class="mi">504</span>         <span class="n">n_jobs_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_jobs</span>
+<span class="g g-Whitespace">    </span><span class="mi">505</span>         <span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_validate_data</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">accept_sparse</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;csr&#39;</span><span class="p">,</span> <span class="s1">&#39;csc&#39;</span><span class="p">,</span> <span class="s1">&#39;coo&#39;</span><span class="p">],</span>
+<span class="ne">--&gt; </span><span class="mi">506</span>                                    <span class="n">y_numeric</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">multi_output</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">507</span> 
+<span class="g g-Whitespace">    </span><span class="mi">508</span>         <span class="k">if</span> <span class="n">sample_weight</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+
+<span class="nn">~/miniconda3/envs/pfizer_pt2/lib/python3.7/site-packages/sklearn/base.py</span> in <span class="ni">_validate_data</span><span class="nt">(self, X, y, reset, validate_separately, **check_params)</span>
+<span class="g g-Whitespace">    </span><span class="mi">430</span>                 <span class="n">y</span> <span class="o">=</span> <span class="n">check_array</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="o">**</span><span class="n">check_y_params</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">431</span>             <span class="k">else</span><span class="p">:</span>
+<span class="ne">--&gt; </span><span class="mi">432</span>                 <span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">check_X_y</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="o">**</span><span class="n">check_params</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">433</span>             <span class="n">out</span> <span class="o">=</span> <span class="n">X</span><span class="p">,</span> <span class="n">y</span>
+<span class="g g-Whitespace">    </span><span class="mi">434</span> 
+
+<span class="nn">~/miniconda3/envs/pfizer_pt2/lib/python3.7/site-packages/sklearn/utils/validation.py</span> in <span class="ni">inner_f</span><span class="nt">(*args, **kwargs)</span>
+<span class="g g-Whitespace">     </span><span class="mi">70</span>                           <span class="ne">FutureWarning</span><span class="p">)</span>
+<span class="nn">     71         kwargs.update({k: arg for k, arg</span> in <span class="ni">zip</span><span class="nt">(sig.parameters, args)})</span>
+<span class="ne">---&gt; </span><span class="mi">72</span>         <span class="k">return</span> <span class="n">f</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">73</span>     <span class="k">return</span> <span class="n">inner_f</span>
+<span class="g g-Whitespace">     </span><span class="mi">74</span> 
+
+<span class="nn">~/miniconda3/envs/pfizer_pt2/lib/python3.7/site-packages/sklearn/utils/validation.py</span> in <span class="ni">check_X_y</span><span class="nt">(X, y, accept_sparse, accept_large_sparse, dtype, order, copy, force_all_finite, ensure_2d, allow_nd, multi_output, ensure_min_samples, ensure_min_features, y_numeric, estimator)</span>
+<span class="g g-Whitespace">    </span><span class="mi">800</span>                     <span class="n">ensure_min_samples</span><span class="o">=</span><span class="n">ensure_min_samples</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">801</span>                     <span class="n">ensure_min_features</span><span class="o">=</span><span class="n">ensure_min_features</span><span class="p">,</span>
+<span class="ne">--&gt; </span><span class="mi">802</span>                     <span class="n">estimator</span><span class="o">=</span><span class="n">estimator</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">803</span>     <span class="k">if</span> <span class="n">multi_output</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">804</span>         <span class="n">y</span> <span class="o">=</span> <span class="n">check_array</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">accept_sparse</span><span class="o">=</span><span class="s1">&#39;csr&#39;</span><span class="p">,</span> <span class="n">force_all_finite</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+
+<span class="nn">~/miniconda3/envs/pfizer_pt2/lib/python3.7/site-packages/sklearn/utils/validation.py</span> in <span class="ni">inner_f</span><span class="nt">(*args, **kwargs)</span>
+<span class="g g-Whitespace">     </span><span class="mi">70</span>                           <span class="ne">FutureWarning</span><span class="p">)</span>
+<span class="nn">     71         kwargs.update({k: arg for k, arg</span> in <span class="ni">zip</span><span class="nt">(sig.parameters, args)})</span>
+<span class="ne">---&gt; </span><span class="mi">72</span>         <span class="k">return</span> <span class="n">f</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">73</span>     <span class="k">return</span> <span class="n">inner_f</span>
+<span class="g g-Whitespace">     </span><span class="mi">74</span> 
+
+<span class="nn">~/miniconda3/envs/pfizer_pt2/lib/python3.7/site-packages/sklearn/utils/validation.py</span> in <span class="ni">check_array</span><span class="nt">(array, accept_sparse, accept_large_sparse, dtype, order, copy, force_all_finite, ensure_2d, allow_nd, ensure_min_samples, ensure_min_features, estimator)</span>
+<span class="g g-Whitespace">    </span><span class="mi">621</span>                     <span class="s2">&quot;Reshape your data either using array.reshape(-1, 1) if &quot;</span>
+<span class="g g-Whitespace">    </span><span class="mi">622</span>                     <span class="s2">&quot;your data has a single feature or array.reshape(1, -1) &quot;</span>
+<span class="ne">--&gt; </span><span class="mi">623</span>                     <span class="s2">&quot;if it contains a single sample.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">array</span><span class="p">))</span>
+<span class="g g-Whitespace">    </span><span class="mi">624</span> 
+<span class="g g-Whitespace">    </span><span class="mi">625</span>         <span class="c1"># in the future np.flexible dtypes will be handled like object dtypes</span>
+
+<span class="ne">ValueError</span>: Expected 2D array, got 1D array instead:
+<span class="n">array</span><span class="o">=</span><span class="p">[</span> <span class="mf">10.6</span>  <span class="mf">21.7</span>  <span class="mf">22.3</span>  <span class="mf">31.9</span>  <span class="mf">33.4</span>  <span class="mf">42.2</span>  <span class="mf">43.6</span>  <span class="mf">49.4</span>  <span class="mf">52.</span>   <span class="mf">52.4</span>  <span class="mf">53.9</span>  <span class="mf">60.</span>
+<span class="g g-Whitespace">  </span><span class="mi">60</span><span class="o">.</span><span class="mi">2</span>  <span class="mf">62.6</span>  <span class="mf">64.</span>   <span class="mf">64.1</span>  <span class="mf">66.</span>   <span class="mf">66.</span>   <span class="mf">67.6</span>  <span class="mf">67.6</span>  <span class="mf">70.</span>   <span class="mf">71.</span>   <span class="mf">71.</span>   <span class="mf">72.3</span>
+<span class="g g-Whitespace">  </span><span class="mi">72</span><span class="o">.</span><span class="mi">9</span>  <span class="mf">74.3</span>  <span class="mf">79.5</span>  <span class="mf">83.1</span>  <span class="mf">84.6</span>  <span class="mf">93.3</span>  <span class="mf">94.8</span> <span class="mf">104.</span>  <span class="mf">114.</span> <span class="p">]</span><span class="o">.</span>
+<span class="n">Reshape</span> <span class="n">your</span> <span class="n">data</span> <span class="n">either</span> <span class="n">using</span> <span class="n">array</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="k">if</span> <span class="n">your</span> <span class="n">data</span> <span class="n">has</span> <span class="n">a</span> <span class="n">single</span> <span class="n">feature</span> <span class="ow">or</span> <span class="n">array</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="k">if</span> <span class="n">it</span> <span class="n">contains</span> <span class="n">a</span> <span class="n">single</span> <span class="n">sample</span><span class="o">.</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>It is at this point that the array’s <strong>shape</strong> becomes important. Typically if you print the shape of a pandas Series or a one dimensional slice of a NumPy array, you will see something like <code class="docutils literal notranslate"><span class="pre">(n,</span> <span class="pre">)</span></code>. For example,</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">X</span><span class="o">.</span><span class="n">shape</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(33,)
+</pre></div>
+</div>
+</div>
+</div>
+<p>This array is one dimensional, mean that its shape is specified with only one number. You can sort of think of this as a vector. Even though the shape would not seem different with a shape of <code class="docutils literal notranslate"><span class="pre">(33,</span> <span class="pre">1)</span></code>, it is necessary for fitting with scikitlearn.</p>
+<p>You will see that scikitlearn even tells us this in the error function.</p>
+<p><code class="docutils literal notranslate"><span class="pre">Reshape</span> <span class="pre">your</span> <span class="pre">data</span> <span class="pre">either</span> <span class="pre">using</span> <span class="pre">array.reshape(-1,</span> <span class="pre">1)</span> <span class="pre">if</span> <span class="pre">your</span> <span class="pre">data</span> <span class="pre">has</span> <span class="pre">a</span> <span class="pre">single</span> <span class="pre">feature</span> <span class="pre">or</span> <span class="pre">array.reshape(1,</span> <span class="pre">-1)</span> <span class="pre">if</span> <span class="pre">it</span> <span class="pre">contains</span> <span class="pre">a</span> <span class="pre">single</span> <span class="pre">sample.</span></code></p>
+<p>In NumPy, when we use a <code class="docutils literal notranslate"><span class="pre">-1</span></code> in a dimension it basically translates into whatever number is required in order for the array to have the other specified dimensions. Otherwise, we would have to specify the number of rows for each reshape command. We don’t really know or care about the number of rows, what’s important for us in that the data be in a single column.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">X</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">X</span><span class="o">.</span><span class="n">shape</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(33, 1)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">Y</span> <span class="o">=</span> <span class="n">Y</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">linear_model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>LinearRegression()
+</pre></div>
+</div>
+</div>
+</div>
+<p>The reg variable now contains our linear fit. We can check our fit coefficient and intercept.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;The intercept is </span><span class="si">{</span><span class="n">linear_model</span><span class="o">.</span><span class="n">coef_</span><span class="si">}</span><span class="s2"> and the intercept is </span><span class="si">{</span><span class="n">linear_model</span><span class="o">.</span><span class="n">intercept_</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The intercept is [[0.02705618]] and the intercept is [-7.24687081].
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fit_data_pi</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;log P&quot;</span><span class="p">,</span> <span class="s2">&quot;pi&quot;</span><span class="p">],</span> <span class="n">how</span><span class="o">=</span><span class="s2">&quot;any&quot;</span><span class="p">)</span>
+
+<span class="n">linear_pi</span> <span class="o">=</span> <span class="n">LinearRegression</span><span class="p">()</span>
+
+<span class="n">X_pi</span> <span class="o">=</span> <span class="n">fit_data_pi</span><span class="p">[</span><span class="s2">&quot;pi&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">Y_pi</span> <span class="o">=</span> <span class="n">fit_data_pi</span><span class="p">[</span><span class="s2">&quot;log P&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+<span class="n">linear_pi</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_pi</span><span class="p">,</span> <span class="n">Y_pi</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;The intercept is </span><span class="si">{</span><span class="n">linear_pi</span><span class="o">.</span><span class="n">coef_</span><span class="si">}</span><span class="s2"> and the intercept is </span><span class="si">{</span><span class="n">linear_pi</span><span class="o">.</span><span class="n">intercept_</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The intercept is [[0.06416467]] and the intercept is [-5.59119251].
+</pre></div>
+</div>
+</div>
+</div>
+<p>We might next be interested in how good these fits are, or fit metrics. We might evaluate that using an <code class="docutils literal notranslate"><span class="pre">R2</span></code> value. In scikitlearn for the linear model, this is accessible through <code class="docutils literal notranslate"><span class="pre">model.score</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">r2</span> <span class="o">=</span> <span class="n">linear_model</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;The r2 score for log P vs MV is </span><span class="si">{</span><span class="n">r2</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The r2 score for log P vs MV is 0.4462290155325287
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">r2_pi</span> <span class="o">=</span> <span class="n">linear_pi</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">X_pi</span><span class="p">,</span> <span class="n">Y_pi</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;The r2 score for log P vs pi is </span><span class="si">{</span><span class="n">r2_pi</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The r2 score for log P vs pi is 0.000529506196607854
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="multiple-linear-regression">
+<h2>Multiple Linear Regression<a class="headerlink" href="#multiple-linear-regression" title="Permalink to this headline">¶</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fit_data</span> <span class="o">=</span> <span class="n">df</span><span class="p">[[</span><span class="s2">&quot;log P&quot;</span><span class="p">,</span> <span class="s2">&quot;MV&quot;</span><span class="p">,</span> <span class="s2">&quot;pi&quot;</span><span class="p">,</span> <span class="s2">&quot;Ha&quot;</span><span class="p">,</span> <span class="s2">&quot;Hd&quot;</span><span class="p">,</span> <span class="s2">&quot;R_2&quot;</span><span class="p">]]</span>
+<span class="n">fit_data</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>log P</th>
+      <th>MV</th>
+      <th>pi</th>
+      <th>Ha</th>
+      <th>Hd</th>
+      <th>R_2</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>-6.85</td>
+      <td>10.6</td>
+      <td>0.45</td>
+      <td>0.35</td>
+      <td>0.82</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>-6.68</td>
+      <td>21.7</td>
+      <td>0.44</td>
+      <td>0.47</td>
+      <td>0.43</td>
+      <td>0.28</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>-7.08</td>
+      <td>22.3</td>
+      <td>0.60</td>
+      <td>0.38</td>
+      <td>0.75</td>
+      <td>0.30</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>-6.66</td>
+      <td>31.9</td>
+      <td>0.42</td>
+      <td>0.48</td>
+      <td>0.37</td>
+      <td>0.25</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>-7.01</td>
+      <td>33.4</td>
+      <td>0.65</td>
+      <td>0.45</td>
+      <td>0.61</td>
+      <td>0.27</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fit_data</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/Users/jessica/miniconda3/envs/pfizer_pt2/lib/python3.7/site-packages/ipykernel_launcher.py:1: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  &quot;&quot;&quot;Entry point for launching an IPython kernel.
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">X</span> <span class="o">=</span> <span class="n">fit_data</span><span class="p">[[</span><span class="s2">&quot;MV&quot;</span><span class="p">,</span> <span class="s2">&quot;pi&quot;</span><span class="p">,</span> <span class="s2">&quot;Ha&quot;</span><span class="p">,</span> <span class="s2">&quot;Hd&quot;</span><span class="p">,</span> <span class="s2">&quot;R_2&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+<span class="n">Y</span> <span class="o">=</span> <span class="n">fit_data</span><span class="p">[</span><span class="s2">&quot;log P&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">multiple_reg</span> <span class="o">=</span> <span class="n">LinearRegression</span><span class="p">()</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">multiple_reg</span><span class="o">.</span><span class="n">coef_</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">multiple_reg</span><span class="o">.</span><span class="n">intercept_</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[ 0.02598616 -0.93187432 -4.37563319 -1.30374738  0.51352483]
+-4.486102127117395
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">multiple_reg</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0.9653374499670214
+</pre></div>
+</div>
+</div>
+</div>
+</div>
 </div>
 
     <script type="text/x-thebe-config">
