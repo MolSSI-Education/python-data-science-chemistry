@@ -304,6 +304,36 @@
         <!-- Table of contents -->
         <div class="d-none d-md-block col-md-2 bd-toc show">
             
+        <div class="tocsection onthispage pt-5 pb-3">
+            <i class="fas fa-list"></i>
+            Contents
+        </div>
+        <nav id="bd-toc-nav">
+            <ul class="nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#basic-matching">
+   Basic Matching
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#using-metacharacters">
+   Using metacharacters
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#greedy-and-non-greedy-matching">
+   “Greedy” and “non-greedy” matching
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#re-finditer">
+   re.finditer
+  </a>
+ </li>
+</ul>
+
+        </nav>
+        
         </div>
     </div>
 </div>
@@ -314,6 +344,671 @@
                 
   <div class="section" id="regular-expressions">
 <h1>Regular Expressions<a class="headerlink" href="#regular-expressions" title="Permalink to this headline">¶</a></h1>
+<p>In the first Python and Data Scripting Workshop we learned how to parse files using <code class="docutils literal notranslate"><span class="pre">open</span></code>, <code class="docutils literal notranslate"><span class="pre">readlines</span></code>, then looping through the file to find specific phrases. This works fine for some cases, however, there are some times when this will either be slow or impossible.</p>
+<p>Sometimes, you will want to look for text which resembles a certain pattern.</p>
+<p>Regular expressions will allow us to define patterns of text we are looking for rather than hardcoding specific phrases.</p>
+<p>For this section, we will be parsing output files from the Spartan software. This dataset was published as supplemental information for <a class="reference external" href="https://science.sciencemag.org/content/360/6385/186">this paper</a> where the authors used molecular descriptors obtained from the Spartan software along with machine learning methods to predict reaction yields.</p>
+<p>To follow along with this section, you should download <a class="reference external" href="https://github.com/doylelab/rxnpredict/blob/master/spartan_molecules/1-bromo-4-(trifluoromethyl)benzene.spardir/M0001/output">this file</a> and put it in your data folder (name it <code class="docutils literal notranslate"><span class="pre">output</span></code>).</p>
+<p>We will see later how to loop over all of the files in <a class="reference external" href="https://github.com/doylelab/rxnpredict">this repository</a>. We will be working with files in the <code class="docutils literal notranslate"><span class="pre">rxnpredict/spartan_molecules</span></code> directory. First, we will proof our regular expressions on one file, then we will apply it to all of our files to get our molecular descriptors.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">file_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">,</span> <span class="s2">&quot;output&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Because this is not a file which is tabular or structured, we will read it in using <code class="docutils literal notranslate"><span class="pre">open</span></code>. Note that there are many ways to open files in Python. If you reading a file that is only partially tabular, you may still want to use pandas with appropriate variables on the read functions. However, these files contain a lot of information and are mostly unstructured, so we will first pull out some information using regular expressions.</p>
+<p>We use the syntax <code class="docutils literal notranslate"><span class="pre">with</span> <span class="pre">open</span></code> because this allows us to open and automatically close the file. We will read the file inside the open block. The <code class="docutils literal notranslate"><span class="pre">read</span></code> function in Python is used on an open file object. All of the file contents will be pulled into a string called <code class="docutils literal notranslate"><span class="pre">data</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># print the first 500 characters of data</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">data</span><span class="p">[:</span><span class="mi">500</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SPARTAN &#39;14 CONFORMATION SEARCH:   (Win/64b)                      Release  1.1.4
+
+
+ Conformation Search
+
+
+ Initializing 4 threads
+
+  Reason for exit: Successful completion 
+  Conformer Program CPU Time :          .30
+  Conformer Program Wall Time:          .07
+
+SPARTAN &#39;14 Quantum Mechanics Driver:  (Win/64b)         Release  1.1.4
+
+Job type: Geometry optimization.
+Method: RB3LYP
+Basis set: 6-31G(D)
+Number of shells: 56
+Number of basis functions: 193
+Multiplicity: 1
+Parallel Job: 4 threads
+
+SCF 
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="basic-matching">
+<h2>Basic Matching<a class="headerlink" href="#basic-matching" title="Permalink to this headline">¶</a></h2>
+<p>We are going to process this file using regular expressions. Regular expressions will let us define patterns that we want to look for in our text. To use regular expressions, you start by importing the appropriate module - <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">re</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">re</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>At it’s simplest, regular expressions match the exact pattern yoou specify. For example, if we wanted to find all the places the word <code class="docutils literal notranslate"><span class="pre">energy</span></code> occurred in the file, we could do that.</p>
+<p>We create a regular expression pattern by using <code class="docutils literal notranslate"><span class="pre">re.compile</span></code>. Inside this function, you put the pattern you want to look for. Then you use <code class="docutils literal notranslate"><span class="pre">pattern.findall</span></code> and pass the string you would like to search as an argument. The function will return a list of matches in the text.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s2">&quot;energy&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">matches</span> <span class="o">=</span> <span class="n">pattern</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">matches</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&#39;energy&#39;, &#39;energy&#39;]
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="using-metacharacters">
+<h2>Using metacharacters<a class="headerlink" href="#using-metacharacters" title="Permalink to this headline">¶</a></h2>
+<p>This is not that interesting, but we can see that the word “energy” is found twice in the text. You’ll notice here that this text matches exactly, as in it is only showing us when the word <code class="docutils literal notranslate"><span class="pre">energy</span></code> (lowercase <code class="docutils literal notranslate"><span class="pre">e</span></code>) is found. This is where the power of regular expressions can come in. Let’s imagine that you want to look for either the word <code class="docutils literal notranslate"><span class="pre">energy</span></code> or the word <code class="docutils literal notranslate"><span class="pre">Energy</span></code>. You can modify your regular expression to use special characters to tell the regular expression that either letter is okay.</p>
+<p>To do matches other than matching for the literal character, you use special characters in your regular expressions (referred to as <code class="docutils literal notranslate"><span class="pre">metacharacters</span></code>). Here are some examples of metacharacters:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>. ^ $ * + ? { } [ ] \ | ( )
+</pre></div>
+</div>
+<p>The first we will use is <code class="docutils literal notranslate"><span class="pre">[</span> <span class="pre">]</span></code>. For regular expressions, these indicate a class of characters you want to search for. For example, to look for <code class="docutils literal notranslate"><span class="pre">e</span></code> or <code class="docutils literal notranslate"><span class="pre">E</span></code>, we could use <code class="docutils literal notranslate"><span class="pre">[Ee]</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s2">&quot;[Ee]nergy&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">matches</span> <span class="o">=</span> <span class="n">pattern</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">matches</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&#39;Energy&#39;, &#39;energy&#39;, &#39;energy&#39;, &#39;Energy&#39;, &#39;Energy&#39;]
+</pre></div>
+</div>
+</div>
+</div>
+<p>This is just a simple example. Note that we could have also achieved a similar result to the one shown above by specifying <code class="docutils literal notranslate"><span class="pre">re.IGNORECASE</span></code> in our pattern. Then case would be ignored entirely in our matches.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s2">&quot;energy&quot;</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">IGNORECASE</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">matches</span> <span class="o">=</span> <span class="n">pattern</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">matches</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&#39;Energy&#39;, &#39;energy&#39;, &#39;energy&#39;, &#39;Energy&#39;, &#39;Energy&#39;]
+</pre></div>
+</div>
+</div>
+</div>
+<p>Let’s keep building on one of these and get what follows the word “energy”. Another special character recognized by <code class="docutils literal notranslate"><span class="pre">regex</span></code> is the period. The period means <code class="docutils literal notranslate"><span class="pre">any</span> <span class="pre">character</span> <span class="pre">except</span> <span class="pre">a</span> <span class="pre">new</span> <span class="pre">line</span></code>. If we add a period after the word <code class="docutils literal notranslate"><span class="pre">energy</span></code>, it will match the word <code class="docutils literal notranslate"><span class="pre">energy</span></code> (case insensitive) followed by any character except a newline.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s2">&quot;energy.&quot;</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">IGNORECASE</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">matches</span> <span class="o">=</span> <span class="n">pattern</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">matches</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&#39;Energy &#39;, &#39;energy:&#39;, &#39;energy:&#39;, &#39;Energy &#39;, &#39;Energy &#39;]
+</pre></div>
+</div>
+</div>
+</div>
+<p>After adding the dot, you will see another trailing character has been added to our results.</p>
+<p>We can specify how many times we want a special character or group of characters repeated by using <code class="docutils literal notranslate"><span class="pre">{}</span></code> and specifying the number of times. For example, the following will get the two following characters.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s2">&quot;energy.</span><span class="si">{2}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">IGNORECASE</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">matches</span> <span class="o">=</span> <span class="n">pattern</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">matches</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&#39;Energy  &#39;, &#39;energy: &#39;, &#39;energy: &#39;, &#39;Energy D&#39;, &#39;Energy S&#39;]
+</pre></div>
+</div>
+</div>
+</div>
+<p>You can also use <code class="docutils literal notranslate"><span class="pre">*</span></code> to specify 0 or more matches, or <code class="docutils literal notranslate"><span class="pre">+</span></code> to specify one or more matches. In this case, you do not need the curly braces <code class="docutils literal notranslate"><span class="pre">{}</span></code>. In general, this is the pattern you will follow when not doing exact matches. You will define something using the special metacharacters, followed by how many times to look for that metacharacter.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s2">&quot;energy.+&quot;</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">IGNORECASE</span><span class="p">)</span>
+<span class="n">matches</span> <span class="o">=</span> <span class="n">pattern</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">matches</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&#39;Energy          Max Grad.      Max Dist. &#39;, &#39;energy:   -3142.5663410 hartrees&#39;, &#39;energy:   -3142.5663410 hartrees&#39;, &#39;Energy Due to Solvation&#39;, &#39;Energy SM5.4/A          1.983&#39;]
+</pre></div>
+</div>
+</div>
+</div>
+<p>Within the matches, you can use parenthesis <code class="docutils literal notranslate"><span class="pre">()</span></code> to create groups. For example, if we wanted to separate the word energy from what followed, we could surround relevant parts with parenthesis.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s2">&quot;(energy)(.+)&quot;</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">IGNORECASE</span><span class="p">)</span>
+<span class="n">matches</span> <span class="o">=</span> <span class="n">pattern</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">matches</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[(&#39;Energy&#39;, &#39;          Max Grad.      Max Dist. &#39;), (&#39;energy&#39;, &#39;:   -3142.5663410 hartrees&#39;), (&#39;energy&#39;, &#39;:   -3142.5663410 hartrees&#39;), (&#39;Energy&#39;, &#39; Due to Solvation&#39;), (&#39;Energy&#39;, &#39; SM5.4/A          1.983&#39;)]
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">matches</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(&#39;Energy&#39;, &#39;          Max Grad.      Max Dist. &#39;)
+</pre></div>
+</div>
+</div>
+</div>
+<p>You can imagine how this might be more useful if we wanted to pull out all of the keyword values pairs, ie <code class="docutils literal notranslate"><span class="pre">word</span> <span class="pre">:</span> <span class="pre">value</span></code>.</p>
+<p>In this case, the pattern we would look for is first that a “word” occurs. We could define a “word” as a collection of letters. One way we might express that is <code class="docutils literal notranslate"><span class="pre">[A-Z]</span></code>. This would match all letters <code class="docutils literal notranslate"><span class="pre">A-Z</span></code>, to make this be any case, we would use <code class="docutils literal notranslate"><span class="pre">[A-Za-z]</span></code>.</p>
+<p>Here is an explanation of that pattern:</p>
+<table class="colwidths-auto table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Regex</p></th>
+<th class="head"><p>Explanation</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>[A-Za-z]</p></td>
+<td><p>matches any character A-Z or any character a-z</p></td>
+</tr>
+<tr class="row-odd"><td><p>+</p></td>
+<td><p>the preceeding pattern occurs one or more times</p></td>
+</tr>
+<tr class="row-even"><td><p>.</p></td>
+<td><p>any character except the newline character</p></td>
+</tr>
+<tr class="row-odd"><td><p>+</p></td>
+<td><p>the preceeding pattern occurs one or more times</p></td>
+</tr>
+<tr class="row-even"><td><p>:</p></td>
+<td><p>matches a literal colon</p></td>
+</tr>
+<tr class="row-odd"><td><p>.</p></td>
+<td><p>matches any character except a newline</p></td>
+</tr>
+<tr class="row-even"><td><p>+</p></td>
+<td><p>the preceeding pattern occurs one or more times</p></td>
+</tr>
+</tbody>
+</table>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s2">&quot;[A-Za-z]+.+:.+&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">matches</span> <span class="o">=</span> <span class="n">pattern</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">matches</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>313
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">50</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">matches</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SPARTAN &#39;14 CONFORMATION SEARCH:   (Win/64b)                      Release  1.1.4
+Reason for exit: Successful completion 
+Conformer Program CPU Time :          .30
+Conformer Program Wall Time:          .07
+SPARTAN &#39;14 Quantum Mechanics Driver:  (Win/64b)         Release  1.1.4
+Job type: Geometry optimization.
+Method: RB3LYP
+Basis set: 6-31G(D)
+Number of shells: 56
+Number of basis functions: 193
+Multiplicity: 1
+Parallel Job: 4 threads
+Job type: Frequency calculation.
+Method: RB3LYP
+Basis set: 6-31G(D)
+Job type: Single point.
+Method: RB3LYP
+Basis set: 6-31G(D)
+SCF total energy:   -3142.5663410 hartrees
+Job type: Molecular property calculation.
+Method: RB3LYP
+Basis set: 6-31G(D)
+SCF total energy:   -3142.5663410 hartrees
+Reason for exit: Successful completion 
+Quantum Calculation CPU Time :     50:25.28
+Quantum Calculation Wall Time:     58:12.93
+SPARTAN &#39;14 Semi-Empirical Program:  (Win/64b)           Release  1.1.4        
+Memory Used:         882.13 Kb
+Reason for exit: Successful completion 
+Semi-Empirical Program CPU Time :          .33
+Semi-Empirical Program Wall Time:          .03
+Surface computation Wall Time: 000:00:04.5
+Surface computation CPU Time: 000:00:04.5
+QSAR CPU Time:  000:00:00.7
+QSAR Wall Time: 000:00:05.2
+SPARTAN &#39;14 Properties Program:  (Win/64b)                     Release  1.1.4  
+Model: B3LYP/6- 
+Number of shells:   56
+Number of basis functions:   193
+Molecular charge:   0
+Spin multiplicity:  1
+Electrons:         108
+Molecular volume:       149.53 (Ang**3)
+Surface area:           171.08 (Ang**2)
+Ovality:                  1.256
+Atomic weight:          225.012 g
+E(HOMO):                 -0.2616
+E(LUMO):                 -0.0413
+Electronegativity:        0.15
+Hardness:                 0.11
+</pre></div>
+</div>
+</div>
+</div>
+<div class="exercise-this-is-a-title exercise">
+<p class="exercise-title">Check your understanding</p>
+    <p> Add parenthesis to the appropriate place in the regular expression so that each match is grouped into (`key`, `value`). </p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s2">&quot;[A-Za-z]+.+:.+&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="dropdown admonition">
+<p class="admonition-title">Solution</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s2">&quot;([A-Za-z]+.+):(.+)&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div><p>If we wanted to limit these responses to digits, we would have to do some additional work. We could use either <code class="docutils literal notranslate"><span class="pre">[0-9]</span></code> or <code class="docutils literal notranslate"><span class="pre">\d</span></code> to indicate that we were looking for digits. However, the presence of a decimal complicates things a bit. Doing <code class="docutils literal notranslate"><span class="pre">\d+</span></code> would only result in integers, while doing something like <code class="docutils literal notranslate"><span class="pre">\d+\.\d+</span></code> (notice the slash in front of the period to escape the decimal) wouldn’t result in any integer matches.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s2">&quot;([A-Za-z]+.+):\s*(\d+)&quot;</span><span class="p">)</span>
+<span class="n">matches</span> <span class="o">=</span> <span class="n">pattern</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">matches</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(&#39;Basis set&#39;, &#39;6&#39;)
+(&#39;Number of shells&#39;, &#39;56&#39;)
+(&#39;Number of basis functions&#39;, &#39;193&#39;)
+(&#39;Multiplicity&#39;, &#39;1&#39;)
+(&#39;Parallel Job&#39;, &#39;4&#39;)
+(&#39;Basis set&#39;, &#39;6&#39;)
+(&#39;Basis set&#39;, &#39;6&#39;)
+(&#39;Basis set&#39;, &#39;6&#39;)
+(&#39;Quantum Calculation CPU Time :     50&#39;, &#39;25&#39;)
+(&#39;Quantum Calculation Wall Time:     58&#39;, &#39;12&#39;)
+</pre></div>
+</div>
+</div>
+</div>
+<p>In the example above, we’ve also added the possibility of encountering whitespace using <code class="docutils literal notranslate"><span class="pre">\s</span></code>. You’ll notice that we are only pulling out integers.</p>
+<p>If we modify to have a decimal place (escaped with <code class="docutils literal notranslate"><span class="pre">\</span></code>) followed by more numbers, we will only have decimal numbers.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s2">&quot;([A-Za-z]+.+):\s*(\d+\.\d+)&quot;</span><span class="p">)</span>
+<span class="n">matches</span> <span class="o">=</span> <span class="n">pattern</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">matches</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(&#39;Quantum Calculation CPU Time :     50&#39;, &#39;25.28&#39;)
+(&#39;Quantum Calculation Wall Time:     58&#39;, &#39;12.93&#39;)
+(&#39;Memory Used&#39;, &#39;882.13&#39;)
+(&#39;Surface computation Wall Time: 000:00&#39;, &#39;04.5&#39;)
+(&#39;Surface computation CPU Time: 000:00&#39;, &#39;04.5&#39;)
+(&#39;QSAR CPU Time:  000:00&#39;, &#39;00.7&#39;)
+(&#39;QSAR Wall Time: 000:00&#39;, &#39;05.2&#39;)
+(&#39;Molecular volume&#39;, &#39;149.53&#39;)
+(&#39;Surface area&#39;, &#39;171.08&#39;)
+(&#39;Ovality&#39;, &#39;1.256&#39;)
+</pre></div>
+</div>
+</div>
+</div>
+<p>We can modify this regular expression and make the decimal optional (matches 1 or 0 times) by following it with a question mark <code class="docutils literal notranslate"><span class="pre">?</span></code>. This means that the decimal is optional. You can then make the first digit have 0 or more repeats. Finally, we need to specify that we might have a negative sign at the start of the number.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s2">&quot;([A-Za-z]+.*):\s*(-?\d*\.?\d+)&quot;</span><span class="p">)</span>
+<span class="n">matches</span> <span class="o">=</span> <span class="n">pattern</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">25</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">matches</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(&#39;Conformer Program CPU Time &#39;, &#39;.30&#39;)
+(&#39;Conformer Program Wall Time&#39;, &#39;.07&#39;)
+(&#39;Basis set&#39;, &#39;6&#39;)
+(&#39;Number of shells&#39;, &#39;56&#39;)
+(&#39;Number of basis functions&#39;, &#39;193&#39;)
+(&#39;Multiplicity&#39;, &#39;1&#39;)
+(&#39;Parallel Job&#39;, &#39;4&#39;)
+(&#39;Basis set&#39;, &#39;6&#39;)
+(&#39;Basis set&#39;, &#39;6&#39;)
+(&#39;SCF total energy&#39;, &#39;-3142.5663410&#39;)
+(&#39;Basis set&#39;, &#39;6&#39;)
+(&#39;SCF total energy&#39;, &#39;-3142.5663410&#39;)
+(&#39;Quantum Calculation CPU Time :     50&#39;, &#39;25.28&#39;)
+(&#39;Quantum Calculation Wall Time:     58&#39;, &#39;12.93&#39;)
+(&#39;Memory Used&#39;, &#39;882.13&#39;)
+(&#39;Semi-Empirical Program CPU Time &#39;, &#39;.33&#39;)
+(&#39;Semi-Empirical Program Wall Time&#39;, &#39;.03&#39;)
+(&#39;Surface computation Wall Time: 000:00&#39;, &#39;04.5&#39;)
+(&#39;Surface computation CPU Time: 000:00&#39;, &#39;04.5&#39;)
+(&#39;QSAR CPU Time:  000:00&#39;, &#39;00.7&#39;)
+(&#39;QSAR Wall Time: 000:00&#39;, &#39;05.2&#39;)
+(&#39;Number of shells&#39;, &#39;56&#39;)
+(&#39;Number of basis functions&#39;, &#39;193&#39;)
+(&#39;Molecular charge&#39;, &#39;0&#39;)
+(&#39;Spin multiplicity&#39;, &#39;1&#39;)
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="greedy-and-non-greedy-matching">
+<h2>“Greedy” and “non-greedy” matching<a class="headerlink" href="#greedy-and-non-greedy-matching" title="Permalink to this headline">¶</a></h2>
+<p>You’ll notice in the file that there is data between various steps. For example, the results from the step where NMR shifts are shown below. You’ll notice <code class="docutils literal notranslate"><span class="pre">&lt;step</span> <span class="pre">3&gt;</span></code> starting this block and <code class="docutils literal notranslate"><span class="pre">&lt;step</span> <span class="pre">4&gt;</span></code> ending this block. Let’s imagine that we want to pull out all text starting with <code class="docutils literal notranslate"><span class="pre">&lt;step</span> <span class="pre">n&gt;</span></code> and ending <code class="docutils literal notranslate"><span class="pre">&lt;step</span> <span class="pre">n+1&gt;</span></code>. We might think to match characters in between <code class="docutils literal notranslate"><span class="pre">&lt;step</span> <span class="pre">\d&gt;</span></code>.</p>
+<div class="highlight-raw notranslate"><div class="highlight"><pre><span></span>&lt;step 3&gt;
+Job type: Single point.
+Method: RB3LYP
+Basis set: 6-31G(D)
+ SCF total energy:   -3142.5663410 hartrees
+
+
+  NMR shifts (ppm)
+       Atom     Isotropic        Rel. Shift 
+  ---------------------------------------------------
+     1   *C1      50.7941          138.83
+     2   *C4      64.1012          125.53
+     3    C2      63.9735          125.65
+     4   *C2      63.9735          125.65
+     5   *C3      68.6792          120.95
+     6    C3      68.6792          120.95
+     7    H2      24.8868            7.30
+     8   *H2      24.8868            7.30
+     9   *H3      24.8117            7.37
+    10    H3      24.8117            7.37
+    11    C7      63.3782          126.25
+    12    F1     273.5747          -93.43
+    13    F2     248.4779          -68.34
+    14    F3     273.5747          -93.43
+    15   Br1    2066.9469 
+
+&lt;step 4&gt;
+</pre></div>
+</div>
+<p>We might write something like the following. Here we are using the flag <code class="docutils literal notranslate"><span class="pre">re.DOTALL</span></code> to make the <code class="docutils literal notranslate"><span class="pre">.</span></code> all characters (including newline).</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s2">&quot;&lt;step \d&gt;.+&lt;step \d&gt;&quot;</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">DOTALL</span><span class="p">)</span>
+<span class="n">matches</span> <span class="o">=</span> <span class="n">pattern</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">matches</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;step 2&gt;
+Job type: Frequency calculation.
+Method: RB3LYP
+Basis set: 6-31G(D)
+
+&lt;step 3&gt;
+Job type: Single point.
+Method: RB3LYP
+Basis set: 6-31G(D)
+ SCF total energy:   -3142.5663410 hartrees
+
+
+  NMR shifts (ppm)
+       Atom     Isotropic        Rel. Shift 
+  ---------------------------------------------------
+     1   *C1      50.7941          138.83
+     2   *C4      64.1012          125.53
+     3    C2      63.9735          125.65
+     4   *C2      63.9735          125.65
+     5   *C3      68.6792          120.95
+     6    C3      68.6792          120.95
+     7    H2      24.8868            7.30
+     8   *H2      24.8868            7.30
+     9   *H3      24.8117            7.37
+    10    H3      24.8117            7.37
+    11    C7      63.3782          126.25
+    12    F1     273.5747          -93.43
+    13    F2     248.4779          -68.34
+    14    F3     273.5747          -93.43
+    15   Br1    2066.9469 
+
+&lt;step 4&gt;
+</pre></div>
+</div>
+</div>
+</div>
+<p>You’ll notice that this does not quite give us the expected output. It gives us the output all the way to <code class="docutils literal notranslate"><span class="pre">&lt;step</span> <span class="pre">4&gt;</span></code>. This is because by default regular expressions use something called “greedy matching”. This means that what is returned tries to use as much of the pattern as possible.</p>
+<p>We will need to add a modifier to our pattern to make it non-greedy. This means it will match as little text as possible. You can add a <code class="docutils literal notranslate"><span class="pre">question</span> <span class="pre">mark</span></code> after the <code class="docutils literal notranslate"><span class="pre">+</span></code> (or after the repeat character) to make the expression ‘non-greedy’.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s2">&quot;&lt;step \d&gt;(.+?)&lt;step \d&gt;&quot;</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">DOTALL</span><span class="p">)</span>
+<span class="n">matches</span> <span class="o">=</span> <span class="n">pattern</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Found </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">matches</span><span class="p">)</span><span class="si">}</span><span class="s2"> matches!&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">matches</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Found 1 matches!
+
+Job type: Frequency calculation.
+Method: RB3LYP
+Basis set: 6-31G(D)
+</pre></div>
+</div>
+</div>
+</div>
+<p>This seems better, but it’s still not quit what we want. You’ll notice that we are not getting the data in <code class="docutils literal notranslate"><span class="pre">step</span> <span class="pre">3</span></code>. This is because by default matches will not overlap. Since <code class="docutils literal notranslate"><span class="pre">&lt;step</span> <span class="pre">3&gt;</span></code> is used at the end of the first match, it can’t be used at the beginning of the next one.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s2">&quot;(?=(&lt;step \d&gt;(.+?)&lt;step \d&gt;))&quot;</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">DOTALL</span><span class="p">)</span>
+<span class="n">matches</span> <span class="o">=</span> <span class="n">pattern</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Found </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">matches</span><span class="p">)</span><span class="si">}</span><span class="s2"> matches!&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">matches</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Found 2 matches!
+
+Job type: Single point.
+Method: RB3LYP
+Basis set: 6-31G(D)
+ SCF total energy:   -3142.5663410 hartrees
+
+
+  NMR shifts (ppm)
+       Atom     Isotropic        Rel. Shift 
+  ---------------------------------------------------
+     1   *C1      50.7941          138.83
+     2   *C4      64.1012          125.53
+     3    C2      63.9735          125.65
+     4   *C2      63.9735          125.65
+     5   *C3      68.6792          120.95
+     6    C3      68.6792          120.95
+     7    H2      24.8868            7.30
+     8   *H2      24.8868            7.30
+     9   *H3      24.8117            7.37
+    10    H3      24.8117            7.37
+    11    C7      63.3782          126.25
+    12    F1     273.5747          -93.43
+    13    F2     248.4779          -68.34
+    14    F3     273.5747          -93.43
+    15   Br1    2066.9469 
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="re-finditer">
+<h2>re.finditer<a class="headerlink" href="#re-finditer" title="Permalink to this headline">¶</a></h2>
+<p>We started with <code class="docutils literal notranslate"><span class="pre">re.findall</span></code> here for simplicity, but an alternative which will give you more information about your matches is to use <code class="docutils literal notranslate"><span class="pre">re.finditer</span></code>. In this case, a iterable will be returned to you rather than a string. You can then iterate through the results with a <code class="docutils literal notranslate"><span class="pre">for</span></code> loop. A lot more information is provided about the matches.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s2">&quot;(?=(&lt;step \d&gt;(.+?)&lt;step \d&gt;))&quot;</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">DOTALL</span><span class="p">)</span>
+<span class="n">matches</span> <span class="o">=</span> <span class="n">pattern</span><span class="o">.</span><span class="n">finditer</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">match</span> <span class="ow">in</span> <span class="n">matches</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Match span is </span><span class="si">{</span><span class="n">match</span><span class="o">.</span><span class="n">span</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Match span is (1125, 1195)
+
+Job type: Frequency calculation.
+Method: RB3LYP
+Basis set: 6-31G(D)
+
+
+Match span is (1203, 2043)
+
+Job type: Single point.
+Method: RB3LYP
+Basis set: 6-31G(D)
+ SCF total energy:   -3142.5663410 hartrees
+
+
+  NMR shifts (ppm)
+       Atom     Isotropic        Rel. Shift 
+  ---------------------------------------------------
+     1   *C1      50.7941          138.83
+     2   *C4      64.1012          125.53
+     3    C2      63.9735          125.65
+     4   *C2      63.9735          125.65
+     5   *C3      68.6792          120.95
+     6    C3      68.6792          120.95
+     7    H2      24.8868            7.30
+     8   *H2      24.8868            7.30
+     9   *H3      24.8117            7.37
+    10    H3      24.8117            7.37
+    11    C7      63.3782          126.25
+    12    F1     273.5747          -93.43
+    13    F2     248.4779          -68.34
+    14    F3     273.5747          -93.43
+    15   Br1    2066.9469 
+</pre></div>
+</div>
+</div>
+</div>
+<p>Regular expressions take practice, but they are worth learning a bit about. It is useful to try out small regexes on online tools like <a class="reference external" href="https://pythex.org/">pythex</a>.</p>
+</div>
 </div>
 
     <script type="text/x-thebe-config">
