@@ -615,8 +615,8 @@ mpl.figure = function (figure_id, websocket, ondownload, parent_element) {
     this.ws.onopen = function () {
         fig.send_message('supports_binary', { value: fig.supports_binary });
         fig.send_message('send_image_mode', {});
-        if (mpl.ratio !== 1) {
-            fig.send_message('set_dpi_ratio', { dpi_ratio: mpl.ratio });
+        if (fig.ratio !== 1) {
+            fig.send_message('set_dpi_ratio', { dpi_ratio: fig.ratio });
         }
         fig.send_message('refresh', {});
     };
@@ -709,7 +709,7 @@ mpl.figure.prototype._init_canvas = function () {
         this.context.backingStorePixelRatio ||
         1;
 
-    mpl.ratio = (window.devicePixelRatio || 1) / backingStore;
+    this.ratio = (window.devicePixelRatio || 1) / backingStore;
 
     var rubberband_canvas = (this.rubberband_canvas = document.createElement(
         'canvas'
@@ -719,7 +719,17 @@ mpl.figure.prototype._init_canvas = function () {
         'box-sizing: content-box; position: absolute; left: 0; top: 0; z-index: 1;'
     );
 
-    var resizeObserver = new ResizeObserver(function (entries) {
+    // Apply a ponyfill if ResizeObserver is not implemented by browser.
+    if (this.ResizeObserver === undefined) {
+        if (window.ResizeObserver !== undefined) {
+            this.ResizeObserver = window.ResizeObserver;
+        } else {
+            var obs = _JSXTOOLS_RESIZE_OBSERVER({});
+            this.ResizeObserver = obs.ResizeObserver;
+        }
+    }
+
+    this.resizeObserverInstance = new this.ResizeObserver(function (entries) {
         var nentries = entries.length;
         for (var i = 0; i < nentries; i++) {
             var entry = entries[i];
@@ -753,8 +763,8 @@ mpl.figure.prototype._init_canvas = function () {
                     entry.devicePixelContentBoxSize[0].blockSize
                 );
             } else {
-                canvas.setAttribute('width', width * mpl.ratio);
-                canvas.setAttribute('height', height * mpl.ratio);
+                canvas.setAttribute('width', width * fig.ratio);
+                canvas.setAttribute('height', height * fig.ratio);
             }
             canvas.setAttribute(
                 'style',
@@ -767,12 +777,12 @@ mpl.figure.prototype._init_canvas = function () {
             // And update the size in Python. We ignore the initial 0/0 size
             // that occurs as the element is placed into the DOM, which should
             // otherwise not happen due to the minimum size styling.
-            if (width != 0 && height != 0) {
+            if (fig.ws.readyState == 1 && width != 0 && height != 0) {
                 fig.request_resize(width, height);
             }
         }
     });
-    resizeObserver.observe(canvas_div);
+    this.resizeObserverInstance.observe(canvas_div);
 
     function on_mouse_event_closure(name) {
         return function (event) {
@@ -787,6 +797,10 @@ mpl.figure.prototype._init_canvas = function () {
     rubberband_canvas.addEventListener(
         'mouseup',
         on_mouse_event_closure('button_release')
+    );
+    rubberband_canvas.addEventListener(
+        'dblclick',
+        on_mouse_event_closure('dblclick')
     );
     // Throttle sequential mouse events to 1 every 20ms.
     rubberband_canvas.addEventListener(
@@ -952,10 +966,10 @@ mpl.figure.prototype.handle_resize = function (fig, msg) {
 };
 
 mpl.figure.prototype.handle_rubberband = function (fig, msg) {
-    var x0 = msg['x0'] / mpl.ratio;
-    var y0 = (fig.canvas.height - msg['y0']) / mpl.ratio;
-    var x1 = msg['x1'] / mpl.ratio;
-    var y1 = (fig.canvas.height - msg['y1']) / mpl.ratio;
+    var x0 = msg['x0'] / fig.ratio;
+    var y0 = (fig.canvas.height - msg['y0']) / fig.ratio;
+    var x1 = msg['x1'] / fig.ratio;
+    var y1 = (fig.canvas.height - msg['y1']) / fig.ratio;
     x0 = Math.floor(x0) + 0.5;
     y0 = Math.floor(y0) + 0.5;
     x1 = Math.floor(x1) + 0.5;
@@ -968,8 +982,8 @@ mpl.figure.prototype.handle_rubberband = function (fig, msg) {
     fig.rubberband_context.clearRect(
         0,
         0,
-        fig.canvas.width / mpl.ratio,
-        fig.canvas.height / mpl.ratio
+        fig.canvas.width / fig.ratio,
+        fig.canvas.height / fig.ratio
     );
 
     fig.rubberband_context.strokeRect(min_x, min_y, width, height);
@@ -1045,11 +1059,14 @@ mpl.figure.prototype.updated_canvas_event = function () {
 mpl.figure.prototype._make_on_message_function = function (fig) {
     return function socket_on_message(evt) {
         if (evt.data instanceof Blob) {
-            /* FIXME: We get "Resource interpreted as Image but
-             * transferred with MIME type text/plain:" errors on
-             * Chrome.  But how to set the MIME type?  It doesn't seem
-             * to be part of the websocket stream */
-            evt.data.type = 'image/png';
+            var img = evt.data;
+            if (img.type !== 'image/png') {
+                /* FIXME: We get "Resource interpreted as Image but
+                 * transferred with MIME type text/plain:" errors on
+                 * Chrome.  But how to set the MIME type?  It doesn't seem
+                 * to be part of the websocket stream */
+                img.type = 'image/png';
+            }
 
             /* Free the memory for the previous frames */
             if (fig.imageObj.src) {
@@ -1059,7 +1076,7 @@ mpl.figure.prototype._make_on_message_function = function (fig) {
             }
 
             fig.imageObj.src = (window.URL || window.webkitURL).createObjectURL(
-                evt.data
+                img
             );
             fig.updated_canvas_event();
             fig.waiting = false;
@@ -1152,8 +1169,8 @@ mpl.figure.prototype.mouse_event = function (event, name) {
         this.canvas_div.focus();
     }
 
-    var x = canvas_pos.x * mpl.ratio;
-    var y = canvas_pos.y * mpl.ratio;
+    var x = canvas_pos.x * this.ratio;
+    var y = canvas_pos.y * this.ratio;
 
     this.send_message(name, {
         x: x,
@@ -1178,10 +1195,10 @@ mpl.figure.prototype._key_event_extra = function (_event, _name) {
 mpl.figure.prototype.key_event = function (event, name) {
     // Prevent repeat events
     if (name === 'key_press') {
-        if (event.which === this._key) {
+        if (event.key === this._key) {
             return;
         } else {
-            this._key = event.which;
+            this._key = event.key;
         }
     }
     if (name === 'key_release') {
@@ -1189,18 +1206,17 @@ mpl.figure.prototype.key_event = function (event, name) {
     }
 
     var value = '';
-    if (event.ctrlKey && event.which !== 17) {
+    if (event.ctrlKey && event.key !== 'Control') {
         value += 'ctrl+';
     }
-    if (event.altKey && event.which !== 18) {
+    else if (event.altKey && event.key !== 'Alt') {
         value += 'alt+';
     }
-    if (event.shiftKey && event.which !== 16) {
+    else if (event.shiftKey && event.key !== 'Shift') {
         value += 'shift+';
     }
 
-    value += 'k';
-    value += event.which.toString();
+    value += 'k' + event.key;
 
     this._key_event_extra(event, name);
 
@@ -1219,9 +1235,13 @@ mpl.figure.prototype.toolbar_button_onclick = function (name) {
 mpl.figure.prototype.toolbar_button_onmouseover = function (tooltip) {
     this.message.textContent = tooltip;
 };
+
+///////////////// REMAINING CONTENT GENERATED BY embed_js.py /////////////////
+// prettier-ignore
+var _JSXTOOLS_RESIZE_OBSERVER=function(A){var t,i=new WeakMap,n=new WeakMap,a=new WeakMap,r=new WeakMap,o=new Set;function s(e){if(!(this instanceof s))throw new TypeError("Constructor requires 'new' operator");i.set(this,e)}function h(){throw new TypeError("Function is not a constructor")}function c(e,t,i,n){e=0 in arguments?Number(arguments[0]):0,t=1 in arguments?Number(arguments[1]):0,i=2 in arguments?Number(arguments[2]):0,n=3 in arguments?Number(arguments[3]):0,this.right=(this.x=this.left=e)+(this.width=i),this.bottom=(this.y=this.top=t)+(this.height=n),Object.freeze(this)}function d(){t=requestAnimationFrame(d);var s=new WeakMap,p=new Set;o.forEach((function(t){r.get(t).forEach((function(i){var r=t instanceof window.SVGElement,o=a.get(t),d=r?0:parseFloat(o.paddingTop),f=r?0:parseFloat(o.paddingRight),l=r?0:parseFloat(o.paddingBottom),u=r?0:parseFloat(o.paddingLeft),g=r?0:parseFloat(o.borderTopWidth),m=r?0:parseFloat(o.borderRightWidth),w=r?0:parseFloat(o.borderBottomWidth),b=u+f,F=d+l,v=(r?0:parseFloat(o.borderLeftWidth))+m,W=g+w,y=r?0:t.offsetHeight-W-t.clientHeight,E=r?0:t.offsetWidth-v-t.clientWidth,R=b+v,z=F+W,M=r?t.width:parseFloat(o.width)-R-E,O=r?t.height:parseFloat(o.height)-z-y;if(n.has(t)){var k=n.get(t);if(k[0]===M&&k[1]===O)return}n.set(t,[M,O]);var S=Object.create(h.prototype);S.target=t,S.contentRect=new c(u,d,M,O),s.has(i)||(s.set(i,[]),p.add(i)),s.get(i).push(S)}))})),p.forEach((function(e){i.get(e).call(e,s.get(e),e)}))}return s.prototype.observe=function(i){if(i instanceof window.Element){r.has(i)||(r.set(i,new Set),o.add(i),a.set(i,window.getComputedStyle(i)));var n=r.get(i);n.has(this)||n.add(this),cancelAnimationFrame(t),t=requestAnimationFrame(d)}},s.prototype.unobserve=function(i){if(i instanceof window.Element&&r.has(i)){var n=r.get(i);n.has(this)&&(n.delete(this),n.size||(r.delete(i),o.delete(i))),n.size||r.delete(i),o.size||cancelAnimationFrame(t)}},A.DOMRectReadOnly=c,A.ResizeObserver=s,A.ResizeObserverEntry=h,A}; // eslint-disable-line
 mpl.toolbar_items = [["Home", "Reset original view", "fa fa-home icon-home", "home"], ["Back", "Back to previous view", "fa fa-arrow-left icon-arrow-left", "back"], ["Forward", "Forward to next view", "fa fa-arrow-right icon-arrow-right", "forward"], ["", "", "", ""], ["Pan", "Left button pans, Right button zooms\nx/y fixes axis, CTRL fixes aspect", "fa fa-arrows icon-move", "pan"], ["Zoom", "Zoom to rectangle\nx/y fixes axis, CTRL fixes aspect", "fa fa-square-o icon-check-empty", "zoom"], ["", "", "", ""], ["Download", "Download plot", "fa fa-floppy-o icon-save", "download"]];
 
-mpl.extensions = ["eps", "jpeg", "pdf", "png", "ps", "raw", "svg", "tif"];
+mpl.extensions = ["eps", "jpeg", "pgf", "pdf", "png", "ps", "raw", "svg", "tif"];
 
 mpl.default_extension = "png";/* global mpl */
 
@@ -1230,6 +1250,19 @@ var comm_websocket_adapter = function (comm) {
     // object with the appropriate methods. Currently this is a non binary
     // socket, so there is still some room for performance tuning.
     var ws = {};
+
+    ws.binaryType = comm.kernel.ws.binaryType;
+    ws.readyState = comm.kernel.ws.readyState;
+    function updateReadyState(_event) {
+        if (comm.kernel.ws) {
+            ws.readyState = comm.kernel.ws.readyState;
+        } else {
+            ws.readyState = 3; // Closed state.
+        }
+    }
+    comm.kernel.ws.addEventListener('open', updateReadyState);
+    comm.kernel.ws.addEventListener('close', updateReadyState);
+    comm.kernel.ws.addEventListener('error', updateReadyState);
 
     ws.close = function () {
         comm.close();
@@ -1241,8 +1274,14 @@ var comm_websocket_adapter = function (comm) {
     // Register the callback with on_msg.
     comm.on_msg(function (msg) {
         //console.log('receiving', msg['content']['data'], msg);
+        var data = msg['content']['data'];
+        if (data['blob'] !== undefined) {
+            data = {
+                data: new Blob(msg['buffers'], { type: data['blob'] }),
+            };
+        }
         // Pass the mpl event to the overridden (by mpl) onmessage function.
-        ws.onmessage(msg['content']['data']);
+        ws.onmessage(data);
     });
     return ws;
 };
@@ -1273,11 +1312,20 @@ mpl.mpl_figure_comm = function (comm, msg) {
         console.error('Failed to find cell for figure', id, fig);
         return;
     }
+    fig.cell_info[0].output_area.element.on(
+        'cleared',
+        { fig: fig },
+        fig._remove_fig_handler
+    );
 };
 
 mpl.figure.prototype.handle_close = function (fig, msg) {
-    var width = fig.canvas.width / mpl.ratio;
-    fig.root.removeEventListener('remove', this._remove_fig_handler);
+    var width = fig.canvas.width / fig.ratio;
+    fig.cell_info[0].output_area.element.off(
+        'cleared',
+        fig._remove_fig_handler
+    );
+    fig.resizeObserverInstance.unobserve(fig.canvas_div);
 
     // Update the output cell to use the data from the current canvas.
     fig.push_to_output();
@@ -1297,7 +1345,7 @@ mpl.figure.prototype.close_ws = function (fig, msg) {
 
 mpl.figure.prototype.push_to_output = function (_remove_interactive) {
     // Turn the data on the canvas into data in the output cell.
-    var width = this.canvas.width / mpl.ratio;
+    var width = this.canvas.width / this.ratio;
     var dataURL = this.canvas.toDataURL();
     this.cell_info[1]['text/html'] =
         '<img src="' + dataURL + '" width="' + width + '">';
@@ -1396,13 +1444,17 @@ mpl.figure.prototype._init_toolbar = function () {
     titlebar.insertBefore(buttongrp, titlebar.firstChild);
 };
 
-mpl.figure.prototype._remove_fig_handler = function () {
-    this.close_ws(this, {});
+mpl.figure.prototype._remove_fig_handler = function (event) {
+    var fig = event.data.fig;
+    if (event.target !== this) {
+        // Ignore bubbled events from children.
+        return;
+    }
+    fig.close_ws(fig, {});
 };
 
 mpl.figure.prototype._root_extra_style = function (el) {
     el.style.boxSizing = 'content-box'; // override notebook setting of border-box.
-    el.addEventListener('remove', this._remove_fig_handler);
 };
 
 mpl.figure.prototype._canvas_extra_style = function (el) {
@@ -1551,8 +1603,8 @@ mpl.figure = function (figure_id, websocket, ondownload, parent_element) {
     this.ws.onopen = function () {
         fig.send_message('supports_binary', { value: fig.supports_binary });
         fig.send_message('send_image_mode', {});
-        if (mpl.ratio !== 1) {
-            fig.send_message('set_dpi_ratio', { dpi_ratio: mpl.ratio });
+        if (fig.ratio !== 1) {
+            fig.send_message('set_dpi_ratio', { dpi_ratio: fig.ratio });
         }
         fig.send_message('refresh', {});
     };
@@ -1645,7 +1697,7 @@ mpl.figure.prototype._init_canvas = function () {
         this.context.backingStorePixelRatio ||
         1;
 
-    mpl.ratio = (window.devicePixelRatio || 1) / backingStore;
+    this.ratio = (window.devicePixelRatio || 1) / backingStore;
 
     var rubberband_canvas = (this.rubberband_canvas = document.createElement(
         'canvas'
@@ -1655,7 +1707,17 @@ mpl.figure.prototype._init_canvas = function () {
         'box-sizing: content-box; position: absolute; left: 0; top: 0; z-index: 1;'
     );
 
-    var resizeObserver = new ResizeObserver(function (entries) {
+    // Apply a ponyfill if ResizeObserver is not implemented by browser.
+    if (this.ResizeObserver === undefined) {
+        if (window.ResizeObserver !== undefined) {
+            this.ResizeObserver = window.ResizeObserver;
+        } else {
+            var obs = _JSXTOOLS_RESIZE_OBSERVER({});
+            this.ResizeObserver = obs.ResizeObserver;
+        }
+    }
+
+    this.resizeObserverInstance = new this.ResizeObserver(function (entries) {
         var nentries = entries.length;
         for (var i = 0; i < nentries; i++) {
             var entry = entries[i];
@@ -1689,8 +1751,8 @@ mpl.figure.prototype._init_canvas = function () {
                     entry.devicePixelContentBoxSize[0].blockSize
                 );
             } else {
-                canvas.setAttribute('width', width * mpl.ratio);
-                canvas.setAttribute('height', height * mpl.ratio);
+                canvas.setAttribute('width', width * fig.ratio);
+                canvas.setAttribute('height', height * fig.ratio);
             }
             canvas.setAttribute(
                 'style',
@@ -1703,12 +1765,12 @@ mpl.figure.prototype._init_canvas = function () {
             // And update the size in Python. We ignore the initial 0/0 size
             // that occurs as the element is placed into the DOM, which should
             // otherwise not happen due to the minimum size styling.
-            if (width != 0 && height != 0) {
+            if (fig.ws.readyState == 1 && width != 0 && height != 0) {
                 fig.request_resize(width, height);
             }
         }
     });
-    resizeObserver.observe(canvas_div);
+    this.resizeObserverInstance.observe(canvas_div);
 
     function on_mouse_event_closure(name) {
         return function (event) {
@@ -1723,6 +1785,10 @@ mpl.figure.prototype._init_canvas = function () {
     rubberband_canvas.addEventListener(
         'mouseup',
         on_mouse_event_closure('button_release')
+    );
+    rubberband_canvas.addEventListener(
+        'dblclick',
+        on_mouse_event_closure('dblclick')
     );
     // Throttle sequential mouse events to 1 every 20ms.
     rubberband_canvas.addEventListener(
@@ -1888,10 +1954,10 @@ mpl.figure.prototype.handle_resize = function (fig, msg) {
 };
 
 mpl.figure.prototype.handle_rubberband = function (fig, msg) {
-    var x0 = msg['x0'] / mpl.ratio;
-    var y0 = (fig.canvas.height - msg['y0']) / mpl.ratio;
-    var x1 = msg['x1'] / mpl.ratio;
-    var y1 = (fig.canvas.height - msg['y1']) / mpl.ratio;
+    var x0 = msg['x0'] / fig.ratio;
+    var y0 = (fig.canvas.height - msg['y0']) / fig.ratio;
+    var x1 = msg['x1'] / fig.ratio;
+    var y1 = (fig.canvas.height - msg['y1']) / fig.ratio;
     x0 = Math.floor(x0) + 0.5;
     y0 = Math.floor(y0) + 0.5;
     x1 = Math.floor(x1) + 0.5;
@@ -1904,8 +1970,8 @@ mpl.figure.prototype.handle_rubberband = function (fig, msg) {
     fig.rubberband_context.clearRect(
         0,
         0,
-        fig.canvas.width / mpl.ratio,
-        fig.canvas.height / mpl.ratio
+        fig.canvas.width / fig.ratio,
+        fig.canvas.height / fig.ratio
     );
 
     fig.rubberband_context.strokeRect(min_x, min_y, width, height);
@@ -1981,11 +2047,14 @@ mpl.figure.prototype.updated_canvas_event = function () {
 mpl.figure.prototype._make_on_message_function = function (fig) {
     return function socket_on_message(evt) {
         if (evt.data instanceof Blob) {
-            /* FIXME: We get "Resource interpreted as Image but
-             * transferred with MIME type text/plain:" errors on
-             * Chrome.  But how to set the MIME type?  It doesn't seem
-             * to be part of the websocket stream */
-            evt.data.type = 'image/png';
+            var img = evt.data;
+            if (img.type !== 'image/png') {
+                /* FIXME: We get "Resource interpreted as Image but
+                 * transferred with MIME type text/plain:" errors on
+                 * Chrome.  But how to set the MIME type?  It doesn't seem
+                 * to be part of the websocket stream */
+                img.type = 'image/png';
+            }
 
             /* Free the memory for the previous frames */
             if (fig.imageObj.src) {
@@ -1995,7 +2064,7 @@ mpl.figure.prototype._make_on_message_function = function (fig) {
             }
 
             fig.imageObj.src = (window.URL || window.webkitURL).createObjectURL(
-                evt.data
+                img
             );
             fig.updated_canvas_event();
             fig.waiting = false;
@@ -2088,8 +2157,8 @@ mpl.figure.prototype.mouse_event = function (event, name) {
         this.canvas_div.focus();
     }
 
-    var x = canvas_pos.x * mpl.ratio;
-    var y = canvas_pos.y * mpl.ratio;
+    var x = canvas_pos.x * this.ratio;
+    var y = canvas_pos.y * this.ratio;
 
     this.send_message(name, {
         x: x,
@@ -2114,10 +2183,10 @@ mpl.figure.prototype._key_event_extra = function (_event, _name) {
 mpl.figure.prototype.key_event = function (event, name) {
     // Prevent repeat events
     if (name === 'key_press') {
-        if (event.which === this._key) {
+        if (event.key === this._key) {
             return;
         } else {
-            this._key = event.which;
+            this._key = event.key;
         }
     }
     if (name === 'key_release') {
@@ -2125,18 +2194,17 @@ mpl.figure.prototype.key_event = function (event, name) {
     }
 
     var value = '';
-    if (event.ctrlKey && event.which !== 17) {
+    if (event.ctrlKey && event.key !== 'Control') {
         value += 'ctrl+';
     }
-    if (event.altKey && event.which !== 18) {
+    else if (event.altKey && event.key !== 'Alt') {
         value += 'alt+';
     }
-    if (event.shiftKey && event.which !== 16) {
+    else if (event.shiftKey && event.key !== 'Shift') {
         value += 'shift+';
     }
 
-    value += 'k';
-    value += event.which.toString();
+    value += 'k' + event.key;
 
     this._key_event_extra(event, name);
 
@@ -2155,9 +2223,13 @@ mpl.figure.prototype.toolbar_button_onclick = function (name) {
 mpl.figure.prototype.toolbar_button_onmouseover = function (tooltip) {
     this.message.textContent = tooltip;
 };
+
+///////////////// REMAINING CONTENT GENERATED BY embed_js.py /////////////////
+// prettier-ignore
+var _JSXTOOLS_RESIZE_OBSERVER=function(A){var t,i=new WeakMap,n=new WeakMap,a=new WeakMap,r=new WeakMap,o=new Set;function s(e){if(!(this instanceof s))throw new TypeError("Constructor requires 'new' operator");i.set(this,e)}function h(){throw new TypeError("Function is not a constructor")}function c(e,t,i,n){e=0 in arguments?Number(arguments[0]):0,t=1 in arguments?Number(arguments[1]):0,i=2 in arguments?Number(arguments[2]):0,n=3 in arguments?Number(arguments[3]):0,this.right=(this.x=this.left=e)+(this.width=i),this.bottom=(this.y=this.top=t)+(this.height=n),Object.freeze(this)}function d(){t=requestAnimationFrame(d);var s=new WeakMap,p=new Set;o.forEach((function(t){r.get(t).forEach((function(i){var r=t instanceof window.SVGElement,o=a.get(t),d=r?0:parseFloat(o.paddingTop),f=r?0:parseFloat(o.paddingRight),l=r?0:parseFloat(o.paddingBottom),u=r?0:parseFloat(o.paddingLeft),g=r?0:parseFloat(o.borderTopWidth),m=r?0:parseFloat(o.borderRightWidth),w=r?0:parseFloat(o.borderBottomWidth),b=u+f,F=d+l,v=(r?0:parseFloat(o.borderLeftWidth))+m,W=g+w,y=r?0:t.offsetHeight-W-t.clientHeight,E=r?0:t.offsetWidth-v-t.clientWidth,R=b+v,z=F+W,M=r?t.width:parseFloat(o.width)-R-E,O=r?t.height:parseFloat(o.height)-z-y;if(n.has(t)){var k=n.get(t);if(k[0]===M&&k[1]===O)return}n.set(t,[M,O]);var S=Object.create(h.prototype);S.target=t,S.contentRect=new c(u,d,M,O),s.has(i)||(s.set(i,[]),p.add(i)),s.get(i).push(S)}))})),p.forEach((function(e){i.get(e).call(e,s.get(e),e)}))}return s.prototype.observe=function(i){if(i instanceof window.Element){r.has(i)||(r.set(i,new Set),o.add(i),a.set(i,window.getComputedStyle(i)));var n=r.get(i);n.has(this)||n.add(this),cancelAnimationFrame(t),t=requestAnimationFrame(d)}},s.prototype.unobserve=function(i){if(i instanceof window.Element&&r.has(i)){var n=r.get(i);n.has(this)&&(n.delete(this),n.size||(r.delete(i),o.delete(i))),n.size||r.delete(i),o.size||cancelAnimationFrame(t)}},A.DOMRectReadOnly=c,A.ResizeObserver=s,A.ResizeObserverEntry=h,A}; // eslint-disable-line
 mpl.toolbar_items = [["Home", "Reset original view", "fa fa-home icon-home", "home"], ["Back", "Back to previous view", "fa fa-arrow-left icon-arrow-left", "back"], ["Forward", "Forward to next view", "fa fa-arrow-right icon-arrow-right", "forward"], ["", "", "", ""], ["Pan", "Left button pans, Right button zooms\nx/y fixes axis, CTRL fixes aspect", "fa fa-arrows icon-move", "pan"], ["Zoom", "Zoom to rectangle\nx/y fixes axis, CTRL fixes aspect", "fa fa-square-o icon-check-empty", "zoom"], ["", "", "", ""], ["Download", "Download plot", "fa fa-floppy-o icon-save", "download"]];
 
-mpl.extensions = ["eps", "jpeg", "pdf", "png", "ps", "raw", "svg", "tif"];
+mpl.extensions = ["eps", "jpeg", "pgf", "pdf", "png", "ps", "raw", "svg", "tif"];
 
 mpl.default_extension = "png";/* global mpl */
 
@@ -2166,6 +2238,19 @@ var comm_websocket_adapter = function (comm) {
     // object with the appropriate methods. Currently this is a non binary
     // socket, so there is still some room for performance tuning.
     var ws = {};
+
+    ws.binaryType = comm.kernel.ws.binaryType;
+    ws.readyState = comm.kernel.ws.readyState;
+    function updateReadyState(_event) {
+        if (comm.kernel.ws) {
+            ws.readyState = comm.kernel.ws.readyState;
+        } else {
+            ws.readyState = 3; // Closed state.
+        }
+    }
+    comm.kernel.ws.addEventListener('open', updateReadyState);
+    comm.kernel.ws.addEventListener('close', updateReadyState);
+    comm.kernel.ws.addEventListener('error', updateReadyState);
 
     ws.close = function () {
         comm.close();
@@ -2177,8 +2262,14 @@ var comm_websocket_adapter = function (comm) {
     // Register the callback with on_msg.
     comm.on_msg(function (msg) {
         //console.log('receiving', msg['content']['data'], msg);
+        var data = msg['content']['data'];
+        if (data['blob'] !== undefined) {
+            data = {
+                data: new Blob(msg['buffers'], { type: data['blob'] }),
+            };
+        }
         // Pass the mpl event to the overridden (by mpl) onmessage function.
-        ws.onmessage(msg['content']['data']);
+        ws.onmessage(data);
     });
     return ws;
 };
@@ -2209,11 +2300,20 @@ mpl.mpl_figure_comm = function (comm, msg) {
         console.error('Failed to find cell for figure', id, fig);
         return;
     }
+    fig.cell_info[0].output_area.element.on(
+        'cleared',
+        { fig: fig },
+        fig._remove_fig_handler
+    );
 };
 
 mpl.figure.prototype.handle_close = function (fig, msg) {
-    var width = fig.canvas.width / mpl.ratio;
-    fig.root.removeEventListener('remove', this._remove_fig_handler);
+    var width = fig.canvas.width / fig.ratio;
+    fig.cell_info[0].output_area.element.off(
+        'cleared',
+        fig._remove_fig_handler
+    );
+    fig.resizeObserverInstance.unobserve(fig.canvas_div);
 
     // Update the output cell to use the data from the current canvas.
     fig.push_to_output();
@@ -2233,7 +2333,7 @@ mpl.figure.prototype.close_ws = function (fig, msg) {
 
 mpl.figure.prototype.push_to_output = function (_remove_interactive) {
     // Turn the data on the canvas into data in the output cell.
-    var width = this.canvas.width / mpl.ratio;
+    var width = this.canvas.width / this.ratio;
     var dataURL = this.canvas.toDataURL();
     this.cell_info[1]['text/html'] =
         '<img src="' + dataURL + '" width="' + width + '">';
@@ -2332,13 +2432,17 @@ mpl.figure.prototype._init_toolbar = function () {
     titlebar.insertBefore(buttongrp, titlebar.firstChild);
 };
 
-mpl.figure.prototype._remove_fig_handler = function () {
-    this.close_ws(this, {});
+mpl.figure.prototype._remove_fig_handler = function (event) {
+    var fig = event.data.fig;
+    if (event.target !== this) {
+        // Ignore bubbled events from children.
+        return;
+    }
+    fig.close_ws(fig, {});
 };
 
 mpl.figure.prototype._root_extra_style = function (el) {
     el.style.boxSizing = 'content-box'; // override notebook setting of border-box.
-    el.addEventListener('remove', this._remove_fig_handler);
 };
 
 mpl.figure.prototype._canvas_extra_style = function (el) {
@@ -2483,8 +2587,8 @@ mpl.figure = function (figure_id, websocket, ondownload, parent_element) {
     this.ws.onopen = function () {
         fig.send_message('supports_binary', { value: fig.supports_binary });
         fig.send_message('send_image_mode', {});
-        if (mpl.ratio !== 1) {
-            fig.send_message('set_dpi_ratio', { dpi_ratio: mpl.ratio });
+        if (fig.ratio !== 1) {
+            fig.send_message('set_dpi_ratio', { dpi_ratio: fig.ratio });
         }
         fig.send_message('refresh', {});
     };
@@ -2577,7 +2681,7 @@ mpl.figure.prototype._init_canvas = function () {
         this.context.backingStorePixelRatio ||
         1;
 
-    mpl.ratio = (window.devicePixelRatio || 1) / backingStore;
+    this.ratio = (window.devicePixelRatio || 1) / backingStore;
 
     var rubberband_canvas = (this.rubberband_canvas = document.createElement(
         'canvas'
@@ -2587,7 +2691,17 @@ mpl.figure.prototype._init_canvas = function () {
         'box-sizing: content-box; position: absolute; left: 0; top: 0; z-index: 1;'
     );
 
-    var resizeObserver = new ResizeObserver(function (entries) {
+    // Apply a ponyfill if ResizeObserver is not implemented by browser.
+    if (this.ResizeObserver === undefined) {
+        if (window.ResizeObserver !== undefined) {
+            this.ResizeObserver = window.ResizeObserver;
+        } else {
+            var obs = _JSXTOOLS_RESIZE_OBSERVER({});
+            this.ResizeObserver = obs.ResizeObserver;
+        }
+    }
+
+    this.resizeObserverInstance = new this.ResizeObserver(function (entries) {
         var nentries = entries.length;
         for (var i = 0; i < nentries; i++) {
             var entry = entries[i];
@@ -2621,8 +2735,8 @@ mpl.figure.prototype._init_canvas = function () {
                     entry.devicePixelContentBoxSize[0].blockSize
                 );
             } else {
-                canvas.setAttribute('width', width * mpl.ratio);
-                canvas.setAttribute('height', height * mpl.ratio);
+                canvas.setAttribute('width', width * fig.ratio);
+                canvas.setAttribute('height', height * fig.ratio);
             }
             canvas.setAttribute(
                 'style',
@@ -2635,12 +2749,12 @@ mpl.figure.prototype._init_canvas = function () {
             // And update the size in Python. We ignore the initial 0/0 size
             // that occurs as the element is placed into the DOM, which should
             // otherwise not happen due to the minimum size styling.
-            if (width != 0 && height != 0) {
+            if (fig.ws.readyState == 1 && width != 0 && height != 0) {
                 fig.request_resize(width, height);
             }
         }
     });
-    resizeObserver.observe(canvas_div);
+    this.resizeObserverInstance.observe(canvas_div);
 
     function on_mouse_event_closure(name) {
         return function (event) {
@@ -2655,6 +2769,10 @@ mpl.figure.prototype._init_canvas = function () {
     rubberband_canvas.addEventListener(
         'mouseup',
         on_mouse_event_closure('button_release')
+    );
+    rubberband_canvas.addEventListener(
+        'dblclick',
+        on_mouse_event_closure('dblclick')
     );
     // Throttle sequential mouse events to 1 every 20ms.
     rubberband_canvas.addEventListener(
@@ -2820,10 +2938,10 @@ mpl.figure.prototype.handle_resize = function (fig, msg) {
 };
 
 mpl.figure.prototype.handle_rubberband = function (fig, msg) {
-    var x0 = msg['x0'] / mpl.ratio;
-    var y0 = (fig.canvas.height - msg['y0']) / mpl.ratio;
-    var x1 = msg['x1'] / mpl.ratio;
-    var y1 = (fig.canvas.height - msg['y1']) / mpl.ratio;
+    var x0 = msg['x0'] / fig.ratio;
+    var y0 = (fig.canvas.height - msg['y0']) / fig.ratio;
+    var x1 = msg['x1'] / fig.ratio;
+    var y1 = (fig.canvas.height - msg['y1']) / fig.ratio;
     x0 = Math.floor(x0) + 0.5;
     y0 = Math.floor(y0) + 0.5;
     x1 = Math.floor(x1) + 0.5;
@@ -2836,8 +2954,8 @@ mpl.figure.prototype.handle_rubberband = function (fig, msg) {
     fig.rubberband_context.clearRect(
         0,
         0,
-        fig.canvas.width / mpl.ratio,
-        fig.canvas.height / mpl.ratio
+        fig.canvas.width / fig.ratio,
+        fig.canvas.height / fig.ratio
     );
 
     fig.rubberband_context.strokeRect(min_x, min_y, width, height);
@@ -2913,11 +3031,14 @@ mpl.figure.prototype.updated_canvas_event = function () {
 mpl.figure.prototype._make_on_message_function = function (fig) {
     return function socket_on_message(evt) {
         if (evt.data instanceof Blob) {
-            /* FIXME: We get "Resource interpreted as Image but
-             * transferred with MIME type text/plain:" errors on
-             * Chrome.  But how to set the MIME type?  It doesn't seem
-             * to be part of the websocket stream */
-            evt.data.type = 'image/png';
+            var img = evt.data;
+            if (img.type !== 'image/png') {
+                /* FIXME: We get "Resource interpreted as Image but
+                 * transferred with MIME type text/plain:" errors on
+                 * Chrome.  But how to set the MIME type?  It doesn't seem
+                 * to be part of the websocket stream */
+                img.type = 'image/png';
+            }
 
             /* Free the memory for the previous frames */
             if (fig.imageObj.src) {
@@ -2927,7 +3048,7 @@ mpl.figure.prototype._make_on_message_function = function (fig) {
             }
 
             fig.imageObj.src = (window.URL || window.webkitURL).createObjectURL(
-                evt.data
+                img
             );
             fig.updated_canvas_event();
             fig.waiting = false;
@@ -3020,8 +3141,8 @@ mpl.figure.prototype.mouse_event = function (event, name) {
         this.canvas_div.focus();
     }
 
-    var x = canvas_pos.x * mpl.ratio;
-    var y = canvas_pos.y * mpl.ratio;
+    var x = canvas_pos.x * this.ratio;
+    var y = canvas_pos.y * this.ratio;
 
     this.send_message(name, {
         x: x,
@@ -3046,10 +3167,10 @@ mpl.figure.prototype._key_event_extra = function (_event, _name) {
 mpl.figure.prototype.key_event = function (event, name) {
     // Prevent repeat events
     if (name === 'key_press') {
-        if (event.which === this._key) {
+        if (event.key === this._key) {
             return;
         } else {
-            this._key = event.which;
+            this._key = event.key;
         }
     }
     if (name === 'key_release') {
@@ -3057,18 +3178,17 @@ mpl.figure.prototype.key_event = function (event, name) {
     }
 
     var value = '';
-    if (event.ctrlKey && event.which !== 17) {
+    if (event.ctrlKey && event.key !== 'Control') {
         value += 'ctrl+';
     }
-    if (event.altKey && event.which !== 18) {
+    else if (event.altKey && event.key !== 'Alt') {
         value += 'alt+';
     }
-    if (event.shiftKey && event.which !== 16) {
+    else if (event.shiftKey && event.key !== 'Shift') {
         value += 'shift+';
     }
 
-    value += 'k';
-    value += event.which.toString();
+    value += 'k' + event.key;
 
     this._key_event_extra(event, name);
 
@@ -3087,9 +3207,13 @@ mpl.figure.prototype.toolbar_button_onclick = function (name) {
 mpl.figure.prototype.toolbar_button_onmouseover = function (tooltip) {
     this.message.textContent = tooltip;
 };
+
+///////////////// REMAINING CONTENT GENERATED BY embed_js.py /////////////////
+// prettier-ignore
+var _JSXTOOLS_RESIZE_OBSERVER=function(A){var t,i=new WeakMap,n=new WeakMap,a=new WeakMap,r=new WeakMap,o=new Set;function s(e){if(!(this instanceof s))throw new TypeError("Constructor requires 'new' operator");i.set(this,e)}function h(){throw new TypeError("Function is not a constructor")}function c(e,t,i,n){e=0 in arguments?Number(arguments[0]):0,t=1 in arguments?Number(arguments[1]):0,i=2 in arguments?Number(arguments[2]):0,n=3 in arguments?Number(arguments[3]):0,this.right=(this.x=this.left=e)+(this.width=i),this.bottom=(this.y=this.top=t)+(this.height=n),Object.freeze(this)}function d(){t=requestAnimationFrame(d);var s=new WeakMap,p=new Set;o.forEach((function(t){r.get(t).forEach((function(i){var r=t instanceof window.SVGElement,o=a.get(t),d=r?0:parseFloat(o.paddingTop),f=r?0:parseFloat(o.paddingRight),l=r?0:parseFloat(o.paddingBottom),u=r?0:parseFloat(o.paddingLeft),g=r?0:parseFloat(o.borderTopWidth),m=r?0:parseFloat(o.borderRightWidth),w=r?0:parseFloat(o.borderBottomWidth),b=u+f,F=d+l,v=(r?0:parseFloat(o.borderLeftWidth))+m,W=g+w,y=r?0:t.offsetHeight-W-t.clientHeight,E=r?0:t.offsetWidth-v-t.clientWidth,R=b+v,z=F+W,M=r?t.width:parseFloat(o.width)-R-E,O=r?t.height:parseFloat(o.height)-z-y;if(n.has(t)){var k=n.get(t);if(k[0]===M&&k[1]===O)return}n.set(t,[M,O]);var S=Object.create(h.prototype);S.target=t,S.contentRect=new c(u,d,M,O),s.has(i)||(s.set(i,[]),p.add(i)),s.get(i).push(S)}))})),p.forEach((function(e){i.get(e).call(e,s.get(e),e)}))}return s.prototype.observe=function(i){if(i instanceof window.Element){r.has(i)||(r.set(i,new Set),o.add(i),a.set(i,window.getComputedStyle(i)));var n=r.get(i);n.has(this)||n.add(this),cancelAnimationFrame(t),t=requestAnimationFrame(d)}},s.prototype.unobserve=function(i){if(i instanceof window.Element&&r.has(i)){var n=r.get(i);n.has(this)&&(n.delete(this),n.size||(r.delete(i),o.delete(i))),n.size||r.delete(i),o.size||cancelAnimationFrame(t)}},A.DOMRectReadOnly=c,A.ResizeObserver=s,A.ResizeObserverEntry=h,A}; // eslint-disable-line
 mpl.toolbar_items = [["Home", "Reset original view", "fa fa-home icon-home", "home"], ["Back", "Back to previous view", "fa fa-arrow-left icon-arrow-left", "back"], ["Forward", "Forward to next view", "fa fa-arrow-right icon-arrow-right", "forward"], ["", "", "", ""], ["Pan", "Left button pans, Right button zooms\nx/y fixes axis, CTRL fixes aspect", "fa fa-arrows icon-move", "pan"], ["Zoom", "Zoom to rectangle\nx/y fixes axis, CTRL fixes aspect", "fa fa-square-o icon-check-empty", "zoom"], ["", "", "", ""], ["Download", "Download plot", "fa fa-floppy-o icon-save", "download"]];
 
-mpl.extensions = ["eps", "jpeg", "pdf", "png", "ps", "raw", "svg", "tif"];
+mpl.extensions = ["eps", "jpeg", "pgf", "pdf", "png", "ps", "raw", "svg", "tif"];
 
 mpl.default_extension = "png";/* global mpl */
 
@@ -3098,6 +3222,19 @@ var comm_websocket_adapter = function (comm) {
     // object with the appropriate methods. Currently this is a non binary
     // socket, so there is still some room for performance tuning.
     var ws = {};
+
+    ws.binaryType = comm.kernel.ws.binaryType;
+    ws.readyState = comm.kernel.ws.readyState;
+    function updateReadyState(_event) {
+        if (comm.kernel.ws) {
+            ws.readyState = comm.kernel.ws.readyState;
+        } else {
+            ws.readyState = 3; // Closed state.
+        }
+    }
+    comm.kernel.ws.addEventListener('open', updateReadyState);
+    comm.kernel.ws.addEventListener('close', updateReadyState);
+    comm.kernel.ws.addEventListener('error', updateReadyState);
 
     ws.close = function () {
         comm.close();
@@ -3109,8 +3246,14 @@ var comm_websocket_adapter = function (comm) {
     // Register the callback with on_msg.
     comm.on_msg(function (msg) {
         //console.log('receiving', msg['content']['data'], msg);
+        var data = msg['content']['data'];
+        if (data['blob'] !== undefined) {
+            data = {
+                data: new Blob(msg['buffers'], { type: data['blob'] }),
+            };
+        }
         // Pass the mpl event to the overridden (by mpl) onmessage function.
-        ws.onmessage(msg['content']['data']);
+        ws.onmessage(data);
     });
     return ws;
 };
@@ -3141,11 +3284,20 @@ mpl.mpl_figure_comm = function (comm, msg) {
         console.error('Failed to find cell for figure', id, fig);
         return;
     }
+    fig.cell_info[0].output_area.element.on(
+        'cleared',
+        { fig: fig },
+        fig._remove_fig_handler
+    );
 };
 
 mpl.figure.prototype.handle_close = function (fig, msg) {
-    var width = fig.canvas.width / mpl.ratio;
-    fig.root.removeEventListener('remove', this._remove_fig_handler);
+    var width = fig.canvas.width / fig.ratio;
+    fig.cell_info[0].output_area.element.off(
+        'cleared',
+        fig._remove_fig_handler
+    );
+    fig.resizeObserverInstance.unobserve(fig.canvas_div);
 
     // Update the output cell to use the data from the current canvas.
     fig.push_to_output();
@@ -3165,7 +3317,7 @@ mpl.figure.prototype.close_ws = function (fig, msg) {
 
 mpl.figure.prototype.push_to_output = function (_remove_interactive) {
     // Turn the data on the canvas into data in the output cell.
-    var width = this.canvas.width / mpl.ratio;
+    var width = this.canvas.width / this.ratio;
     var dataURL = this.canvas.toDataURL();
     this.cell_info[1]['text/html'] =
         '<img src="' + dataURL + '" width="' + width + '">';
@@ -3264,13 +3416,17 @@ mpl.figure.prototype._init_toolbar = function () {
     titlebar.insertBefore(buttongrp, titlebar.firstChild);
 };
 
-mpl.figure.prototype._remove_fig_handler = function () {
-    this.close_ws(this, {});
+mpl.figure.prototype._remove_fig_handler = function (event) {
+    var fig = event.data.fig;
+    if (event.target !== this) {
+        // Ignore bubbled events from children.
+        return;
+    }
+    fig.close_ws(fig, {});
 };
 
 mpl.figure.prototype._root_extra_style = function (el) {
     el.style.boxSizing = 'content-box'; // override notebook setting of border-box.
-    el.addEventListener('remove', this._remove_fig_handler);
 };
 
 mpl.figure.prototype._canvas_extra_style = function (el) {
@@ -3418,8 +3574,8 @@ mpl.figure = function (figure_id, websocket, ondownload, parent_element) {
     this.ws.onopen = function () {
         fig.send_message('supports_binary', { value: fig.supports_binary });
         fig.send_message('send_image_mode', {});
-        if (mpl.ratio !== 1) {
-            fig.send_message('set_dpi_ratio', { dpi_ratio: mpl.ratio });
+        if (fig.ratio !== 1) {
+            fig.send_message('set_dpi_ratio', { dpi_ratio: fig.ratio });
         }
         fig.send_message('refresh', {});
     };
@@ -3512,7 +3668,7 @@ mpl.figure.prototype._init_canvas = function () {
         this.context.backingStorePixelRatio ||
         1;
 
-    mpl.ratio = (window.devicePixelRatio || 1) / backingStore;
+    this.ratio = (window.devicePixelRatio || 1) / backingStore;
 
     var rubberband_canvas = (this.rubberband_canvas = document.createElement(
         'canvas'
@@ -3522,7 +3678,17 @@ mpl.figure.prototype._init_canvas = function () {
         'box-sizing: content-box; position: absolute; left: 0; top: 0; z-index: 1;'
     );
 
-    var resizeObserver = new ResizeObserver(function (entries) {
+    // Apply a ponyfill if ResizeObserver is not implemented by browser.
+    if (this.ResizeObserver === undefined) {
+        if (window.ResizeObserver !== undefined) {
+            this.ResizeObserver = window.ResizeObserver;
+        } else {
+            var obs = _JSXTOOLS_RESIZE_OBSERVER({});
+            this.ResizeObserver = obs.ResizeObserver;
+        }
+    }
+
+    this.resizeObserverInstance = new this.ResizeObserver(function (entries) {
         var nentries = entries.length;
         for (var i = 0; i < nentries; i++) {
             var entry = entries[i];
@@ -3556,8 +3722,8 @@ mpl.figure.prototype._init_canvas = function () {
                     entry.devicePixelContentBoxSize[0].blockSize
                 );
             } else {
-                canvas.setAttribute('width', width * mpl.ratio);
-                canvas.setAttribute('height', height * mpl.ratio);
+                canvas.setAttribute('width', width * fig.ratio);
+                canvas.setAttribute('height', height * fig.ratio);
             }
             canvas.setAttribute(
                 'style',
@@ -3570,12 +3736,12 @@ mpl.figure.prototype._init_canvas = function () {
             // And update the size in Python. We ignore the initial 0/0 size
             // that occurs as the element is placed into the DOM, which should
             // otherwise not happen due to the minimum size styling.
-            if (width != 0 && height != 0) {
+            if (fig.ws.readyState == 1 && width != 0 && height != 0) {
                 fig.request_resize(width, height);
             }
         }
     });
-    resizeObserver.observe(canvas_div);
+    this.resizeObserverInstance.observe(canvas_div);
 
     function on_mouse_event_closure(name) {
         return function (event) {
@@ -3590,6 +3756,10 @@ mpl.figure.prototype._init_canvas = function () {
     rubberband_canvas.addEventListener(
         'mouseup',
         on_mouse_event_closure('button_release')
+    );
+    rubberband_canvas.addEventListener(
+        'dblclick',
+        on_mouse_event_closure('dblclick')
     );
     // Throttle sequential mouse events to 1 every 20ms.
     rubberband_canvas.addEventListener(
@@ -3755,10 +3925,10 @@ mpl.figure.prototype.handle_resize = function (fig, msg) {
 };
 
 mpl.figure.prototype.handle_rubberband = function (fig, msg) {
-    var x0 = msg['x0'] / mpl.ratio;
-    var y0 = (fig.canvas.height - msg['y0']) / mpl.ratio;
-    var x1 = msg['x1'] / mpl.ratio;
-    var y1 = (fig.canvas.height - msg['y1']) / mpl.ratio;
+    var x0 = msg['x0'] / fig.ratio;
+    var y0 = (fig.canvas.height - msg['y0']) / fig.ratio;
+    var x1 = msg['x1'] / fig.ratio;
+    var y1 = (fig.canvas.height - msg['y1']) / fig.ratio;
     x0 = Math.floor(x0) + 0.5;
     y0 = Math.floor(y0) + 0.5;
     x1 = Math.floor(x1) + 0.5;
@@ -3771,8 +3941,8 @@ mpl.figure.prototype.handle_rubberband = function (fig, msg) {
     fig.rubberband_context.clearRect(
         0,
         0,
-        fig.canvas.width / mpl.ratio,
-        fig.canvas.height / mpl.ratio
+        fig.canvas.width / fig.ratio,
+        fig.canvas.height / fig.ratio
     );
 
     fig.rubberband_context.strokeRect(min_x, min_y, width, height);
@@ -3848,11 +4018,14 @@ mpl.figure.prototype.updated_canvas_event = function () {
 mpl.figure.prototype._make_on_message_function = function (fig) {
     return function socket_on_message(evt) {
         if (evt.data instanceof Blob) {
-            /* FIXME: We get "Resource interpreted as Image but
-             * transferred with MIME type text/plain:" errors on
-             * Chrome.  But how to set the MIME type?  It doesn't seem
-             * to be part of the websocket stream */
-            evt.data.type = 'image/png';
+            var img = evt.data;
+            if (img.type !== 'image/png') {
+                /* FIXME: We get "Resource interpreted as Image but
+                 * transferred with MIME type text/plain:" errors on
+                 * Chrome.  But how to set the MIME type?  It doesn't seem
+                 * to be part of the websocket stream */
+                img.type = 'image/png';
+            }
 
             /* Free the memory for the previous frames */
             if (fig.imageObj.src) {
@@ -3862,7 +4035,7 @@ mpl.figure.prototype._make_on_message_function = function (fig) {
             }
 
             fig.imageObj.src = (window.URL || window.webkitURL).createObjectURL(
-                evt.data
+                img
             );
             fig.updated_canvas_event();
             fig.waiting = false;
@@ -3955,8 +4128,8 @@ mpl.figure.prototype.mouse_event = function (event, name) {
         this.canvas_div.focus();
     }
 
-    var x = canvas_pos.x * mpl.ratio;
-    var y = canvas_pos.y * mpl.ratio;
+    var x = canvas_pos.x * this.ratio;
+    var y = canvas_pos.y * this.ratio;
 
     this.send_message(name, {
         x: x,
@@ -3981,10 +4154,10 @@ mpl.figure.prototype._key_event_extra = function (_event, _name) {
 mpl.figure.prototype.key_event = function (event, name) {
     // Prevent repeat events
     if (name === 'key_press') {
-        if (event.which === this._key) {
+        if (event.key === this._key) {
             return;
         } else {
-            this._key = event.which;
+            this._key = event.key;
         }
     }
     if (name === 'key_release') {
@@ -3992,18 +4165,17 @@ mpl.figure.prototype.key_event = function (event, name) {
     }
 
     var value = '';
-    if (event.ctrlKey && event.which !== 17) {
+    if (event.ctrlKey && event.key !== 'Control') {
         value += 'ctrl+';
     }
-    if (event.altKey && event.which !== 18) {
+    else if (event.altKey && event.key !== 'Alt') {
         value += 'alt+';
     }
-    if (event.shiftKey && event.which !== 16) {
+    else if (event.shiftKey && event.key !== 'Shift') {
         value += 'shift+';
     }
 
-    value += 'k';
-    value += event.which.toString();
+    value += 'k' + event.key;
 
     this._key_event_extra(event, name);
 
@@ -4022,9 +4194,13 @@ mpl.figure.prototype.toolbar_button_onclick = function (name) {
 mpl.figure.prototype.toolbar_button_onmouseover = function (tooltip) {
     this.message.textContent = tooltip;
 };
+
+///////////////// REMAINING CONTENT GENERATED BY embed_js.py /////////////////
+// prettier-ignore
+var _JSXTOOLS_RESIZE_OBSERVER=function(A){var t,i=new WeakMap,n=new WeakMap,a=new WeakMap,r=new WeakMap,o=new Set;function s(e){if(!(this instanceof s))throw new TypeError("Constructor requires 'new' operator");i.set(this,e)}function h(){throw new TypeError("Function is not a constructor")}function c(e,t,i,n){e=0 in arguments?Number(arguments[0]):0,t=1 in arguments?Number(arguments[1]):0,i=2 in arguments?Number(arguments[2]):0,n=3 in arguments?Number(arguments[3]):0,this.right=(this.x=this.left=e)+(this.width=i),this.bottom=(this.y=this.top=t)+(this.height=n),Object.freeze(this)}function d(){t=requestAnimationFrame(d);var s=new WeakMap,p=new Set;o.forEach((function(t){r.get(t).forEach((function(i){var r=t instanceof window.SVGElement,o=a.get(t),d=r?0:parseFloat(o.paddingTop),f=r?0:parseFloat(o.paddingRight),l=r?0:parseFloat(o.paddingBottom),u=r?0:parseFloat(o.paddingLeft),g=r?0:parseFloat(o.borderTopWidth),m=r?0:parseFloat(o.borderRightWidth),w=r?0:parseFloat(o.borderBottomWidth),b=u+f,F=d+l,v=(r?0:parseFloat(o.borderLeftWidth))+m,W=g+w,y=r?0:t.offsetHeight-W-t.clientHeight,E=r?0:t.offsetWidth-v-t.clientWidth,R=b+v,z=F+W,M=r?t.width:parseFloat(o.width)-R-E,O=r?t.height:parseFloat(o.height)-z-y;if(n.has(t)){var k=n.get(t);if(k[0]===M&&k[1]===O)return}n.set(t,[M,O]);var S=Object.create(h.prototype);S.target=t,S.contentRect=new c(u,d,M,O),s.has(i)||(s.set(i,[]),p.add(i)),s.get(i).push(S)}))})),p.forEach((function(e){i.get(e).call(e,s.get(e),e)}))}return s.prototype.observe=function(i){if(i instanceof window.Element){r.has(i)||(r.set(i,new Set),o.add(i),a.set(i,window.getComputedStyle(i)));var n=r.get(i);n.has(this)||n.add(this),cancelAnimationFrame(t),t=requestAnimationFrame(d)}},s.prototype.unobserve=function(i){if(i instanceof window.Element&&r.has(i)){var n=r.get(i);n.has(this)&&(n.delete(this),n.size||(r.delete(i),o.delete(i))),n.size||r.delete(i),o.size||cancelAnimationFrame(t)}},A.DOMRectReadOnly=c,A.ResizeObserver=s,A.ResizeObserverEntry=h,A}; // eslint-disable-line
 mpl.toolbar_items = [["Home", "Reset original view", "fa fa-home icon-home", "home"], ["Back", "Back to previous view", "fa fa-arrow-left icon-arrow-left", "back"], ["Forward", "Forward to next view", "fa fa-arrow-right icon-arrow-right", "forward"], ["", "", "", ""], ["Pan", "Left button pans, Right button zooms\nx/y fixes axis, CTRL fixes aspect", "fa fa-arrows icon-move", "pan"], ["Zoom", "Zoom to rectangle\nx/y fixes axis, CTRL fixes aspect", "fa fa-square-o icon-check-empty", "zoom"], ["", "", "", ""], ["Download", "Download plot", "fa fa-floppy-o icon-save", "download"]];
 
-mpl.extensions = ["eps", "jpeg", "pdf", "png", "ps", "raw", "svg", "tif"];
+mpl.extensions = ["eps", "jpeg", "pgf", "pdf", "png", "ps", "raw", "svg", "tif"];
 
 mpl.default_extension = "png";/* global mpl */
 
@@ -4033,6 +4209,19 @@ var comm_websocket_adapter = function (comm) {
     // object with the appropriate methods. Currently this is a non binary
     // socket, so there is still some room for performance tuning.
     var ws = {};
+
+    ws.binaryType = comm.kernel.ws.binaryType;
+    ws.readyState = comm.kernel.ws.readyState;
+    function updateReadyState(_event) {
+        if (comm.kernel.ws) {
+            ws.readyState = comm.kernel.ws.readyState;
+        } else {
+            ws.readyState = 3; // Closed state.
+        }
+    }
+    comm.kernel.ws.addEventListener('open', updateReadyState);
+    comm.kernel.ws.addEventListener('close', updateReadyState);
+    comm.kernel.ws.addEventListener('error', updateReadyState);
 
     ws.close = function () {
         comm.close();
@@ -4044,8 +4233,14 @@ var comm_websocket_adapter = function (comm) {
     // Register the callback with on_msg.
     comm.on_msg(function (msg) {
         //console.log('receiving', msg['content']['data'], msg);
+        var data = msg['content']['data'];
+        if (data['blob'] !== undefined) {
+            data = {
+                data: new Blob(msg['buffers'], { type: data['blob'] }),
+            };
+        }
         // Pass the mpl event to the overridden (by mpl) onmessage function.
-        ws.onmessage(msg['content']['data']);
+        ws.onmessage(data);
     });
     return ws;
 };
@@ -4076,11 +4271,20 @@ mpl.mpl_figure_comm = function (comm, msg) {
         console.error('Failed to find cell for figure', id, fig);
         return;
     }
+    fig.cell_info[0].output_area.element.on(
+        'cleared',
+        { fig: fig },
+        fig._remove_fig_handler
+    );
 };
 
 mpl.figure.prototype.handle_close = function (fig, msg) {
-    var width = fig.canvas.width / mpl.ratio;
-    fig.root.removeEventListener('remove', this._remove_fig_handler);
+    var width = fig.canvas.width / fig.ratio;
+    fig.cell_info[0].output_area.element.off(
+        'cleared',
+        fig._remove_fig_handler
+    );
+    fig.resizeObserverInstance.unobserve(fig.canvas_div);
 
     // Update the output cell to use the data from the current canvas.
     fig.push_to_output();
@@ -4100,7 +4304,7 @@ mpl.figure.prototype.close_ws = function (fig, msg) {
 
 mpl.figure.prototype.push_to_output = function (_remove_interactive) {
     // Turn the data on the canvas into data in the output cell.
-    var width = this.canvas.width / mpl.ratio;
+    var width = this.canvas.width / this.ratio;
     var dataURL = this.canvas.toDataURL();
     this.cell_info[1]['text/html'] =
         '<img src="' + dataURL + '" width="' + width + '">';
@@ -4199,13 +4403,17 @@ mpl.figure.prototype._init_toolbar = function () {
     titlebar.insertBefore(buttongrp, titlebar.firstChild);
 };
 
-mpl.figure.prototype._remove_fig_handler = function () {
-    this.close_ws(this, {});
+mpl.figure.prototype._remove_fig_handler = function (event) {
+    var fig = event.data.fig;
+    if (event.target !== this) {
+        // Ignore bubbled events from children.
+        return;
+    }
+    fig.close_ws(fig, {});
 };
 
 mpl.figure.prototype._root_extra_style = function (el) {
     el.style.boxSizing = 'content-box'; // override notebook setting of border-box.
-    el.addEventListener('remove', this._remove_fig_handler);
 };
 
 mpl.figure.prototype._canvas_extra_style = function (el) {
@@ -4366,8 +4574,8 @@ mpl.figure = function (figure_id, websocket, ondownload, parent_element) {
     this.ws.onopen = function () {
         fig.send_message('supports_binary', { value: fig.supports_binary });
         fig.send_message('send_image_mode', {});
-        if (mpl.ratio !== 1) {
-            fig.send_message('set_dpi_ratio', { dpi_ratio: mpl.ratio });
+        if (fig.ratio !== 1) {
+            fig.send_message('set_dpi_ratio', { dpi_ratio: fig.ratio });
         }
         fig.send_message('refresh', {});
     };
@@ -4460,7 +4668,7 @@ mpl.figure.prototype._init_canvas = function () {
         this.context.backingStorePixelRatio ||
         1;
 
-    mpl.ratio = (window.devicePixelRatio || 1) / backingStore;
+    this.ratio = (window.devicePixelRatio || 1) / backingStore;
 
     var rubberband_canvas = (this.rubberband_canvas = document.createElement(
         'canvas'
@@ -4470,7 +4678,17 @@ mpl.figure.prototype._init_canvas = function () {
         'box-sizing: content-box; position: absolute; left: 0; top: 0; z-index: 1;'
     );
 
-    var resizeObserver = new ResizeObserver(function (entries) {
+    // Apply a ponyfill if ResizeObserver is not implemented by browser.
+    if (this.ResizeObserver === undefined) {
+        if (window.ResizeObserver !== undefined) {
+            this.ResizeObserver = window.ResizeObserver;
+        } else {
+            var obs = _JSXTOOLS_RESIZE_OBSERVER({});
+            this.ResizeObserver = obs.ResizeObserver;
+        }
+    }
+
+    this.resizeObserverInstance = new this.ResizeObserver(function (entries) {
         var nentries = entries.length;
         for (var i = 0; i < nentries; i++) {
             var entry = entries[i];
@@ -4504,8 +4722,8 @@ mpl.figure.prototype._init_canvas = function () {
                     entry.devicePixelContentBoxSize[0].blockSize
                 );
             } else {
-                canvas.setAttribute('width', width * mpl.ratio);
-                canvas.setAttribute('height', height * mpl.ratio);
+                canvas.setAttribute('width', width * fig.ratio);
+                canvas.setAttribute('height', height * fig.ratio);
             }
             canvas.setAttribute(
                 'style',
@@ -4518,12 +4736,12 @@ mpl.figure.prototype._init_canvas = function () {
             // And update the size in Python. We ignore the initial 0/0 size
             // that occurs as the element is placed into the DOM, which should
             // otherwise not happen due to the minimum size styling.
-            if (width != 0 && height != 0) {
+            if (fig.ws.readyState == 1 && width != 0 && height != 0) {
                 fig.request_resize(width, height);
             }
         }
     });
-    resizeObserver.observe(canvas_div);
+    this.resizeObserverInstance.observe(canvas_div);
 
     function on_mouse_event_closure(name) {
         return function (event) {
@@ -4538,6 +4756,10 @@ mpl.figure.prototype._init_canvas = function () {
     rubberband_canvas.addEventListener(
         'mouseup',
         on_mouse_event_closure('button_release')
+    );
+    rubberband_canvas.addEventListener(
+        'dblclick',
+        on_mouse_event_closure('dblclick')
     );
     // Throttle sequential mouse events to 1 every 20ms.
     rubberband_canvas.addEventListener(
@@ -4703,10 +4925,10 @@ mpl.figure.prototype.handle_resize = function (fig, msg) {
 };
 
 mpl.figure.prototype.handle_rubberband = function (fig, msg) {
-    var x0 = msg['x0'] / mpl.ratio;
-    var y0 = (fig.canvas.height - msg['y0']) / mpl.ratio;
-    var x1 = msg['x1'] / mpl.ratio;
-    var y1 = (fig.canvas.height - msg['y1']) / mpl.ratio;
+    var x0 = msg['x0'] / fig.ratio;
+    var y0 = (fig.canvas.height - msg['y0']) / fig.ratio;
+    var x1 = msg['x1'] / fig.ratio;
+    var y1 = (fig.canvas.height - msg['y1']) / fig.ratio;
     x0 = Math.floor(x0) + 0.5;
     y0 = Math.floor(y0) + 0.5;
     x1 = Math.floor(x1) + 0.5;
@@ -4719,8 +4941,8 @@ mpl.figure.prototype.handle_rubberband = function (fig, msg) {
     fig.rubberband_context.clearRect(
         0,
         0,
-        fig.canvas.width / mpl.ratio,
-        fig.canvas.height / mpl.ratio
+        fig.canvas.width / fig.ratio,
+        fig.canvas.height / fig.ratio
     );
 
     fig.rubberband_context.strokeRect(min_x, min_y, width, height);
@@ -4796,11 +5018,14 @@ mpl.figure.prototype.updated_canvas_event = function () {
 mpl.figure.prototype._make_on_message_function = function (fig) {
     return function socket_on_message(evt) {
         if (evt.data instanceof Blob) {
-            /* FIXME: We get "Resource interpreted as Image but
-             * transferred with MIME type text/plain:" errors on
-             * Chrome.  But how to set the MIME type?  It doesn't seem
-             * to be part of the websocket stream */
-            evt.data.type = 'image/png';
+            var img = evt.data;
+            if (img.type !== 'image/png') {
+                /* FIXME: We get "Resource interpreted as Image but
+                 * transferred with MIME type text/plain:" errors on
+                 * Chrome.  But how to set the MIME type?  It doesn't seem
+                 * to be part of the websocket stream */
+                img.type = 'image/png';
+            }
 
             /* Free the memory for the previous frames */
             if (fig.imageObj.src) {
@@ -4810,7 +5035,7 @@ mpl.figure.prototype._make_on_message_function = function (fig) {
             }
 
             fig.imageObj.src = (window.URL || window.webkitURL).createObjectURL(
-                evt.data
+                img
             );
             fig.updated_canvas_event();
             fig.waiting = false;
@@ -4903,8 +5128,8 @@ mpl.figure.prototype.mouse_event = function (event, name) {
         this.canvas_div.focus();
     }
 
-    var x = canvas_pos.x * mpl.ratio;
-    var y = canvas_pos.y * mpl.ratio;
+    var x = canvas_pos.x * this.ratio;
+    var y = canvas_pos.y * this.ratio;
 
     this.send_message(name, {
         x: x,
@@ -4929,10 +5154,10 @@ mpl.figure.prototype._key_event_extra = function (_event, _name) {
 mpl.figure.prototype.key_event = function (event, name) {
     // Prevent repeat events
     if (name === 'key_press') {
-        if (event.which === this._key) {
+        if (event.key === this._key) {
             return;
         } else {
-            this._key = event.which;
+            this._key = event.key;
         }
     }
     if (name === 'key_release') {
@@ -4940,18 +5165,17 @@ mpl.figure.prototype.key_event = function (event, name) {
     }
 
     var value = '';
-    if (event.ctrlKey && event.which !== 17) {
+    if (event.ctrlKey && event.key !== 'Control') {
         value += 'ctrl+';
     }
-    if (event.altKey && event.which !== 18) {
+    else if (event.altKey && event.key !== 'Alt') {
         value += 'alt+';
     }
-    if (event.shiftKey && event.which !== 16) {
+    else if (event.shiftKey && event.key !== 'Shift') {
         value += 'shift+';
     }
 
-    value += 'k';
-    value += event.which.toString();
+    value += 'k' + event.key;
 
     this._key_event_extra(event, name);
 
@@ -4970,9 +5194,13 @@ mpl.figure.prototype.toolbar_button_onclick = function (name) {
 mpl.figure.prototype.toolbar_button_onmouseover = function (tooltip) {
     this.message.textContent = tooltip;
 };
+
+///////////////// REMAINING CONTENT GENERATED BY embed_js.py /////////////////
+// prettier-ignore
+var _JSXTOOLS_RESIZE_OBSERVER=function(A){var t,i=new WeakMap,n=new WeakMap,a=new WeakMap,r=new WeakMap,o=new Set;function s(e){if(!(this instanceof s))throw new TypeError("Constructor requires 'new' operator");i.set(this,e)}function h(){throw new TypeError("Function is not a constructor")}function c(e,t,i,n){e=0 in arguments?Number(arguments[0]):0,t=1 in arguments?Number(arguments[1]):0,i=2 in arguments?Number(arguments[2]):0,n=3 in arguments?Number(arguments[3]):0,this.right=(this.x=this.left=e)+(this.width=i),this.bottom=(this.y=this.top=t)+(this.height=n),Object.freeze(this)}function d(){t=requestAnimationFrame(d);var s=new WeakMap,p=new Set;o.forEach((function(t){r.get(t).forEach((function(i){var r=t instanceof window.SVGElement,o=a.get(t),d=r?0:parseFloat(o.paddingTop),f=r?0:parseFloat(o.paddingRight),l=r?0:parseFloat(o.paddingBottom),u=r?0:parseFloat(o.paddingLeft),g=r?0:parseFloat(o.borderTopWidth),m=r?0:parseFloat(o.borderRightWidth),w=r?0:parseFloat(o.borderBottomWidth),b=u+f,F=d+l,v=(r?0:parseFloat(o.borderLeftWidth))+m,W=g+w,y=r?0:t.offsetHeight-W-t.clientHeight,E=r?0:t.offsetWidth-v-t.clientWidth,R=b+v,z=F+W,M=r?t.width:parseFloat(o.width)-R-E,O=r?t.height:parseFloat(o.height)-z-y;if(n.has(t)){var k=n.get(t);if(k[0]===M&&k[1]===O)return}n.set(t,[M,O]);var S=Object.create(h.prototype);S.target=t,S.contentRect=new c(u,d,M,O),s.has(i)||(s.set(i,[]),p.add(i)),s.get(i).push(S)}))})),p.forEach((function(e){i.get(e).call(e,s.get(e),e)}))}return s.prototype.observe=function(i){if(i instanceof window.Element){r.has(i)||(r.set(i,new Set),o.add(i),a.set(i,window.getComputedStyle(i)));var n=r.get(i);n.has(this)||n.add(this),cancelAnimationFrame(t),t=requestAnimationFrame(d)}},s.prototype.unobserve=function(i){if(i instanceof window.Element&&r.has(i)){var n=r.get(i);n.has(this)&&(n.delete(this),n.size||(r.delete(i),o.delete(i))),n.size||r.delete(i),o.size||cancelAnimationFrame(t)}},A.DOMRectReadOnly=c,A.ResizeObserver=s,A.ResizeObserverEntry=h,A}; // eslint-disable-line
 mpl.toolbar_items = [["Home", "Reset original view", "fa fa-home icon-home", "home"], ["Back", "Back to previous view", "fa fa-arrow-left icon-arrow-left", "back"], ["Forward", "Forward to next view", "fa fa-arrow-right icon-arrow-right", "forward"], ["", "", "", ""], ["Pan", "Left button pans, Right button zooms\nx/y fixes axis, CTRL fixes aspect", "fa fa-arrows icon-move", "pan"], ["Zoom", "Zoom to rectangle\nx/y fixes axis, CTRL fixes aspect", "fa fa-square-o icon-check-empty", "zoom"], ["", "", "", ""], ["Download", "Download plot", "fa fa-floppy-o icon-save", "download"]];
 
-mpl.extensions = ["eps", "jpeg", "pdf", "png", "ps", "raw", "svg", "tif"];
+mpl.extensions = ["eps", "jpeg", "pgf", "pdf", "png", "ps", "raw", "svg", "tif"];
 
 mpl.default_extension = "png";/* global mpl */
 
@@ -4981,6 +5209,19 @@ var comm_websocket_adapter = function (comm) {
     // object with the appropriate methods. Currently this is a non binary
     // socket, so there is still some room for performance tuning.
     var ws = {};
+
+    ws.binaryType = comm.kernel.ws.binaryType;
+    ws.readyState = comm.kernel.ws.readyState;
+    function updateReadyState(_event) {
+        if (comm.kernel.ws) {
+            ws.readyState = comm.kernel.ws.readyState;
+        } else {
+            ws.readyState = 3; // Closed state.
+        }
+    }
+    comm.kernel.ws.addEventListener('open', updateReadyState);
+    comm.kernel.ws.addEventListener('close', updateReadyState);
+    comm.kernel.ws.addEventListener('error', updateReadyState);
 
     ws.close = function () {
         comm.close();
@@ -4992,8 +5233,14 @@ var comm_websocket_adapter = function (comm) {
     // Register the callback with on_msg.
     comm.on_msg(function (msg) {
         //console.log('receiving', msg['content']['data'], msg);
+        var data = msg['content']['data'];
+        if (data['blob'] !== undefined) {
+            data = {
+                data: new Blob(msg['buffers'], { type: data['blob'] }),
+            };
+        }
         // Pass the mpl event to the overridden (by mpl) onmessage function.
-        ws.onmessage(msg['content']['data']);
+        ws.onmessage(data);
     });
     return ws;
 };
@@ -5024,11 +5271,20 @@ mpl.mpl_figure_comm = function (comm, msg) {
         console.error('Failed to find cell for figure', id, fig);
         return;
     }
+    fig.cell_info[0].output_area.element.on(
+        'cleared',
+        { fig: fig },
+        fig._remove_fig_handler
+    );
 };
 
 mpl.figure.prototype.handle_close = function (fig, msg) {
-    var width = fig.canvas.width / mpl.ratio;
-    fig.root.removeEventListener('remove', this._remove_fig_handler);
+    var width = fig.canvas.width / fig.ratio;
+    fig.cell_info[0].output_area.element.off(
+        'cleared',
+        fig._remove_fig_handler
+    );
+    fig.resizeObserverInstance.unobserve(fig.canvas_div);
 
     // Update the output cell to use the data from the current canvas.
     fig.push_to_output();
@@ -5048,7 +5304,7 @@ mpl.figure.prototype.close_ws = function (fig, msg) {
 
 mpl.figure.prototype.push_to_output = function (_remove_interactive) {
     // Turn the data on the canvas into data in the output cell.
-    var width = this.canvas.width / mpl.ratio;
+    var width = this.canvas.width / this.ratio;
     var dataURL = this.canvas.toDataURL();
     this.cell_info[1]['text/html'] =
         '<img src="' + dataURL + '" width="' + width + '">';
@@ -5147,13 +5403,17 @@ mpl.figure.prototype._init_toolbar = function () {
     titlebar.insertBefore(buttongrp, titlebar.firstChild);
 };
 
-mpl.figure.prototype._remove_fig_handler = function () {
-    this.close_ws(this, {});
+mpl.figure.prototype._remove_fig_handler = function (event) {
+    var fig = event.data.fig;
+    if (event.target !== this) {
+        // Ignore bubbled events from children.
+        return;
+    }
+    fig.close_ws(fig, {});
 };
 
 mpl.figure.prototype._root_extra_style = function (el) {
     el.style.boxSizing = 'content-box'; // override notebook setting of border-box.
-    el.addEventListener('remove', this._remove_fig_handler);
 };
 
 mpl.figure.prototype._canvas_extra_style = function (el) {
@@ -5307,8 +5567,8 @@ mpl.figure = function (figure_id, websocket, ondownload, parent_element) {
     this.ws.onopen = function () {
         fig.send_message('supports_binary', { value: fig.supports_binary });
         fig.send_message('send_image_mode', {});
-        if (mpl.ratio !== 1) {
-            fig.send_message('set_dpi_ratio', { dpi_ratio: mpl.ratio });
+        if (fig.ratio !== 1) {
+            fig.send_message('set_dpi_ratio', { dpi_ratio: fig.ratio });
         }
         fig.send_message('refresh', {});
     };
@@ -5401,7 +5661,7 @@ mpl.figure.prototype._init_canvas = function () {
         this.context.backingStorePixelRatio ||
         1;
 
-    mpl.ratio = (window.devicePixelRatio || 1) / backingStore;
+    this.ratio = (window.devicePixelRatio || 1) / backingStore;
 
     var rubberband_canvas = (this.rubberband_canvas = document.createElement(
         'canvas'
@@ -5411,7 +5671,17 @@ mpl.figure.prototype._init_canvas = function () {
         'box-sizing: content-box; position: absolute; left: 0; top: 0; z-index: 1;'
     );
 
-    var resizeObserver = new ResizeObserver(function (entries) {
+    // Apply a ponyfill if ResizeObserver is not implemented by browser.
+    if (this.ResizeObserver === undefined) {
+        if (window.ResizeObserver !== undefined) {
+            this.ResizeObserver = window.ResizeObserver;
+        } else {
+            var obs = _JSXTOOLS_RESIZE_OBSERVER({});
+            this.ResizeObserver = obs.ResizeObserver;
+        }
+    }
+
+    this.resizeObserverInstance = new this.ResizeObserver(function (entries) {
         var nentries = entries.length;
         for (var i = 0; i < nentries; i++) {
             var entry = entries[i];
@@ -5445,8 +5715,8 @@ mpl.figure.prototype._init_canvas = function () {
                     entry.devicePixelContentBoxSize[0].blockSize
                 );
             } else {
-                canvas.setAttribute('width', width * mpl.ratio);
-                canvas.setAttribute('height', height * mpl.ratio);
+                canvas.setAttribute('width', width * fig.ratio);
+                canvas.setAttribute('height', height * fig.ratio);
             }
             canvas.setAttribute(
                 'style',
@@ -5459,12 +5729,12 @@ mpl.figure.prototype._init_canvas = function () {
             // And update the size in Python. We ignore the initial 0/0 size
             // that occurs as the element is placed into the DOM, which should
             // otherwise not happen due to the minimum size styling.
-            if (width != 0 && height != 0) {
+            if (fig.ws.readyState == 1 && width != 0 && height != 0) {
                 fig.request_resize(width, height);
             }
         }
     });
-    resizeObserver.observe(canvas_div);
+    this.resizeObserverInstance.observe(canvas_div);
 
     function on_mouse_event_closure(name) {
         return function (event) {
@@ -5479,6 +5749,10 @@ mpl.figure.prototype._init_canvas = function () {
     rubberband_canvas.addEventListener(
         'mouseup',
         on_mouse_event_closure('button_release')
+    );
+    rubberband_canvas.addEventListener(
+        'dblclick',
+        on_mouse_event_closure('dblclick')
     );
     // Throttle sequential mouse events to 1 every 20ms.
     rubberband_canvas.addEventListener(
@@ -5644,10 +5918,10 @@ mpl.figure.prototype.handle_resize = function (fig, msg) {
 };
 
 mpl.figure.prototype.handle_rubberband = function (fig, msg) {
-    var x0 = msg['x0'] / mpl.ratio;
-    var y0 = (fig.canvas.height - msg['y0']) / mpl.ratio;
-    var x1 = msg['x1'] / mpl.ratio;
-    var y1 = (fig.canvas.height - msg['y1']) / mpl.ratio;
+    var x0 = msg['x0'] / fig.ratio;
+    var y0 = (fig.canvas.height - msg['y0']) / fig.ratio;
+    var x1 = msg['x1'] / fig.ratio;
+    var y1 = (fig.canvas.height - msg['y1']) / fig.ratio;
     x0 = Math.floor(x0) + 0.5;
     y0 = Math.floor(y0) + 0.5;
     x1 = Math.floor(x1) + 0.5;
@@ -5660,8 +5934,8 @@ mpl.figure.prototype.handle_rubberband = function (fig, msg) {
     fig.rubberband_context.clearRect(
         0,
         0,
-        fig.canvas.width / mpl.ratio,
-        fig.canvas.height / mpl.ratio
+        fig.canvas.width / fig.ratio,
+        fig.canvas.height / fig.ratio
     );
 
     fig.rubberband_context.strokeRect(min_x, min_y, width, height);
@@ -5737,11 +6011,14 @@ mpl.figure.prototype.updated_canvas_event = function () {
 mpl.figure.prototype._make_on_message_function = function (fig) {
     return function socket_on_message(evt) {
         if (evt.data instanceof Blob) {
-            /* FIXME: We get "Resource interpreted as Image but
-             * transferred with MIME type text/plain:" errors on
-             * Chrome.  But how to set the MIME type?  It doesn't seem
-             * to be part of the websocket stream */
-            evt.data.type = 'image/png';
+            var img = evt.data;
+            if (img.type !== 'image/png') {
+                /* FIXME: We get "Resource interpreted as Image but
+                 * transferred with MIME type text/plain:" errors on
+                 * Chrome.  But how to set the MIME type?  It doesn't seem
+                 * to be part of the websocket stream */
+                img.type = 'image/png';
+            }
 
             /* Free the memory for the previous frames */
             if (fig.imageObj.src) {
@@ -5751,7 +6028,7 @@ mpl.figure.prototype._make_on_message_function = function (fig) {
             }
 
             fig.imageObj.src = (window.URL || window.webkitURL).createObjectURL(
-                evt.data
+                img
             );
             fig.updated_canvas_event();
             fig.waiting = false;
@@ -5844,8 +6121,8 @@ mpl.figure.prototype.mouse_event = function (event, name) {
         this.canvas_div.focus();
     }
 
-    var x = canvas_pos.x * mpl.ratio;
-    var y = canvas_pos.y * mpl.ratio;
+    var x = canvas_pos.x * this.ratio;
+    var y = canvas_pos.y * this.ratio;
 
     this.send_message(name, {
         x: x,
@@ -5870,10 +6147,10 @@ mpl.figure.prototype._key_event_extra = function (_event, _name) {
 mpl.figure.prototype.key_event = function (event, name) {
     // Prevent repeat events
     if (name === 'key_press') {
-        if (event.which === this._key) {
+        if (event.key === this._key) {
             return;
         } else {
-            this._key = event.which;
+            this._key = event.key;
         }
     }
     if (name === 'key_release') {
@@ -5881,18 +6158,17 @@ mpl.figure.prototype.key_event = function (event, name) {
     }
 
     var value = '';
-    if (event.ctrlKey && event.which !== 17) {
+    if (event.ctrlKey && event.key !== 'Control') {
         value += 'ctrl+';
     }
-    if (event.altKey && event.which !== 18) {
+    else if (event.altKey && event.key !== 'Alt') {
         value += 'alt+';
     }
-    if (event.shiftKey && event.which !== 16) {
+    else if (event.shiftKey && event.key !== 'Shift') {
         value += 'shift+';
     }
 
-    value += 'k';
-    value += event.which.toString();
+    value += 'k' + event.key;
 
     this._key_event_extra(event, name);
 
@@ -5911,9 +6187,13 @@ mpl.figure.prototype.toolbar_button_onclick = function (name) {
 mpl.figure.prototype.toolbar_button_onmouseover = function (tooltip) {
     this.message.textContent = tooltip;
 };
+
+///////////////// REMAINING CONTENT GENERATED BY embed_js.py /////////////////
+// prettier-ignore
+var _JSXTOOLS_RESIZE_OBSERVER=function(A){var t,i=new WeakMap,n=new WeakMap,a=new WeakMap,r=new WeakMap,o=new Set;function s(e){if(!(this instanceof s))throw new TypeError("Constructor requires 'new' operator");i.set(this,e)}function h(){throw new TypeError("Function is not a constructor")}function c(e,t,i,n){e=0 in arguments?Number(arguments[0]):0,t=1 in arguments?Number(arguments[1]):0,i=2 in arguments?Number(arguments[2]):0,n=3 in arguments?Number(arguments[3]):0,this.right=(this.x=this.left=e)+(this.width=i),this.bottom=(this.y=this.top=t)+(this.height=n),Object.freeze(this)}function d(){t=requestAnimationFrame(d);var s=new WeakMap,p=new Set;o.forEach((function(t){r.get(t).forEach((function(i){var r=t instanceof window.SVGElement,o=a.get(t),d=r?0:parseFloat(o.paddingTop),f=r?0:parseFloat(o.paddingRight),l=r?0:parseFloat(o.paddingBottom),u=r?0:parseFloat(o.paddingLeft),g=r?0:parseFloat(o.borderTopWidth),m=r?0:parseFloat(o.borderRightWidth),w=r?0:parseFloat(o.borderBottomWidth),b=u+f,F=d+l,v=(r?0:parseFloat(o.borderLeftWidth))+m,W=g+w,y=r?0:t.offsetHeight-W-t.clientHeight,E=r?0:t.offsetWidth-v-t.clientWidth,R=b+v,z=F+W,M=r?t.width:parseFloat(o.width)-R-E,O=r?t.height:parseFloat(o.height)-z-y;if(n.has(t)){var k=n.get(t);if(k[0]===M&&k[1]===O)return}n.set(t,[M,O]);var S=Object.create(h.prototype);S.target=t,S.contentRect=new c(u,d,M,O),s.has(i)||(s.set(i,[]),p.add(i)),s.get(i).push(S)}))})),p.forEach((function(e){i.get(e).call(e,s.get(e),e)}))}return s.prototype.observe=function(i){if(i instanceof window.Element){r.has(i)||(r.set(i,new Set),o.add(i),a.set(i,window.getComputedStyle(i)));var n=r.get(i);n.has(this)||n.add(this),cancelAnimationFrame(t),t=requestAnimationFrame(d)}},s.prototype.unobserve=function(i){if(i instanceof window.Element&&r.has(i)){var n=r.get(i);n.has(this)&&(n.delete(this),n.size||(r.delete(i),o.delete(i))),n.size||r.delete(i),o.size||cancelAnimationFrame(t)}},A.DOMRectReadOnly=c,A.ResizeObserver=s,A.ResizeObserverEntry=h,A}; // eslint-disable-line
 mpl.toolbar_items = [["Home", "Reset original view", "fa fa-home icon-home", "home"], ["Back", "Back to previous view", "fa fa-arrow-left icon-arrow-left", "back"], ["Forward", "Forward to next view", "fa fa-arrow-right icon-arrow-right", "forward"], ["", "", "", ""], ["Pan", "Left button pans, Right button zooms\nx/y fixes axis, CTRL fixes aspect", "fa fa-arrows icon-move", "pan"], ["Zoom", "Zoom to rectangle\nx/y fixes axis, CTRL fixes aspect", "fa fa-square-o icon-check-empty", "zoom"], ["", "", "", ""], ["Download", "Download plot", "fa fa-floppy-o icon-save", "download"]];
 
-mpl.extensions = ["eps", "jpeg", "pdf", "png", "ps", "raw", "svg", "tif"];
+mpl.extensions = ["eps", "jpeg", "pgf", "pdf", "png", "ps", "raw", "svg", "tif"];
 
 mpl.default_extension = "png";/* global mpl */
 
@@ -5922,6 +6202,19 @@ var comm_websocket_adapter = function (comm) {
     // object with the appropriate methods. Currently this is a non binary
     // socket, so there is still some room for performance tuning.
     var ws = {};
+
+    ws.binaryType = comm.kernel.ws.binaryType;
+    ws.readyState = comm.kernel.ws.readyState;
+    function updateReadyState(_event) {
+        if (comm.kernel.ws) {
+            ws.readyState = comm.kernel.ws.readyState;
+        } else {
+            ws.readyState = 3; // Closed state.
+        }
+    }
+    comm.kernel.ws.addEventListener('open', updateReadyState);
+    comm.kernel.ws.addEventListener('close', updateReadyState);
+    comm.kernel.ws.addEventListener('error', updateReadyState);
 
     ws.close = function () {
         comm.close();
@@ -5933,8 +6226,14 @@ var comm_websocket_adapter = function (comm) {
     // Register the callback with on_msg.
     comm.on_msg(function (msg) {
         //console.log('receiving', msg['content']['data'], msg);
+        var data = msg['content']['data'];
+        if (data['blob'] !== undefined) {
+            data = {
+                data: new Blob(msg['buffers'], { type: data['blob'] }),
+            };
+        }
         // Pass the mpl event to the overridden (by mpl) onmessage function.
-        ws.onmessage(msg['content']['data']);
+        ws.onmessage(data);
     });
     return ws;
 };
@@ -5965,11 +6264,20 @@ mpl.mpl_figure_comm = function (comm, msg) {
         console.error('Failed to find cell for figure', id, fig);
         return;
     }
+    fig.cell_info[0].output_area.element.on(
+        'cleared',
+        { fig: fig },
+        fig._remove_fig_handler
+    );
 };
 
 mpl.figure.prototype.handle_close = function (fig, msg) {
-    var width = fig.canvas.width / mpl.ratio;
-    fig.root.removeEventListener('remove', this._remove_fig_handler);
+    var width = fig.canvas.width / fig.ratio;
+    fig.cell_info[0].output_area.element.off(
+        'cleared',
+        fig._remove_fig_handler
+    );
+    fig.resizeObserverInstance.unobserve(fig.canvas_div);
 
     // Update the output cell to use the data from the current canvas.
     fig.push_to_output();
@@ -5989,7 +6297,7 @@ mpl.figure.prototype.close_ws = function (fig, msg) {
 
 mpl.figure.prototype.push_to_output = function (_remove_interactive) {
     // Turn the data on the canvas into data in the output cell.
-    var width = this.canvas.width / mpl.ratio;
+    var width = this.canvas.width / this.ratio;
     var dataURL = this.canvas.toDataURL();
     this.cell_info[1]['text/html'] =
         '<img src="' + dataURL + '" width="' + width + '">';
@@ -6088,13 +6396,17 @@ mpl.figure.prototype._init_toolbar = function () {
     titlebar.insertBefore(buttongrp, titlebar.firstChild);
 };
 
-mpl.figure.prototype._remove_fig_handler = function () {
-    this.close_ws(this, {});
+mpl.figure.prototype._remove_fig_handler = function (event) {
+    var fig = event.data.fig;
+    if (event.target !== this) {
+        // Ignore bubbled events from children.
+        return;
+    }
+    fig.close_ws(fig, {});
 };
 
 mpl.figure.prototype._root_extra_style = function (el) {
     el.style.boxSizing = 'content-box'; // override notebook setting of border-box.
-    el.addEventListener('remove', this._remove_fig_handler);
 };
 
 mpl.figure.prototype._canvas_extra_style = function (el) {
