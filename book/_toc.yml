@@ -5,7 +5,7 @@
 - file: setup
 - file: 1-intro-objectives
   sections:
-    - file: 1-pandas-dataframes
+    - file: 1-pandas-dataframes-esol
     - file: 1-numpy-arrays
     - file: 1-matplotlib
     - file: 1-homework
