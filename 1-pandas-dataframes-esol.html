@@ -1,0 +1,2068 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Working with Pandas DataFrames &#8212; Python Data and Scripting - Level 2</title>
+    
+  <link href="_static/css/theme.css" rel="stylesheet" />
+  <link href="_static/css/index.c5995385ac14fb8791e8eb36b4908be2.css" rel="stylesheet" />
+
+    
+  <link rel="stylesheet"
+    href="_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+
+    
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/sphinx-book-theme.acff12b8f9c144ce68a297486a2fa670.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css" />
+    <link rel="stylesheet" type="text/css" href="_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    
+  <link rel="preload" as="script" href="_static/js/index.1c5a1a01449ed65a7b51.js">
+
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/togglebutton.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="_static/sphinx-book-theme.12a9622fbb08dcb3a2a40b2c02b83a57.js"></script>
+    <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
+    <script >
+        const thebe_selector = ".thebe"
+        const thebe_selector_input = "pre"
+        const thebe_selector_output = ".output"
+    </script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processRefs": false, "processEnvironments": false}})</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="index.html">
+      
+      <img src="_static/molssi_main_logo.png" class="logo" alt="logo">
+      
+      
+      <h1 class="site-logo" id="site-title">Python Data and Scripting - Level 2</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+    <div class="bd-toc-item active">
+        <ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="intro.html">
+   Workshop Template
+  </a>
+ </li>
+</ul>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="setup.html">
+   Set Up
+  </a>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="1-intro-objectives.html">
+   Session 1
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="1-pandas-dataframes.html">
+     Working with Pandas DataFrames
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="1-numpy-arrays.html">
+     Working with NumPy Arrays
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="1-matplotlib.html">
+     Plotting with Matplotlib
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="1-homework.html">
+     Session 1 Homework
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="2-intro-objectives.html">
+   Session 2
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="2-ocr-tabula.html">
+     Reading data from PDFs
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="2-pandas-datacleaning.html">
+     Data Cleaning with Pandas
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="2-seaborn.html">
+     Plotting with seaborn
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="2-homework.html">
+     Session 2 Homework
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="3-intro-objectives.html">
+   Session 3
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+  <label for="toctree-checkbox-3">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="3-linear-scikitlearn.html">
+     Linear Fitting with SciKit Learn
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="3-regex.html">
+     Regular Expressions
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="3-homework.html">
+     Session 3 Homework
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="4-intro-objectives.html">
+   Session 4
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
+  <label for="toctree-checkbox-4">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="4-nonlinear-scikitlearn.html">
+     Nonlinear Fitting with ScikitLearn
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="4-linear-statsmodels.html">
+     Linear Fitting with statsmodels
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="4-interactive-visualizations.html">
+     Interactive Visualizations with plotly
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+    </div>
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="topbar container-xl fixed-top">
+    <div class="topbar-contents row">
+        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
+        <div class="col pl-md-4 topbar-main">
+            
+            <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+                data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+                aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+                title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+                <i class="fas fa-bars"></i>
+                <i class="fas fa-arrow-left"></i>
+                <i class="fas fa-arrow-up"></i>
+            </button>
+            
+            
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="_sources/1-pandas-dataframes-esol.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.ipynb</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+</div>
+
+            <!-- Source interaction buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Connect with source repository"><i class="fab fa-github"></i></button>
+    <div class="dropdown-buttons sourcebuttons">
+        <a class="repository-button"
+            href="https://github.com/MolSSI-Education/WORKSHOP_NAME"><button type="button" class="btn btn-secondary topbarbtn"
+                data-toggle="tooltip" data-placement="left" title="Source repository"><i
+                    class="fab fa-github"></i>repository</button></a>
+        <a class="issues-button"
+            href="https://github.com/MolSSI-Education/WORKSHOP_NAME/issues/new?title=Issue%20on%20page%20%2F1-pandas-dataframes-esol.html&body=Your%20issue%20content%20here."><button
+                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
+                title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
+        
+    </div>
+</div>
+
+            <!-- Full screen (wrap in <a> to have style consistency -->
+
+<a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+        data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+        title="Fullscreen mode"><i
+            class="fas fa-expand"></i></button></a>
+
+            <!-- Launch buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
+    <div class="dropdown-buttons">
+        
+        <a class="binder-button" href="https://mybinder.org/v2/gh/MolSSI-Education/WORKSHOP_NAME/main?urlpath=tree/book/1-pandas-dataframes-esol.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
+                data-placement="left"><img class="binder-button-logo"
+                    src="_static/images/logo_binder.svg"
+                    alt="Interact on binder">Binder</button></a>
+        
+        
+        
+        
+    </div>
+</div>
+
+        </div>
+
+        <!-- Table of contents -->
+        <div class="d-none d-md-block col-md-2 bd-toc show">
+            
+            <div class="tocsection onthispage pt-5 pb-3">
+                <i class="fas fa-list"></i> Contents
+            </div>
+            <nav id="bd-toc-nav">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#examining-the-data">
+   Examining the data
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#accessing-data">
+   Accessing Data
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#accessing-with-rows-and-column-numbers">
+     Accessing with rows and column numbers
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#the-iloc-function">
+       The
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         .iloc
+        </span>
+       </code>
+       function
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#accessing-with-names">
+     Accessing with names
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#the-loc-function">
+       The
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         .loc
+        </span>
+       </code>
+       function
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#using-column-names">
+       Using column names
+      </a>
+     </li>
+    </ul>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#filtering-data">
+   Filtering Data
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#sorting-data">
+   Sorting Data
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#performing-operations-on-columns">
+   Performing Operations on Columns
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#the-apply-operator">
+     The
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       .apply
+      </span>
+     </code>
+     operator
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#built-in-plotting">
+   Built-in Plotting
+  </a>
+ </li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+        
+              <div>
+                
+  <div class="section" id="working-with-pandas-dataframes">
+<h1>Working with Pandas DataFrames<a class="headerlink" href="#working-with-pandas-dataframes" title="Permalink to this headline">¶</a></h1>
+<div class="overview">
+   <p class="overview-title">Overview</p>
+    <p>Questions</p>
+        <ul>
+            <li>Question 1
+        </ul>
+    <p>Objectives:</p>
+        <ul>
+            <li>Objective 1
+            <li>Objective 2
+        </ul>
+    <p>Keypoints:</p>
+        <ul>
+            <li>Keypoint 1</li>
+            <li>Keypoint 2</li>
+        </ul>
+    </div><p>Pandas is a Python library used for data analysis and manipulation. Within the world of data science, it is a ubiquitous and widely used library. If you are learning how to analyze data in Python, it will be almost impossible to avoid pandas.</p>
+<p>For this workshop, we will be using two types of data structues - NumPy arrays and pandas DataFrames. Pandas dataframes are specifically for data which is two dimensional (rows and columns). NumPy arrays, while similar in some ways, are meant to work with higher dimensional data. We’ll see this in a future lesson.</p>
+<p>Pandas is very powerful. In this session, we’ll be learning how to access information in pandas dataframes and how to do some basic manipulation and analysis. The first step in using pandas is importing it. Typically when pandas is imported, it is shortened to <code class="docutils literal notranslate"><span class="pre">pd</span></code>. We are also importing <code class="docutils literal notranslate"><span class="pre">os</span></code> here to build a file path.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>The first data set we are looking at in this class is solubility data. This is a data set which gives molecular descriptors along with solubility calculated using the ESOL method. The data was obtained from <a class="reference external" href="http://moleculenet.ai/datasets-1">this website</a> and you can read more about the method <a class="reference external" href="https://www.moreisdifferent.com/assets/DIY_drug_discovery/Delaney_paper.pdf">here</a>. The dataset has been downloaded and placed in your <code class="docutils literal notranslate"><span class="pre">data</span></code> folder.</p>
+<p>Later in the workshop, we’ll be seing how we can fit this model ourselves using Python, but for now we are just going to examine the data using pandas. The data is saved in a csv file. CSV stands for “comma separated values”. This is a file format where commas separate values. You can also typically read files like this into excel. In fact, initially in this session you may not yet see what advantages pandas offers over Excel. However, functionalites in pandas will be more useful once we start cleaning and fitting data.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">file_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">,</span> <span class="s2">&quot;delaney-processed.csv&quot;</span><span class="p">)</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="examining-the-data">
+<h2>Examining the data<a class="headerlink" href="#examining-the-data" title="Permalink to this headline">¶</a></h2>
+<p>Now that we have used the pandas <code class="docutils literal notranslate"><span class="pre">read_csv</span></code> function, our data is in a variable called <code class="docutils literal notranslate"><span class="pre">df</span></code>. This variable is a <strong>pandas dataframe</strong>. This means it has lots of special functionalities thanks to pandas. For example, you can preview the first 5 rows using the <code class="docutils literal notranslate"><span class="pre">.head</span></code> function.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Compound ID</th>
+      <th>ESOL predicted log solubility in mols per litre</th>
+      <th>Minimum Degree</th>
+      <th>Molecular Weight</th>
+      <th>Number of H-Bond Donors</th>
+      <th>Number of Rings</th>
+      <th>Number of Rotatable Bonds</th>
+      <th>Polar Surface Area</th>
+      <th>measured log solubility in mols per litre</th>
+      <th>smiles</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Amigdalin</td>
+      <td>-0.974</td>
+      <td>1</td>
+      <td>457.432</td>
+      <td>7</td>
+      <td>3</td>
+      <td>7</td>
+      <td>202.32</td>
+      <td>-0.77</td>
+      <td>OCC3OC(OCC2OC(OC(C#N)c1ccccc1)C(O)C(O)C2O)C(O)...</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Fenfuram</td>
+      <td>-2.885</td>
+      <td>1</td>
+      <td>201.225</td>
+      <td>1</td>
+      <td>2</td>
+      <td>2</td>
+      <td>42.24</td>
+      <td>-3.30</td>
+      <td>Cc1occc1C(=O)Nc2ccccc2</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>citral</td>
+      <td>-2.579</td>
+      <td>1</td>
+      <td>152.237</td>
+      <td>0</td>
+      <td>0</td>
+      <td>4</td>
+      <td>17.07</td>
+      <td>-2.06</td>
+      <td>CC(C)=CCCC(C)=CC(=O)</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Picene</td>
+      <td>-6.618</td>
+      <td>2</td>
+      <td>278.354</td>
+      <td>0</td>
+      <td>5</td>
+      <td>0</td>
+      <td>0.00</td>
+      <td>-7.87</td>
+      <td>c1ccc2c(c1)ccc3c2ccc4c5ccccc5ccc43</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Thiophene</td>
+      <td>-2.232</td>
+      <td>2</td>
+      <td>84.143</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0.00</td>
+      <td>-1.33</td>
+      <td>c1ccsc1</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">.info</span></code> function will give information about the columns and the data type of those columns. The data type will become very important later as we work with more data.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;class &#39;pandas.core.frame.DataFrame&#39;&gt;
+RangeIndex: 1128 entries, 0 to 1127
+Data columns (total 10 columns):
+ #   Column                                           Non-Null Count  Dtype  
+---  ------                                           --------------  -----  
+ 0   Compound ID                                      1128 non-null   object 
+ 1   ESOL predicted log solubility in mols per litre  1128 non-null   float64
+ 2   Minimum Degree                                   1128 non-null   int64  
+ 3   Molecular Weight                                 1128 non-null   float64
+ 4   Number of H-Bond Donors                          1128 non-null   int64  
+ 5   Number of Rings                                  1128 non-null   int64  
+ 6   Number of Rotatable Bonds                        1128 non-null   int64  
+ 7   Polar Surface Area                               1128 non-null   float64
+ 8   measured log solubility in mols per litre        1128 non-null   float64
+ 9   smiles                                           1128 non-null   object 
+dtypes: float64(4), int64(4), object(2)
+memory usage: 88.2+ KB
+</pre></div>
+</div>
+</div>
+</div>
+<p>Pandas assigns data types to columns, and will do its best to decide the data column for each column based on what is in the column. You will see that this dataframe has <code class="docutils literal notranslate"><span class="pre">1128</span></code> values in each column.</p>
+<p>We see that the column <code class="docutils literal notranslate"><span class="pre">Minimum</span> <span class="pre">Degree</span></code> has the data type of <code class="docutils literal notranslate"><span class="pre">int64</span></code>. Here, <code class="docutils literal notranslate"><span class="pre">int</span></code> means <code class="docutils literal notranslate"><span class="pre">integer</span></code> and <code class="docutils literal notranslate"><span class="pre">64</span></code> means <code class="docutils literal notranslate"><span class="pre">64</span> <span class="pre">bit</span></code>.  The <code class="docutils literal notranslate"><span class="pre">64</span> <span class="pre">bit</span></code> refers to the amount of computer memory the variable can occupy. It won’t really be important for us. Similarly, <code class="docutils literal notranslate"><span class="pre">float64</span></code> means <code class="docutils literal notranslate"><span class="pre">64</span> <span class="pre">bit</span> <span class="pre">floating</span> <span class="pre">point</span></code>. These are decimal numbers.</p>
+<p>The other column names which read <code class="docutils literal notranslate"><span class="pre">object</span></code> are not numeric. They might be strings or they might be something else. We’ll discuss more later.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">describe</span></code> function can be used on a dataframe to quickly see statistics about columns with numerical data. If you look at the columns that statistics are computed for and compare to the data type shown from <code class="docutils literal notranslate"><span class="pre">info</span></code>, you will see that we only get statistics for columns which had <code class="docutils literal notranslate"><span class="pre">int64</span></code> or <code class="docutils literal notranslate"><span class="pre">float64</span></code> data types.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>ESOL predicted log solubility in mols per litre</th>
+      <th>Minimum Degree</th>
+      <th>Molecular Weight</th>
+      <th>Number of H-Bond Donors</th>
+      <th>Number of Rings</th>
+      <th>Number of Rotatable Bonds</th>
+      <th>Polar Surface Area</th>
+      <th>measured log solubility in mols per litre</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>count</th>
+      <td>1128.000000</td>
+      <td>1128.000000</td>
+      <td>1128.000000</td>
+      <td>1128.000000</td>
+      <td>1128.000000</td>
+      <td>1128.000000</td>
+      <td>1128.000000</td>
+      <td>1128.000000</td>
+    </tr>
+    <tr>
+      <th>mean</th>
+      <td>-2.988192</td>
+      <td>1.058511</td>
+      <td>203.937074</td>
+      <td>0.701241</td>
+      <td>1.390957</td>
+      <td>2.177305</td>
+      <td>34.872881</td>
+      <td>-3.050102</td>
+    </tr>
+    <tr>
+      <th>std</th>
+      <td>1.683220</td>
+      <td>0.238560</td>
+      <td>102.738077</td>
+      <td>1.089727</td>
+      <td>1.318286</td>
+      <td>2.640974</td>
+      <td>35.383593</td>
+      <td>2.096441</td>
+    </tr>
+    <tr>
+      <th>min</th>
+      <td>-9.702000</td>
+      <td>0.000000</td>
+      <td>16.043000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>-11.600000</td>
+    </tr>
+    <tr>
+      <th>25%</th>
+      <td>-3.948250</td>
+      <td>1.000000</td>
+      <td>121.183000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>-4.317500</td>
+    </tr>
+    <tr>
+      <th>50%</th>
+      <td>-2.870000</td>
+      <td>1.000000</td>
+      <td>182.179000</td>
+      <td>0.000000</td>
+      <td>1.000000</td>
+      <td>1.000000</td>
+      <td>26.300000</td>
+      <td>-2.860000</td>
+    </tr>
+    <tr>
+      <th>75%</th>
+      <td>-1.843750</td>
+      <td>1.000000</td>
+      <td>270.372000</td>
+      <td>1.000000</td>
+      <td>2.000000</td>
+      <td>3.000000</td>
+      <td>55.440000</td>
+      <td>-1.600000</td>
+    </tr>
+    <tr>
+      <th>max</th>
+      <td>1.091000</td>
+      <td>2.000000</td>
+      <td>780.949000</td>
+      <td>11.000000</td>
+      <td>8.000000</td>
+      <td>23.000000</td>
+      <td>268.680000</td>
+      <td>1.580000</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+</div>
+<div class="section" id="accessing-data">
+<h2>Accessing Data<a class="headerlink" href="#accessing-data" title="Permalink to this headline">¶</a></h2>
+<p>One great thing about pandas dataframes is how easy it is to access information. Pandas allows you to access information in a dataframe using both data indexes and names.</p>
+<p>Pandas dataframes have rows and columns, you can see how many rows and columns using <code class="docutils literal notranslate"><span class="pre">.shape</span></code>. This will return the shape as <code class="docutils literal notranslate"><span class="pre">(num_rows,</span> <span class="pre">num_columns)</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">shape</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(1128, 10)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="accessing-with-rows-and-column-numbers">
+<h3>Accessing with rows and column numbers<a class="headerlink" href="#accessing-with-rows-and-column-numbers" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="the-iloc-function">
+<h4>The <code class="docutils literal notranslate"><span class="pre">.iloc</span></code> function<a class="headerlink" href="#the-iloc-function" title="Permalink to this headline">¶</a></h4>
+<p>Access on a particular row and column using <code class="docutils literal notranslate"><span class="pre">.iloc</span></code> followed by squarre brackets and the row and column numbers yoou want to access. If you only put one number, it will be assumed to be the row number you want.</p>
+<p>The following gets row number 35.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">35</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compound ID                                        Valeraldehyde
+ESOL predicted log solubility in mols per litre           -1.103
+Minimum Degree                                                 1
+Molecular Weight                                          86.134
+Number of H-Bond Donors                                        0
+Number of Rings                                                0
+Number of Rotatable Bonds                                      3
+Polar Surface Area                                         17.07
+measured log solubility in mols per litre                  -0.85
+smiles                                                   CCCCC=O
+Name: 35, dtype: object
+</pre></div>
+</div>
+</div>
+</div>
+<p>We can also specify a number of columns, by adding a column then listing the index numbers for the columns we would like.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">35</span><span class="p">,</span> <span class="p">:</span><span class="mi">3</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compound ID                                        Valeraldehyde
+ESOL predicted log solubility in mols per litre           -1.103
+Minimum Degree                                                 1
+Name: 35, dtype: object
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="accessing-with-names">
+<h3>Accessing with names<a class="headerlink" href="#accessing-with-names" title="Permalink to this headline">¶</a></h3>
+<p>Each dataframe has an index (rows) and columns. The rows and columns have names. For the columns, these are indicated in <code class="docutils literal notranslate"><span class="pre">.head</span></code> by the bold row at the top of the dataframe. The row names are similarly listed in bold in the left of the dataframe. The index can be named, but by default it is usually just numbered.</p>
+<p>You can see information about the index or the columns using <code class="docutils literal notranslate"><span class="pre">df.index</span></code> or <code class="docutils literal notranslate"><span class="pre">df.columns</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">index</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>RangeIndex(start=0, stop=1128, step=1)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">columns</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Index([&#39;Compound ID&#39;, &#39;ESOL predicted log solubility in mols per litre&#39;,
+       &#39;Minimum Degree&#39;, &#39;Molecular Weight&#39;, &#39;Number of H-Bond Donors&#39;,
+       &#39;Number of Rings&#39;, &#39;Number of Rotatable Bonds&#39;, &#39;Polar Surface Area&#39;,
+       &#39;measured log solubility in mols per litre&#39;, &#39;smiles&#39;],
+      dtype=&#39;object&#39;)
+</pre></div>
+</div>
+</div>
+</div>
+<p>To access part of a dataframe using the index or column names, would use the <code class="docutils literal notranslate"><span class="pre">loc</span></code> function.</p>
+<p>Because our index names are just numbers, this doesn’t look that different than <code class="docutils literal notranslate"><span class="pre">iloc</span></code> when we are accessing rows.</p>
+<div class="section" id="the-loc-function">
+<h4>The <code class="docutils literal notranslate"><span class="pre">.loc</span></code> function<a class="headerlink" href="#the-loc-function" title="Permalink to this headline">¶</a></h4>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">35</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compound ID                                        Valeraldehyde
+ESOL predicted log solubility in mols per litre           -1.103
+Minimum Degree                                                 1
+Molecular Weight                                          86.134
+Number of H-Bond Donors                                        0
+Number of Rings                                                0
+Number of Rotatable Bonds                                      3
+Polar Surface Area                                         17.07
+measured log solubility in mols per litre                  -0.85
+smiles                                                   CCCCC=O
+Name: 35, dtype: object
+</pre></div>
+</div>
+</div>
+</div>
+<p>However, we can now use column names</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">35</span><span class="p">,</span> <span class="s2">&quot;smiles&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&#39;CCCCC=O&#39;
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="using-column-names">
+<h4>Using column names<a class="headerlink" href="#using-column-names" title="Permalink to this headline">¶</a></h4>
+<p>You can pull a column of several columns of information using the syntax</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="p">[</span><span class="n">column_name</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>To pull several columns, do</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="p">[[</span><span class="n">colname1</span><span class="p">,</span> <span class="n">colname2</span><span class="p">]]</span>
+</pre></div>
+</div>
+<p>For example</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;Compound ID&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0            Amigdalin
+1             Fenfuram
+2               citral
+3               Picene
+4            Thiophene
+             ...      
+1123         halothane
+1124            Oxamyl
+1125         Thiometon
+1126    2-Methylbutane
+1127          Stirofos
+Name: Compound ID, Length: 1128, dtype: object
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="p">[[</span><span class="s2">&quot;Compound ID&quot;</span><span class="p">,</span> <span class="s2">&quot;smiles&quot;</span><span class="p">]]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Compound ID</th>
+      <th>smiles</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Amigdalin</td>
+      <td>OCC3OC(OCC2OC(OC(C#N)c1ccccc1)C(O)C(O)C2O)C(O)...</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Fenfuram</td>
+      <td>Cc1occc1C(=O)Nc2ccccc2</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>citral</td>
+      <td>CC(C)=CCCC(C)=CC(=O)</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Picene</td>
+      <td>c1ccc2c(c1)ccc3c2ccc4c5ccccc5ccc43</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Thiophene</td>
+      <td>c1ccsc1</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>1123</th>
+      <td>halothane</td>
+      <td>FC(F)(F)C(Cl)Br</td>
+    </tr>
+    <tr>
+      <th>1124</th>
+      <td>Oxamyl</td>
+      <td>CNC(=O)ON=C(SC)C(=O)N(C)C</td>
+    </tr>
+    <tr>
+      <th>1125</th>
+      <td>Thiometon</td>
+      <td>CCSCCSP(=S)(OC)OC</td>
+    </tr>
+    <tr>
+      <th>1126</th>
+      <td>2-Methylbutane</td>
+      <td>CCC(C)C</td>
+    </tr>
+    <tr>
+      <th>1127</th>
+      <td>Stirofos</td>
+      <td>COP(=O)(OC)OC(=CCl)c1cc(Cl)c(Cl)cc1Cl</td>
+    </tr>
+  </tbody>
+</table>
+<p>1128 rows × 2 columns</p>
+</div></div></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="filtering-data">
+<h2>Filtering Data<a class="headerlink" href="#filtering-data" title="Permalink to this headline">¶</a></h2>
+<p>There are two ways filtering in dataframes are typically done. Both are shown here for completeness, and because you will see both when looking at code others have written.</p>
+<p>In the first method, the strategy is that you first establish where something is true within a dataframe, then use that to filter the dataframe.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;Polar Surface Area&quot;</span><span class="p">]</span> <span class="o">&gt;</span><span class="mi">17</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0        True
+1        True
+2        True
+3       False
+4       False
+        ...  
+1123    False
+1124     True
+1125     True
+1126    False
+1127     True
+Name: Polar Surface Area, Length: 1128, dtype: bool
+</pre></div>
+</div>
+</div>
+</div>
+<p>This gives us a list of values with either <code class="docutils literal notranslate"><span class="pre">True</span></code> or <code class="docutils literal notranslate"><span class="pre">False</span></code> that can be used to index into the dataframe.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;Polar Surface Area&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">17</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Compound ID</th>
+      <th>ESOL predicted log solubility in mols per litre</th>
+      <th>Minimum Degree</th>
+      <th>Molecular Weight</th>
+      <th>Number of H-Bond Donors</th>
+      <th>Number of Rings</th>
+      <th>Number of Rotatable Bonds</th>
+      <th>Polar Surface Area</th>
+      <th>measured log solubility in mols per litre</th>
+      <th>smiles</th>
+      <th>Polar Surface Area (nm^2)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Amigdalin</td>
+      <td>-0.974</td>
+      <td>1</td>
+      <td>457.432</td>
+      <td>7</td>
+      <td>3</td>
+      <td>7</td>
+      <td>202.32</td>
+      <td>-0.770</td>
+      <td>OCC3OC(OCC2OC(OC(C#N)c1ccccc1)C(O)C(O)C2O)C(O)...</td>
+      <td>2.0232</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Fenfuram</td>
+      <td>-2.885</td>
+      <td>1</td>
+      <td>201.225</td>
+      <td>1</td>
+      <td>2</td>
+      <td>2</td>
+      <td>42.24</td>
+      <td>-3.300</td>
+      <td>Cc1occc1C(=O)Nc2ccccc2</td>
+      <td>0.4224</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>citral</td>
+      <td>-2.579</td>
+      <td>1</td>
+      <td>152.237</td>
+      <td>0</td>
+      <td>0</td>
+      <td>4</td>
+      <td>17.07</td>
+      <td>-2.060</td>
+      <td>CC(C)=CCCC(C)=CC(=O)</td>
+      <td>0.1707</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>Estradiol</td>
+      <td>-4.138</td>
+      <td>1</td>
+      <td>272.388</td>
+      <td>2</td>
+      <td>4</td>
+      <td>0</td>
+      <td>40.46</td>
+      <td>-5.030</td>
+      <td>CC12CCC3C(CCc4cc(O)ccc34)C2CCC1O</td>
+      <td>0.4046</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>Rotenone</td>
+      <td>-5.246</td>
+      <td>1</td>
+      <td>394.423</td>
+      <td>0</td>
+      <td>5</td>
+      <td>3</td>
+      <td>63.22</td>
+      <td>-4.420</td>
+      <td>COc5cc4OCC3Oc2c1CC(Oc1ccc2C(=O)C3c4cc5OC)C(C)=C</td>
+      <td>0.6322</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>1121</th>
+      <td>Phthalonitrile</td>
+      <td>-1.717</td>
+      <td>1</td>
+      <td>128.134</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>47.58</td>
+      <td>-2.380</td>
+      <td>N#Cc1ccccc1C#N</td>
+      <td>0.4758</td>
+    </tr>
+    <tr>
+      <th>1122</th>
+      <td>m-Nitrotoluene</td>
+      <td>-2.640</td>
+      <td>1</td>
+      <td>137.138</td>
+      <td>0</td>
+      <td>1</td>
+      <td>1</td>
+      <td>43.14</td>
+      <td>-2.440</td>
+      <td>Cc1cccc(c1)N(=O)=O</td>
+      <td>0.4314</td>
+    </tr>
+    <tr>
+      <th>1124</th>
+      <td>Oxamyl</td>
+      <td>-0.908</td>
+      <td>1</td>
+      <td>219.266</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>71.00</td>
+      <td>0.106</td>
+      <td>CNC(=O)ON=C(SC)C(=O)N(C)C</td>
+      <td>0.7100</td>
+    </tr>
+    <tr>
+      <th>1125</th>
+      <td>Thiometon</td>
+      <td>-3.323</td>
+      <td>1</td>
+      <td>246.359</td>
+      <td>0</td>
+      <td>0</td>
+      <td>7</td>
+      <td>18.46</td>
+      <td>-3.091</td>
+      <td>CCSCCSP(=S)(OC)OC</td>
+      <td>0.1846</td>
+    </tr>
+    <tr>
+      <th>1127</th>
+      <td>Stirofos</td>
+      <td>-4.320</td>
+      <td>1</td>
+      <td>365.964</td>
+      <td>0</td>
+      <td>1</td>
+      <td>5</td>
+      <td>44.76</td>
+      <td>-4.522</td>
+      <td>COP(=O)(OC)OC(=CCl)c1cc(Cl)c(Cl)cc1Cl</td>
+      <td>0.4476</td>
+    </tr>
+  </tbody>
+</table>
+<p>758 rows × 11 columns</p>
+</div></div></div>
+</div>
+<p>This can also be accomplished using the pandas <code class="docutils literal notranslate"><span class="pre">query</span></code> function. When using the <code class="docutils literal notranslate"><span class="pre">query</span></code> function, you write your query as a string. If your column name has a space, you must surround it with backticks.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s2">&quot;`Polar Surface Area` &gt; 17&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Compound ID</th>
+      <th>ESOL predicted log solubility in mols per litre</th>
+      <th>Minimum Degree</th>
+      <th>Molecular Weight</th>
+      <th>Number of H-Bond Donors</th>
+      <th>Number of Rings</th>
+      <th>Number of Rotatable Bonds</th>
+      <th>Polar Surface Area</th>
+      <th>measured log solubility in mols per litre</th>
+      <th>smiles</th>
+      <th>Polar Surface Area (nm^2)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Amigdalin</td>
+      <td>-0.974</td>
+      <td>1</td>
+      <td>457.432</td>
+      <td>7</td>
+      <td>3</td>
+      <td>7</td>
+      <td>202.32</td>
+      <td>-0.770</td>
+      <td>OCC3OC(OCC2OC(OC(C#N)c1ccccc1)C(O)C(O)C2O)C(O)...</td>
+      <td>2.0232</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Fenfuram</td>
+      <td>-2.885</td>
+      <td>1</td>
+      <td>201.225</td>
+      <td>1</td>
+      <td>2</td>
+      <td>2</td>
+      <td>42.24</td>
+      <td>-3.300</td>
+      <td>Cc1occc1C(=O)Nc2ccccc2</td>
+      <td>0.4224</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>citral</td>
+      <td>-2.579</td>
+      <td>1</td>
+      <td>152.237</td>
+      <td>0</td>
+      <td>0</td>
+      <td>4</td>
+      <td>17.07</td>
+      <td>-2.060</td>
+      <td>CC(C)=CCCC(C)=CC(=O)</td>
+      <td>0.1707</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>Estradiol</td>
+      <td>-4.138</td>
+      <td>1</td>
+      <td>272.388</td>
+      <td>2</td>
+      <td>4</td>
+      <td>0</td>
+      <td>40.46</td>
+      <td>-5.030</td>
+      <td>CC12CCC3C(CCc4cc(O)ccc34)C2CCC1O</td>
+      <td>0.4046</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>Rotenone</td>
+      <td>-5.246</td>
+      <td>1</td>
+      <td>394.423</td>
+      <td>0</td>
+      <td>5</td>
+      <td>3</td>
+      <td>63.22</td>
+      <td>-4.420</td>
+      <td>COc5cc4OCC3Oc2c1CC(Oc1ccc2C(=O)C3c4cc5OC)C(C)=C</td>
+      <td>0.6322</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>1121</th>
+      <td>Phthalonitrile</td>
+      <td>-1.717</td>
+      <td>1</td>
+      <td>128.134</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>47.58</td>
+      <td>-2.380</td>
+      <td>N#Cc1ccccc1C#N</td>
+      <td>0.4758</td>
+    </tr>
+    <tr>
+      <th>1122</th>
+      <td>m-Nitrotoluene</td>
+      <td>-2.640</td>
+      <td>1</td>
+      <td>137.138</td>
+      <td>0</td>
+      <td>1</td>
+      <td>1</td>
+      <td>43.14</td>
+      <td>-2.440</td>
+      <td>Cc1cccc(c1)N(=O)=O</td>
+      <td>0.4314</td>
+    </tr>
+    <tr>
+      <th>1124</th>
+      <td>Oxamyl</td>
+      <td>-0.908</td>
+      <td>1</td>
+      <td>219.266</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>71.00</td>
+      <td>0.106</td>
+      <td>CNC(=O)ON=C(SC)C(=O)N(C)C</td>
+      <td>0.7100</td>
+    </tr>
+    <tr>
+      <th>1125</th>
+      <td>Thiometon</td>
+      <td>-3.323</td>
+      <td>1</td>
+      <td>246.359</td>
+      <td>0</td>
+      <td>0</td>
+      <td>7</td>
+      <td>18.46</td>
+      <td>-3.091</td>
+      <td>CCSCCSP(=S)(OC)OC</td>
+      <td>0.1846</td>
+    </tr>
+    <tr>
+      <th>1127</th>
+      <td>Stirofos</td>
+      <td>-4.320</td>
+      <td>1</td>
+      <td>365.964</td>
+      <td>0</td>
+      <td>1</td>
+      <td>5</td>
+      <td>44.76</td>
+      <td>-4.522</td>
+      <td>COP(=O)(OC)OC(=CCl)c1cc(Cl)c(Cl)cc1Cl</td>
+      <td>0.4476</td>
+    </tr>
+  </tbody>
+</table>
+<p>758 rows × 11 columns</p>
+</div></div></div>
+</div>
+<div class="exercise-this-is-a-title exercise">
+<p class="exercise-title">Check your understanding</p>
+    <p>Rewrite the following query to use the mask syntax for filtering data.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s2">&quot;`Number of H-Bond Donors`&gt;3&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="dropdown admonition">
+<p class="admonition-title">Solution</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;Number of H-Bond Donors&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">3</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div></div>
+<div class="section" id="sorting-data">
+<h2>Sorting Data<a class="headerlink" href="#sorting-data" title="Permalink to this headline">¶</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s2">&quot;Number of H-Bond Donors&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Compound ID</th>
+      <th>ESOL predicted log solubility in mols per litre</th>
+      <th>Minimum Degree</th>
+      <th>Molecular Weight</th>
+      <th>Number of H-Bond Donors</th>
+      <th>Number of Rings</th>
+      <th>Number of Rotatable Bonds</th>
+      <th>Polar Surface Area</th>
+      <th>measured log solubility in mols per litre</th>
+      <th>smiles</th>
+      <th>Polar Surface Area (nm^2)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>563</th>
+      <td>Dimethyl phthalate</td>
+      <td>-2.347</td>
+      <td>1</td>
+      <td>194.186</td>
+      <td>0</td>
+      <td>1</td>
+      <td>2</td>
+      <td>52.60</td>
+      <td>-1.660</td>
+      <td>COC(=O)c1ccccc1C(=O)OC</td>
+      <td>0.5260</td>
+    </tr>
+    <tr>
+      <th>632</th>
+      <td>1,5-Dimethlnapthalene</td>
+      <td>-4.147</td>
+      <td>1</td>
+      <td>156.228</td>
+      <td>0</td>
+      <td>2</td>
+      <td>0</td>
+      <td>0.00</td>
+      <td>-4.679</td>
+      <td>Cc1cccc2c(C)cccc12</td>
+      <td>0.0000</td>
+    </tr>
+    <tr>
+      <th>634</th>
+      <td>Acenapthylene</td>
+      <td>-3.682</td>
+      <td>2</td>
+      <td>152.196</td>
+      <td>0</td>
+      <td>3</td>
+      <td>0</td>
+      <td>0.00</td>
+      <td>-3.960</td>
+      <td>C1=Cc2cccc3cccc1c23</td>
+      <td>0.0000</td>
+    </tr>
+    <tr>
+      <th>635</th>
+      <td>Ethyl butyrate</td>
+      <td>-2.254</td>
+      <td>1</td>
+      <td>144.214</td>
+      <td>0</td>
+      <td>0</td>
+      <td>5</td>
+      <td>26.30</td>
+      <td>-1.280</td>
+      <td>CCCCCOC(=O)CC</td>
+      <td>0.2630</td>
+    </tr>
+    <tr>
+      <th>637</th>
+      <td>Benzo(a)pyrene</td>
+      <td>-6.007</td>
+      <td>2</td>
+      <td>252.316</td>
+      <td>0</td>
+      <td>5</td>
+      <td>0</td>
+      <td>0.00</td>
+      <td>-8.699</td>
+      <td>c1ccc2c(c1)cc3ccc4cccc5ccc2c3c45</td>
+      <td>0.0000</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>276</th>
+      <td>Sorbitol</td>
+      <td>0.647</td>
+      <td>1</td>
+      <td>182.172</td>
+      <td>6</td>
+      <td>0</td>
+      <td>5</td>
+      <td>121.38</td>
+      <td>1.090</td>
+      <td>OCC(O)C(O)C(O)C(O)CO</td>
+      <td>1.2138</td>
+    </tr>
+    <tr>
+      <th>0</th>
+      <td>Amigdalin</td>
+      <td>-0.974</td>
+      <td>1</td>
+      <td>457.432</td>
+      <td>7</td>
+      <td>3</td>
+      <td>7</td>
+      <td>202.32</td>
+      <td>-0.770</td>
+      <td>OCC3OC(OCC2OC(OC(C#N)c1ccccc1)C(O)C(O)C2O)C(O)...</td>
+      <td>2.0232</td>
+    </tr>
+    <tr>
+      <th>441</th>
+      <td>Lactose</td>
+      <td>1.071</td>
+      <td>1</td>
+      <td>342.297</td>
+      <td>8</td>
+      <td>2</td>
+      <td>4</td>
+      <td>189.53</td>
+      <td>-0.244</td>
+      <td>OCC1OC(OC2C(O)C(O)C(O)OC2CO)C(O)C(O)C1O</td>
+      <td>1.8953</td>
+    </tr>
+    <tr>
+      <th>1025</th>
+      <td>Sucrose</td>
+      <td>0.310</td>
+      <td>1</td>
+      <td>342.297</td>
+      <td>8</td>
+      <td>2</td>
+      <td>5</td>
+      <td>189.53</td>
+      <td>0.790</td>
+      <td>OCC2OC(OC1(CO)OC(CO)C(O)C1O)C(O)C(O)C2O</td>
+      <td>1.8953</td>
+    </tr>
+    <tr>
+      <th>298</th>
+      <td>Raffinose</td>
+      <td>0.496</td>
+      <td>1</td>
+      <td>504.438</td>
+      <td>11</td>
+      <td>3</td>
+      <td>8</td>
+      <td>268.68</td>
+      <td>-0.410</td>
+      <td>OCC1OC(CO)(OC2OC(COC3OC(CO)C(O)C(O)C3O)C(O)C(O...</td>
+      <td>2.6868</td>
+    </tr>
+  </tbody>
+</table>
+<p>1128 rows × 11 columns</p>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">([</span><span class="s2">&quot;Number of H-Bond Donors&quot;</span><span class="p">,</span> <span class="s2">&quot;Molecular Weight&quot;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Compound ID</th>
+      <th>ESOL predicted log solubility in mols per litre</th>
+      <th>Minimum Degree</th>
+      <th>Molecular Weight</th>
+      <th>Number of H-Bond Donors</th>
+      <th>Number of Rings</th>
+      <th>Number of Rotatable Bonds</th>
+      <th>Polar Surface Area</th>
+      <th>measured log solubility in mols per litre</th>
+      <th>smiles</th>
+      <th>Polar Surface Area (nm^2)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>934</th>
+      <td>Methane</td>
+      <td>-0.636</td>
+      <td>0</td>
+      <td>16.043</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0.00</td>
+      <td>-0.900</td>
+      <td>C</td>
+      <td>0.0000</td>
+    </tr>
+    <tr>
+      <th>953</th>
+      <td>Ethyne</td>
+      <td>-0.252</td>
+      <td>1</td>
+      <td>26.038</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0.00</td>
+      <td>0.290</td>
+      <td>C#C</td>
+      <td>0.0000</td>
+    </tr>
+    <tr>
+      <th>689</th>
+      <td>Ethylene</td>
+      <td>-0.815</td>
+      <td>1</td>
+      <td>28.054</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0.00</td>
+      <td>-0.400</td>
+      <td>C=C</td>
+      <td>0.0000</td>
+    </tr>
+    <tr>
+      <th>600</th>
+      <td>Ethane</td>
+      <td>-1.132</td>
+      <td>1</td>
+      <td>30.070</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0.00</td>
+      <td>-1.360</td>
+      <td>CC</td>
+      <td>0.0000</td>
+    </tr>
+    <tr>
+      <th>202</th>
+      <td>Propyne</td>
+      <td>-0.672</td>
+      <td>1</td>
+      <td>40.065</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0.00</td>
+      <td>-0.410</td>
+      <td>CC#C</td>
+      <td>0.0000</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>555</th>
+      <td>Digoxin (L1=41,8mg/mL, L2=68,2mg/mL, Z=40,1mg/mL)</td>
+      <td>-5.312</td>
+      <td>1</td>
+      <td>780.949</td>
+      <td>6</td>
+      <td>8</td>
+      <td>7</td>
+      <td>203.06</td>
+      <td>-4.081</td>
+      <td>CC1OC(CC(O)C1O)OC2C(O)CC(OC2C)OC8C(O)CC(OC7CCC...</td>
+      <td>2.0306</td>
+    </tr>
+    <tr>
+      <th>0</th>
+      <td>Amigdalin</td>
+      <td>-0.974</td>
+      <td>1</td>
+      <td>457.432</td>
+      <td>7</td>
+      <td>3</td>
+      <td>7</td>
+      <td>202.32</td>
+      <td>-0.770</td>
+      <td>OCC3OC(OCC2OC(OC(C#N)c1ccccc1)C(O)C(O)C2O)C(O)...</td>
+      <td>2.0232</td>
+    </tr>
+    <tr>
+      <th>441</th>
+      <td>Lactose</td>
+      <td>1.071</td>
+      <td>1</td>
+      <td>342.297</td>
+      <td>8</td>
+      <td>2</td>
+      <td>4</td>
+      <td>189.53</td>
+      <td>-0.244</td>
+      <td>OCC1OC(OC2C(O)C(O)C(O)OC2CO)C(O)C(O)C1O</td>
+      <td>1.8953</td>
+    </tr>
+    <tr>
+      <th>1025</th>
+      <td>Sucrose</td>
+      <td>0.310</td>
+      <td>1</td>
+      <td>342.297</td>
+      <td>8</td>
+      <td>2</td>
+      <td>5</td>
+      <td>189.53</td>
+      <td>0.790</td>
+      <td>OCC2OC(OC1(CO)OC(CO)C(O)C1O)C(O)C(O)C2O</td>
+      <td>1.8953</td>
+    </tr>
+    <tr>
+      <th>298</th>
+      <td>Raffinose</td>
+      <td>0.496</td>
+      <td>1</td>
+      <td>504.438</td>
+      <td>11</td>
+      <td>3</td>
+      <td>8</td>
+      <td>268.68</td>
+      <td>-0.410</td>
+      <td>OCC1OC(CO)(OC2OC(COC3OC(CO)C(O)C(O)C3O)C(O)C(O...</td>
+      <td>2.6868</td>
+    </tr>
+  </tbody>
+</table>
+<p>1128 rows × 11 columns</p>
+</div></div></div>
+</div>
+</div>
+<div class="section" id="performing-operations-on-columns">
+<h2>Performing Operations on Columns<a class="headerlink" href="#performing-operations-on-columns" title="Permalink to this headline">¶</a></h2>
+<p>Pandas dataframes have the convenient feature that they use something called <code class="docutils literal notranslate"><span class="pre">broadcasting</span></code>. This means that if you are doing something like subtracting a number, multiplying, etc to a column or dataframe of information, it can be done all at once instead of with a <code class="docutils literal notranslate"><span class="pre">for</span></code> loop. Consider if we wanted to express the molecular surface area in <span class="math notranslate nohighlight">\(nm^2\)</span> instead of Å<span class="math notranslate nohighlight">\(^2\)</span>. To do this, we would need to divide each value by 100.</p>
+<p>Instead of writing a <code class="docutils literal notranslate"><span class="pre">for</span></code> loop that does this, we can just write the following code. This will return a pandas Series (one dimensional dataframe).</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;Polar Surface Area&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="mi">100</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0       2.0232
+1       0.4224
+2       0.1707
+3       0.0000
+4       0.0000
+         ...  
+1123    0.0000
+1124    0.7100
+1125    0.1846
+1126    0.0000
+1127    0.4476
+Name: Polar Surface Area, Length: 1128, dtype: float64
+</pre></div>
+</div>
+</div>
+</div>
+<p>To save it as a new column, we need to capture the output in a column. You can create a new column in a dataframe using the following syntax.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;Polar Surface Area (nm^2)&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;Polar Surface Area&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="mi">100</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>You can also add, subtract, or multiply two columns with one another. For example, we might want to calculate the difference between the predicted and observed values for this solubility model.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;ESOL predicted log solubility in mols per litre&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;measured log solubility in mols per litre&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0      -0.204
+1       0.415
+2      -0.519
+3       1.252
+4      -0.902
+        ...  
+1123   -0.898
+1124   -1.014
+1125   -0.232
+1126    0.935
+1127    0.202
+Length: 1128, dtype: float64
+</pre></div>
+</div>
+</div>
+</div>
+<div class="exercise-this-is-a-title exercise">
+<p class="exercise-title">Check your understanding</p>
+    <p> Save the difference between the predicted and measured solubility in a column named "difference" </p>
+<div class="dropdown admonition">
+<p class="admonition-title">Solution</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;difference&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;ESOL predicted log solubility in mols per litre&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;measured log solubility in mols per litre&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div><div class="section" id="the-apply-operator">
+<h3>The <code class="docutils literal notranslate"><span class="pre">.apply</span></code> operator<a class="headerlink" href="#the-apply-operator" title="Permalink to this headline">¶</a></h3>
+<p>Sometimes the operations you want to do on a column can’t be achieved with broadcasting. One might think to use a <code class="docutils literal notranslate"><span class="pre">for</span></code> loop in times like these. However, many modern Python libraries try to make it so that you will rarely need to use a loop.</p>
+<p>In pandas, if you would like to perform an operation on  a column, you can use the <code class="docutils literal notranslate"><span class="pre">apply</span></code> command. For example, if we wanted to know the number of letters in a compound name, we would use the python function <code class="docutils literal notranslate"><span class="pre">len</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Compound ID&quot;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>9
+</pre></div>
+</div>
+</div>
+</div>
+<p>If we wanted to perform this operation on every value in the column, we would use <code class="docutils literal notranslate"><span class="pre">.apply</span></code>. This returns a pandas Series with the results of applying this function to each cell.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;Compound ID&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="nb">len</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0        9
+1        8
+2        6
+3        6
+4        9
+        ..
+1123     9
+1124     6
+1125     9
+1126    14
+1127     8
+Name: Compound ID, Length: 1128, dtype: int64
+</pre></div>
+</div>
+</div>
+</div>
+<p>You can also do this with custom functions. Consider this function which counts the number of carbons in a SMILES string.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">count_carbons</span><span class="p">(</span><span class="n">smiles</span><span class="p">):</span>
+    
+    <span class="n">carbon_count</span> <span class="o">=</span> <span class="mi">0</span>
+    
+    <span class="k">for</span> <span class="n">letter</span> <span class="ow">in</span> <span class="n">smiles</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">letter</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;c&quot;</span><span class="p">:</span>
+            <span class="n">carbon_count</span> <span class="o">+=</span> <span class="mi">1</span>
+    
+    <span class="k">return</span> <span class="n">carbon_count</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;smiles&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">count_carbons</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0       20
+1       12
+2       10
+3       22
+4        4
+        ..
+1123     3
+1124     7
+1125     6
+1126     5
+1127    14
+Name: smiles, Length: 1128, dtype: int64
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="built-in-plotting">
+<h2>Built-in Plotting<a class="headerlink" href="#built-in-plotting" title="Permalink to this headline">¶</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;AxesSubplot:&gt;
+</pre></div>
+</div>
+<img alt="_images/1-pandas-dataframes-esol_52_1.png" src="_images/1-pandas-dataframes-esol_52_1.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s2">&quot;Number of H-Bond Donors&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s2">&quot;ESOL predicted log solubility in mols per litre&quot;</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s2">&quot;scatter&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;AxesSubplot:xlabel=&#39;Number of H-Bond Donors&#39;, ylabel=&#39;ESOL predicted log solubility in mols per litre&#39;&gt;
+</pre></div>
+</div>
+<img alt="_images/1-pandas-dataframes-esol_53_1.png" src="_images/1-pandas-dataframes-esol_53_1.png" />
+</div>
+</div>
+</div>
+</div>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+        
+        <div class='prev-next-bottom'>
+            
+
+        </div>
+        
+        </div>
+    </div>
+    <footer class="footer mt-5 mt-md-0">
+    <div class="container">
+      <p>
+        
+          By Jessica A. Nash<br/>
+        
+            &copy; Copyright 2020.<br/>
+      </p>
+    </div>
+  </footer>
+</main>
+
+
+      </div>
+    </div>
+  
+  <script src="_static/js/index.1c5a1a01449ed65a7b51.js"></script>
+
+  
+<script async="" src="https://www.google-analytics.com/analytics.js"></script>
+<script>
+                        window.ga = window.ga || function () {
+                            (ga.q = ga.q || []).push(arguments) };
+                        ga.l = +new Date;
+                        ga('create', 'UA-169902961-1', 'auto');
+                        ga('set', 'anonymizeIp', true);
+                        ga('send', 'pageview');
+                    </script>
+
+  </body>
+</html>
