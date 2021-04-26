@@ -314,6 +314,29 @@
         <!-- Table of contents -->
         <div class="d-none d-md-block col-md-2 bd-toc show">
             
+            <div class="tocsection onthispage pt-5 pb-3">
+                <i class="fas fa-list"></i> Contents
+            </div>
+            <nav id="bd-toc-nav">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#exercise-1">
+   Exercise 1
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#exercise-2">
+   Exercise 2
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#exercise-3">
+   Exercise 3
+  </a>
+ </li>
+</ul>
+
+            </nav>
         </div>
     </div>
 </div>
@@ -324,6 +347,31 @@
                 
   <div class="section" id="session-1-homework">
 <h1>Session 1 Homework<a class="headerlink" href="#session-1-homework" title="Permalink to this headline">¶</a></h1>
+<p>This is the homework for the first session of the MolSSI Python Scripting Level 2 Workshop.
+This homework is intended to give you practice with the material covered in the first session.</p>
+<p>Goals:</p>
+<ul class="simple">
+<li><p>Utilize pandas to read in and work with the data in a csv file.</p></li>
+<li><p>Utilize matplotlib to create plots and subplots of data stored in a pandas dataframe.</p></li>
+<li><p>Utilize pandas to extract specific information from a dataframe.</p></li>
+<li><p>Utilize matplotlib to construct a plot with multiple groups of data.</p></li>
+</ul>
+<div class="section" id="exercise-1">
+<h2>Exercise 1<a class="headerlink" href="#exercise-1" title="Permalink to this headline">¶</a></h2>
+<p>Using the <code class="docutils literal notranslate"><span class="pre">PubChemElements_all.csv</span></code> file used during Session 1, create a plot of the Ionization Energy trend of the periodic table. The trend can be visualized by plotting the Ionization Energy of each element against it’s Atomic Number. HINT: Use pandas to read in the csv file and plot the data using matplotlib.</p>
+</div>
+<div class="section" id="exercise-2">
+<h2>Exercise 2<a class="headerlink" href="#exercise-2" title="Permalink to this headline">¶</a></h2>
+<p>Create a pair of subplots comparing the Ionization Energy and Electronegativity trends. The Electronegativity trend can be plotted in the same way as the Ionization Energy, by plotting the Electronegativity of each element against it’s Atomic Number.</p>
+</div>
+<div class="section" id="exercise-3">
+<h2>Exercise 3<a class="headerlink" href="#exercise-3" title="Permalink to this headline">¶</a></h2>
+<p>Create a function that will assign a color coding to a particular Standard State of an element, i.e. red for gases, blue for solids, etc. Use the apply function from pandas to apply the function across the periodic table, creating a column of assigned colors. Create a pair of subplots utilizing the assigned color as the color of the marker:</p>
+<ul class="simple">
+<li><p>Atomic Mass against the Melting point of each element</p></li>
+<li><p>Ionization Energy against the Melting Point of each element</p></li>
+</ul>
+</div>
 </div>
 
     <script type="text/x-thebe-config">
