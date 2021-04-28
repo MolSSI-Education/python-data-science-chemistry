@@ -356,9 +356,11 @@ This homework is intended to give you practice with the material covered in the 
 <li><p>Utilize pandas to extract specific information from a dataframe.</p></li>
 <li><p>Utilize matplotlib to construct a plot with multiple groups of data.</p></li>
 </ul>
+<p>For this homework, you will use the file <code class="docutils literal notranslate"><span class="pre">PubChemElements_all.csv</span></code>. This file contains information about elements of the periodic table. If you took MolSSI’s level 1 Python scripting course, you will recognize this data file from the pandas lesson.</p>
+<p>For this homework, you will be exploring this data file using pandas and creating some plots using matplotlib.</p>
 <div class="section" id="exercise-1">
 <h2>Exercise 1<a class="headerlink" href="#exercise-1" title="Permalink to this headline">¶</a></h2>
-<p>Using the <code class="docutils literal notranslate"><span class="pre">PubChemElements_all.csv</span></code> file used during Session 1, create a plot of the Ionization Energy trend of the periodic table. The trend can be visualized by plotting the Ionization Energy of each element against it’s Atomic Number. HINT: Use pandas to read in the csv file and plot the data using matplotlib.</p>
+<p>Using the <code class="docutils literal notranslate"><span class="pre">PubChemElements_all.csv</span></code> file, create a plot of the Ionization Energy trend of the periodic table. The trend can be visualized by plotting the Ionization Energy of each element against it’s Atomic Number.</p>
 </div>
 <div class="section" id="exercise-2">
 <h2>Exercise 2<a class="headerlink" href="#exercise-2" title="Permalink to this headline">¶</a></h2>
@@ -366,11 +368,12 @@ This homework is intended to give you practice with the material covered in the 
 </div>
 <div class="section" id="exercise-3">
 <h2>Exercise 3<a class="headerlink" href="#exercise-3" title="Permalink to this headline">¶</a></h2>
-<p>Create a function that will assign a color coding to a particular Standard State of an element, i.e. red for gases, blue for solids, etc. Use the apply function from pandas to apply the function across the periodic table, creating a column of assigned colors. Create a pair of subplots utilizing the assigned color as the color of the marker:</p>
+<p>Create a function that will assign a color coding to a particular Standard State of an element, i.e. red for gases, blue for solids, etc. Use the appropriate function from pandas to apply your function across the periodic table, creating a column of assigned colors. Create a pair of subplots utilizing the assigned color as the color of the marker:</p>
 <ul class="simple">
 <li><p>Atomic Mass against the Melting point of each element</p></li>
 <li><p>Ionization Energy against the Melting Point of each element</p></li>
 </ul>
+<p><strong>Hint:</strong> You will need to figure out all of the standard states listed in the periodic table. See if you can figureout a pandas function which will tell you all of the <em>unique</em> values in a column.</p>
 </div>
 </div>
 

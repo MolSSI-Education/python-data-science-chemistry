@@ -320,6 +320,11 @@
             <nav id="bd-toc-nav">
                 <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#converting-a-pandas-dataframe-to-a-numpy-array">
+   Converting a Pandas DataFrame to a NumPy Array
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#reshaping-arrays">
    Reshaping Arrays
   </a>
@@ -337,7 +342,26 @@
                 
   <div class="section" id="working-with-numpy-arrays">
 <h1>Working with NumPy Arrays<a class="headerlink" href="#working-with-numpy-arrays" title="Permalink to this headline">¶</a></h1>
-<p>Pandas dataframes are built on top of a data structure known as the NumPy Array. If you completed the first MolSSI Python scripting workshop, you are already familiar with some properties of NumPy arrays.</p>
+<div class="overview">
+   <p class="overview-title">Overview</p>
+    <p>Questions</p>
+        <ul>
+            <li>When should I use NumPy arrays instead of Pandas dataframes?</li>
+            <li>What does the shape of a NumPy array mean?</li>
+            <li>How can I reshape arrays?</li>
+        </ul>
+    <p>Objectives:</p>
+        <ul>
+            <li>Convert data from a pandas dataframe to a NumPy array.</li>
+            <li>Use the `reshape` function to reshape a NumPy array.</li>
+        </ul>
+    <p>Keypoints:</p>
+        <ul>
+            <li>Pandas dataframes are built on top of NumPy arrays.</li>
+            <li>NumPy arrays have all the same data type.</li>
+            <li>NumPy is used for numerical applications</li>
+        </ul>
+    </div><p>Pandas dataframes are built on top of a data structure known as the NumPy Array. If you completed the first MolSSI Python scripting workshop, you are already familiar with some properties of NumPy arrays.</p>
 <p>In general, you should use pandas dataframe when working with data which is:</p>
 <ul class="simple">
 <li><p>Two dimensional (rows and columns).</p></li>
@@ -348,9 +372,10 @@
 <p>You should work with NumPy arrays when:</p>
 <ul class="simple">
 <li><p>You have higher dimensional data (collection of two dimensional arrays).</p></li>
-<li><p>Your data is all numerical.</p></li>
+<li><p>You need to perform advanced mathematics like linear algebra.</p></li>
 <li><p>You are using a library which requires NumPy arrays (scikitlearn).</p></li>
 </ul>
+<p>For our discussion of NumPy, we are first going to load our data into a pandas dataframe then convert this data into a NumPy array. In our previous workshop, we used <code class="docutils literal notranslate"><span class="pre">np.genfromtxt</span></code>. This function might be ideal if you are working with a file that contains only numbers. However, since our data is mixed, we will first read it using pandas, then convert to a NumPy array.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
@@ -363,7 +388,7 @@
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">file_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">,</span> <span class="s2">&quot;PubChemElements_all.csv&quot;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">file_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">,</span> <span class="s2">&quot;delaney-processed.csv&quot;</span><span class="p">)</span>
 
 <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
 <span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
@@ -389,133 +414,109 @@
   <thead>
     <tr style="text-align: right;">
       <th></th>
-      <th>AtomicNumber</th>
-      <th>Symbol</th>
-      <th>Name</th>
-      <th>AtomicMass</th>
-      <th>CPKHexColor</th>
-      <th>ElectronConfiguration</th>
-      <th>Electronegativity</th>
-      <th>AtomicRadius</th>
-      <th>IonizationEnergy</th>
-      <th>ElectronAffinity</th>
-      <th>OxidationStates</th>
-      <th>StandardState</th>
-      <th>MeltingPoint</th>
-      <th>BoilingPoint</th>
-      <th>Density</th>
-      <th>GroupBlock</th>
-      <th>YearDiscovered</th>
+      <th>Compound</th>
+      <th>ESOL logP (mol/L)</th>
+      <th>Minimum Degree</th>
+      <th>Molecular Weight</th>
+      <th># of H-Bond Donors</th>
+      <th># of Rings</th>
+      <th>Number of Rotatable Bonds</th>
+      <th>Polar Surface Area</th>
+      <th>measured logP (mol/L)</th>
+      <th>smiles</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <th>0</th>
+      <td>Amigdalin</td>
+      <td>-0.974</td>
       <td>1</td>
-      <td>H</td>
-      <td>Hydrogen</td>
-      <td>1.008000</td>
-      <td>FFFFFF</td>
-      <td>1s1</td>
-      <td>2.20</td>
-      <td>120.0</td>
-      <td>13.598</td>
-      <td>0.754</td>
-      <td>+1, -1</td>
-      <td>Gas</td>
-      <td>13.81</td>
-      <td>20.28</td>
-      <td>0.000090</td>
-      <td>Nonmetal</td>
-      <td>1766</td>
+      <td>457.432</td>
+      <td>7</td>
+      <td>3</td>
+      <td>7</td>
+      <td>202.32</td>
+      <td>-0.77</td>
+      <td>OCC3OC(OCC2OC(OC(C#N)c1ccccc1)C(O)C(O)C2O)C(O)...</td>
     </tr>
     <tr>
       <th>1</th>
+      <td>Fenfuram</td>
+      <td>-2.885</td>
+      <td>1</td>
+      <td>201.225</td>
+      <td>1</td>
       <td>2</td>
-      <td>He</td>
-      <td>Helium</td>
-      <td>4.002600</td>
-      <td>D9FFFF</td>
-      <td>1s2</td>
-      <td>NaN</td>
-      <td>140.0</td>
-      <td>24.587</td>
-      <td>NaN</td>
-      <td>0</td>
-      <td>Gas</td>
-      <td>0.95</td>
-      <td>4.22</td>
-      <td>0.000179</td>
-      <td>Noble gas</td>
-      <td>1868</td>
+      <td>2</td>
+      <td>42.24</td>
+      <td>-3.30</td>
+      <td>Cc1occc1C(=O)Nc2ccccc2</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>3</td>
-      <td>Li</td>
-      <td>Lithium</td>
-      <td>7.000000</td>
-      <td>CC80FF</td>
-      <td>[He]2s1</td>
-      <td>0.98</td>
-      <td>182.0</td>
-      <td>5.392</td>
-      <td>0.618</td>
-      <td>+1</td>
-      <td>Solid</td>
-      <td>453.65</td>
-      <td>1615.00</td>
-      <td>0.534000</td>
-      <td>Alkali metal</td>
-      <td>1817</td>
+      <td>citral</td>
+      <td>-2.579</td>
+      <td>1</td>
+      <td>152.237</td>
+      <td>0</td>
+      <td>0</td>
+      <td>4</td>
+      <td>17.07</td>
+      <td>-2.06</td>
+      <td>CC(C)=CCCC(C)=CC(=O)</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>4</td>
-      <td>Be</td>
-      <td>Beryllium</td>
-      <td>9.012183</td>
-      <td>C2FF00</td>
-      <td>[He]2s2</td>
-      <td>1.57</td>
-      <td>153.0</td>
-      <td>9.323</td>
-      <td>NaN</td>
-      <td>+2</td>
-      <td>Solid</td>
-      <td>1560.00</td>
-      <td>2744.00</td>
-      <td>1.850000</td>
-      <td>Alkaline earth metal</td>
-      <td>1798</td>
+      <td>Picene</td>
+      <td>-6.618</td>
+      <td>2</td>
+      <td>278.354</td>
+      <td>0</td>
+      <td>5</td>
+      <td>0</td>
+      <td>0.00</td>
+      <td>-7.87</td>
+      <td>c1ccc2c(c1)ccc3c2ccc4c5ccccc5ccc43</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>5</td>
-      <td>B</td>
-      <td>Boron</td>
-      <td>10.810000</td>
-      <td>FFB5B5</td>
-      <td>[He]2s2 2p1</td>
-      <td>2.04</td>
-      <td>192.0</td>
-      <td>8.298</td>
-      <td>0.277</td>
-      <td>+3</td>
-      <td>Solid</td>
-      <td>2348.00</td>
-      <td>4273.00</td>
-      <td>2.370000</td>
-      <td>Metalloid</td>
-      <td>1808</td>
+      <td>Thiophene</td>
+      <td>-2.232</td>
+      <td>2</td>
+      <td>84.143</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0.00</td>
+      <td>-1.33</td>
+      <td>c1ccsc1</td>
     </tr>
   </tbody>
 </table>
 </div></div></div>
 </div>
+<div class="section" id="converting-a-pandas-dataframe-to-a-numpy-array">
+<h2>Converting a Pandas DataFrame to a NumPy Array<a class="headerlink" href="#converting-a-pandas-dataframe-to-a-numpy-array" title="Permalink to this headline">¶</a></h2>
+<p>To convert a dataframe to a numpy array, use the function <code class="docutils literal notranslate"><span class="pre">.to_numpy()</span></code>. You will notice that both the numpy array and the pandas dataframe have the same shape after conversion.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df_array</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">np_array</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">np_array</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[[&#39;Amigdalin&#39; -0.974 1 ... 202.32 -0.77
+  &#39;OCC3OC(OCC2OC(OC(C#N)c1ccccc1)C(O)C(O)C2O)C(O)C(O)C3O &#39;]
+ [&#39;Fenfuram&#39; -2.885 1 ... 42.24 -3.3 &#39;Cc1occc1C(=O)Nc2ccccc2&#39;]
+ [&#39;citral&#39; -2.579 1 ... 17.07 -2.06 &#39;CC(C)=CCCC(C)=CC(=O)&#39;]
+ ...
+ [&#39;Thiometon&#39; -3.323 1 ... 18.46 -3.091 &#39;CCSCCSP(=S)(OC)OC&#39;]
+ [&#39;2-Methylbutane&#39; -2.245 1 ... 0.0 -3.18 &#39;CCC(C)C&#39;]
+ [&#39;Stirofos&#39; -4.32 1 ... 44.76000000000001 -4.522
+  &#39;COP(=O)(OC)OC(=CCl)c1cc(Cl)c(Cl)cc1Cl&#39;]]
 </pre></div>
 </div>
 </div>
@@ -527,166 +528,155 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(118, 17)
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(1128, 10)
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df_array</span><span class="o">.</span><span class="n">shape</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">np_array</span><span class="o">.</span><span class="n">shape</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(118, 17)
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(1128, 10)
 </pre></div>
+</div>
+</div>
+</div>
+<p>At the end of the numpy array, you will see <code class="docutils literal notranslate"><span class="pre">dtype=object</span></code>. When we converted the dataframe to a NumPy array, pandas attempted to give the dataframe the simplest type possible. Since we had a mix of strings and numbers, the assigned type of the numpy array is object.</p>
+<p>Note that we have both strings and numbers in the array.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">np_array</span><span class="o">.</span><span class="n">dtype</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>dtype(&#39;O&#39;)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">np_array</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">np_array</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]))</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">np_array</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">np_array</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Amigdalin
+&lt;class &#39;str&#39;&gt;
+-0.974
+&lt;class &#39;float&#39;&gt;
+</pre></div>
+</div>
 </div>
 </div>
 </div>
 <div class="section" id="reshaping-arrays">
 <h2>Reshaping Arrays<a class="headerlink" href="#reshaping-arrays" title="Permalink to this headline">¶</a></h2>
+<p>NumPy arrays have shapes just like Pandas DataFrames. One major difference is that they can have more dimensions than two. NumPy arrays are n-dimensional, meaning they can have any number of dimensions. Unlike pandas dataframes, NumPy arrays can be reshaped.</p>
+<p>When we fit our data using scikit-learn later in this workshop, we will need to make sure our arrays are the proper shape. Unlike pandas dataframes, NumPy arrays can have more than two dimensions. Let’s see how we might reshape an array.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">numbers</span> <span class="o">=</span> <span class="n">df</span><span class="p">[[</span><span class="s2">&quot;AtomicNumber&quot;</span><span class="p">,</span> <span class="s2">&quot;Electronegativity&quot;</span><span class="p">,</span> <span class="s2">&quot;AtomicRadius&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">numbers</span> <span class="o">=</span> <span class="n">df</span><span class="p">[[</span><span class="s2">&quot;ESOL logP (mol/L)&quot;</span><span class="p">,</span> <span class="s2">&quot;measured logP (mol/L)&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># reshape so each &quot;category&quot; is its own two dimensional array</span>
-<span class="n">numbers</span> <span class="o">=</span> <span class="n">numbers</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># atomic numbers</span>
-<span class="n">numbers</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">]</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">numbers</span><span class="o">.</span><span class="n">shape</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([[  1.],
-       [  2.],
-       [  3.],
-       [  4.],
-       [  5.],
-       [  6.],
-       [  7.],
-       [  8.],
-       [  9.],
-       [ 10.],
-       [ 11.],
-       [ 12.],
-       [ 13.],
-       [ 14.],
-       [ 15.],
-       [ 16.],
-       [ 17.],
-       [ 18.],
-       [ 19.],
-       [ 20.],
-       [ 21.],
-       [ 22.],
-       [ 23.],
-       [ 24.],
-       [ 25.],
-       [ 26.],
-       [ 27.],
-       [ 28.],
-       [ 29.],
-       [ 30.],
-       [ 31.],
-       [ 32.],
-       [ 33.],
-       [ 34.],
-       [ 35.],
-       [ 36.],
-       [ 37.],
-       [ 38.],
-       [ 39.],
-       [ 40.],
-       [ 41.],
-       [ 42.],
-       [ 43.],
-       [ 44.],
-       [ 45.],
-       [ 46.],
-       [ 47.],
-       [ 48.],
-       [ 49.],
-       [ 50.],
-       [ 51.],
-       [ 52.],
-       [ 53.],
-       [ 54.],
-       [ 55.],
-       [ 56.],
-       [ 57.],
-       [ 58.],
-       [ 59.],
-       [ 60.],
-       [ 61.],
-       [ 62.],
-       [ 63.],
-       [ 64.],
-       [ 65.],
-       [ 66.],
-       [ 67.],
-       [ 68.],
-       [ 69.],
-       [ 70.],
-       [ 71.],
-       [ 72.],
-       [ 73.],
-       [ 74.],
-       [ 75.],
-       [ 76.],
-       [ 77.],
-       [ 78.],
-       [ 79.],
-       [ 80.],
-       [ 81.],
-       [ 82.],
-       [ 83.],
-       [ 84.],
-       [ 85.],
-       [ 86.],
-       [ 87.],
-       [ 88.],
-       [ 89.],
-       [ 90.],
-       [ 91.],
-       [ 92.],
-       [ 93.],
-       [ 94.],
-       [ 95.],
-       [ 96.],
-       [ 97.],
-       [ 98.],
-       [ 99.],
-       [100.],
-       [101.],
-       [102.],
-       [103.],
-       [104.],
-       [105.],
-       [106.],
-       [107.],
-       [108.],
-       [109.],
-       [110.],
-       [111.],
-       [112.],
-       [113.],
-       [114.],
-       [115.],
-       [116.],
-       [117.],
-       [118.]])
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(1128, 2)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">numbers</span><span class="o">.</span><span class="n">dtype</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>dtype(&#39;float64&#39;)
+</pre></div>
+</div>
+</div>
+</div>
+<p>To change the shape of an array, use the function <code class="docutils literal notranslate"><span class="pre">.reshape</span></code>. Inside the reshape function, you list the size you would like for each dimension of the array to be. We could shape the <code class="docutils literal notranslate"><span class="pre">numbers</span></code> array we just created to be three dimensional rather than two dimensional. We might want rows with one column. For the third dimension you can think of it as being two columns stacked on one another.</p>
+<p>If you do not care what the shape of one of the dimensions is when doing a reshape, you can specify a <code class="docutils literal notranslate"><span class="pre">-1</span></code> for that dimension (or <code class="docutils literal notranslate"><span class="pre">unknown</span></code>). It essentially means to make that dimension whatever size it needs to be to fit the other specified dimensions.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># reshape so each &quot;category&quot; is its own two dimensional array</span>
+<span class="n">numbers_reshaped</span> <span class="o">=</span> <span class="n">numbers</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">numbers_reshaped</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(1128, 1, 2)
+</pre></div>
+</div>
+</div>
+</div>
+<p>We can slice into our reshaped array.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Get ESOL values</span>
+<span class="n">numbers_reshaped</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([[-0.974],
+       [-2.885],
+       [-2.579],
+       ...,
+       [-3.323],
+       [-2.245],
+       [-4.32 ]])
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">numbers</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([-0.974, -2.885, -2.579, ..., -3.323, -2.245, -4.32 ])
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Get measured values</span>
+<span class="n">numbers_reshaped</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">1</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([[-0.77 ],
+       [-3.3  ],
+       [-2.06 ],
+       ...,
+       [-3.091],
+       [-3.18 ],
+       [-4.522]])
 </pre></div>
 </div>
 </div>
@@ -694,8 +684,23 @@
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># By default pandas Series are one-dimensional. We will have to reshape the arrays sometimes.</span>
-<span class="n">names</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;Name&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+<span class="n">names</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;Compound&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">names</span><span class="p">)</span>
 <span class="n">names</span> <span class="o">=</span> <span class="n">names</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">names</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&#39;Amigdalin&#39; &#39;Fenfuram&#39; &#39;citral&#39; ... &#39;Thiometon&#39; &#39;2-Methylbutane&#39;
+ &#39;Stirofos&#39;]
+[[&#39;Amigdalin&#39;]
+ [&#39;Fenfuram&#39;]
+ [&#39;citral&#39;]
+ ...
+ [&#39;Thiometon&#39;]
+ [&#39;2-Methylbutane&#39;]
+ [&#39;Stirofos&#39;]]
 </pre></div>
 </div>
 </div>

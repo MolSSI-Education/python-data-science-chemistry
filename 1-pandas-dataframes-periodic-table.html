@@ -1,0 +1,1774 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Working with Pandas DataFrames &#8212; Python Data and Scripting - Level 2</title>
+    
+  <link href="_static/css/theme.css" rel="stylesheet" />
+  <link href="_static/css/index.c5995385ac14fb8791e8eb36b4908be2.css" rel="stylesheet" />
+
+    
+  <link rel="stylesheet"
+    href="_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+
+    
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/sphinx-book-theme.acff12b8f9c144ce68a297486a2fa670.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css" />
+    <link rel="stylesheet" type="text/css" href="_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    
+  <link rel="preload" as="script" href="_static/js/index.1c5a1a01449ed65a7b51.js">
+
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/togglebutton.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="_static/sphinx-book-theme.12a9622fbb08dcb3a2a40b2c02b83a57.js"></script>
+    <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
+    <script >
+        const thebe_selector = ".thebe"
+        const thebe_selector_input = "pre"
+        const thebe_selector_output = ".output"
+    </script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="index.html">
+      
+      <img src="_static/molssi_main_logo.png" class="logo" alt="logo">
+      
+      
+      <h1 class="site-logo" id="site-title">Python Data and Scripting - Level 2</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+    <div class="bd-toc-item active">
+        <ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="intro.html">
+   Workshop Template
+  </a>
+ </li>
+</ul>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="setup.html">
+   Set Up
+  </a>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="1-intro-objectives.html">
+   Session 1
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="1-pandas-dataframes-esol.html">
+     Working with Pandas DataFrames
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="1-numpy-arrays.html">
+     Working with NumPy Arrays
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="1-matplotlib.html">
+     Plotting with Matplotlib
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="1-homework.html">
+     Session 1 Homework
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="2-intro-objectives.html">
+   Session 2
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="2-ocr-tabula.html">
+     Reading data from PDFs
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="2-pandas-datacleaning.html">
+     Data Cleaning with Pandas
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="2-seaborn.html">
+     Plotting with seaborn
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="2-homework.html">
+     Session 2 Homework
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="3-intro-objectives.html">
+   Session 3
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+  <label for="toctree-checkbox-3">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="3-linear-scikitlearn.html">
+     Linear Fitting with SciKit Learn
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="3-regex.html">
+     Regular Expressions
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="3-homework.html">
+     Session 3 Homework
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="4-intro-objectives.html">
+   Session 4
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
+  <label for="toctree-checkbox-4">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="4-nonlinear-scikitlearn.html">
+     Nonlinear Fitting with ScikitLearn
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="4-linear-statsmodels.html">
+     Linear Fitting with statsmodels
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="4-interactive-visualizations.html">
+     Interactive Visualizations with plotly
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+    </div>
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="topbar container-xl fixed-top">
+    <div class="topbar-contents row">
+        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
+        <div class="col pl-md-4 topbar-main">
+            
+            <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+                data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+                aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+                title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+                <i class="fas fa-bars"></i>
+                <i class="fas fa-arrow-left"></i>
+                <i class="fas fa-arrow-up"></i>
+            </button>
+            
+            
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="_sources/1-pandas-dataframes-periodic-table.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.ipynb</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+</div>
+
+            <!-- Source interaction buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Connect with source repository"><i class="fab fa-github"></i></button>
+    <div class="dropdown-buttons sourcebuttons">
+        <a class="repository-button"
+            href="https://github.com/MolSSI-Education/WORKSHOP_NAME"><button type="button" class="btn btn-secondary topbarbtn"
+                data-toggle="tooltip" data-placement="left" title="Source repository"><i
+                    class="fab fa-github"></i>repository</button></a>
+        <a class="issues-button"
+            href="https://github.com/MolSSI-Education/WORKSHOP_NAME/issues/new?title=Issue%20on%20page%20%2F1-pandas-dataframes-periodic-table.html&body=Your%20issue%20content%20here."><button
+                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
+                title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
+        
+    </div>
+</div>
+
+            <!-- Full screen (wrap in <a> to have style consistency -->
+
+<a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+        data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+        title="Fullscreen mode"><i
+            class="fas fa-expand"></i></button></a>
+
+            <!-- Launch buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
+    <div class="dropdown-buttons">
+        
+        <a class="binder-button" href="https://mybinder.org/v2/gh/MolSSI-Education/WORKSHOP_NAME/main?urlpath=tree/book/1-pandas-dataframes-periodic-table.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
+                data-placement="left"><img class="binder-button-logo"
+                    src="_static/images/logo_binder.svg"
+                    alt="Interact on binder">Binder</button></a>
+        
+        
+        
+        
+    </div>
+</div>
+
+        </div>
+
+        <!-- Table of contents -->
+        <div class="d-none d-md-block col-md-2 bd-toc show">
+            
+            <div class="tocsection onthispage pt-5 pb-3">
+                <i class="fas fa-list"></i> Contents
+            </div>
+            <nav id="bd-toc-nav">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#examining-data">
+   Examining Data
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#accessing-data">
+   Accessing Data
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#accessing-with-rows-and-column-numbers">
+     Accessing with rows and column numbers
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#accessing-with-names">
+     Accessing with names
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#performing-operations-on-columns">
+   Performing Operations on Columns
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#the-apply-operator">
+     The
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       .apply
+      </span>
+     </code>
+     operator
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#built-in-plotting">
+   Built-in plotting
+  </a>
+ </li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+        
+              <div>
+                
+  <div class="section" id="working-with-pandas-dataframes">
+<h1>Working with Pandas DataFrames<a class="headerlink" href="#working-with-pandas-dataframes" title="Permalink to this headline">¶</a></h1>
+<p>Pandas is a Python library used for data analysis and manipulation. Within the world of data science, it is a ubiquitous and widely used library. If you are learning how to analyze data in Python, it will be almost impossible to avoid pandas.</p>
+<p>For this workshop, we will be using two types of data structues - NumPy arrays and pandas DataFrames. Pandas dataframes are specifically for data which is two dimensional (rows and columns). NumPy arrays, while similar in some ways, are meant to work with higher dimensional data. We’ll see this in a future lesson.</p>
+<p>Pandas is very powerful. In this session, we’ll be learning how to access information in pandas dataframes and how to do some basic manipulation and analysis.</p>
+<p>We start by importing pandas and the os library. We use the os library to build our file paths rather than typing them in directly to ensure compatibility of our notebook on different operating systems.</p>
+<p>We are going to be looking at a dataset which gives information about the elements in the periodic table. We’ll do a little bit of data sorting and cleaning, but we’ll be doing a lot more in session 2.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">file_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">,</span> <span class="s2">&quot;PubChemElements_all.csv&quot;</span><span class="p">)</span>
+
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="examining-data">
+<h2>Examining Data<a class="headerlink" href="#examining-data" title="Permalink to this headline">¶</a></h2>
+<p>Initially when loading data in, and also at certain points as we’re working with it, we’ll want to see what our dataframe looks like. Youo can see a preview of your dataframe using the <code class="docutils literal notranslate"><span class="pre">.head</span></code> function</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>AtomicNumber</th>
+      <th>Symbol</th>
+      <th>Name</th>
+      <th>AtomicMass</th>
+      <th>CPKHexColor</th>
+      <th>ElectronConfiguration</th>
+      <th>Electronegativity</th>
+      <th>AtomicRadius</th>
+      <th>IonizationEnergy</th>
+      <th>ElectronAffinity</th>
+      <th>OxidationStates</th>
+      <th>StandardState</th>
+      <th>MeltingPoint</th>
+      <th>BoilingPoint</th>
+      <th>Density</th>
+      <th>GroupBlock</th>
+      <th>YearDiscovered</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1</td>
+      <td>H</td>
+      <td>Hydrogen</td>
+      <td>1.008000</td>
+      <td>FFFFFF</td>
+      <td>1s1</td>
+      <td>2.20</td>
+      <td>120.0</td>
+      <td>13.598</td>
+      <td>0.754</td>
+      <td>+1, -1</td>
+      <td>Gas</td>
+      <td>13.81</td>
+      <td>20.28</td>
+      <td>0.000090</td>
+      <td>Nonmetal</td>
+      <td>1766</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>2</td>
+      <td>He</td>
+      <td>Helium</td>
+      <td>4.002600</td>
+      <td>D9FFFF</td>
+      <td>1s2</td>
+      <td>NaN</td>
+      <td>140.0</td>
+      <td>24.587</td>
+      <td>NaN</td>
+      <td>0</td>
+      <td>Gas</td>
+      <td>0.95</td>
+      <td>4.22</td>
+      <td>0.000179</td>
+      <td>Noble gas</td>
+      <td>1868</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>3</td>
+      <td>Li</td>
+      <td>Lithium</td>
+      <td>7.000000</td>
+      <td>CC80FF</td>
+      <td>[He]2s1</td>
+      <td>0.98</td>
+      <td>182.0</td>
+      <td>5.392</td>
+      <td>0.618</td>
+      <td>+1</td>
+      <td>Solid</td>
+      <td>453.65</td>
+      <td>1615.00</td>
+      <td>0.534000</td>
+      <td>Alkali metal</td>
+      <td>1817</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>4</td>
+      <td>Be</td>
+      <td>Beryllium</td>
+      <td>9.012183</td>
+      <td>C2FF00</td>
+      <td>[He]2s2</td>
+      <td>1.57</td>
+      <td>153.0</td>
+      <td>9.323</td>
+      <td>NaN</td>
+      <td>+2</td>
+      <td>Solid</td>
+      <td>1560.00</td>
+      <td>2744.00</td>
+      <td>1.850000</td>
+      <td>Alkaline earth metal</td>
+      <td>1798</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>5</td>
+      <td>B</td>
+      <td>Boron</td>
+      <td>10.810000</td>
+      <td>FFB5B5</td>
+      <td>[He]2s2 2p1</td>
+      <td>2.04</td>
+      <td>192.0</td>
+      <td>8.298</td>
+      <td>0.277</td>
+      <td>+3</td>
+      <td>Solid</td>
+      <td>2348.00</td>
+      <td>4273.00</td>
+      <td>2.370000</td>
+      <td>Metalloid</td>
+      <td>1808</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">.info</span></code> function will give information about the columns and the data type of those columns. The data type will become very important later as we work with data more.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;class &#39;pandas.core.frame.DataFrame&#39;&gt;
+RangeIndex: 118 entries, 0 to 117
+Data columns (total 17 columns):
+ #   Column                 Non-Null Count  Dtype  
+---  ------                 --------------  -----  
+ 0   AtomicNumber           118 non-null    int64  
+ 1   Symbol                 118 non-null    object 
+ 2   Name                   118 non-null    object 
+ 3   AtomicMass             118 non-null    float64
+ 4   CPKHexColor            108 non-null    object 
+ 5   ElectronConfiguration  118 non-null    object 
+ 6   Electronegativity      95 non-null     float64
+ 7   AtomicRadius           113 non-null    float64
+ 8   IonizationEnergy       102 non-null    float64
+ 9   ElectronAffinity       57 non-null     float64
+ 10  OxidationStates        103 non-null    object 
+ 11  StandardState          118 non-null    object 
+ 12  MeltingPoint           103 non-null    float64
+ 13  BoilingPoint           93 non-null     float64
+ 14  Density                96 non-null     float64
+ 15  GroupBlock             118 non-null    object 
+ 16  YearDiscovered         118 non-null    object 
+dtypes: float64(8), int64(1), object(8)
+memory usage: 15.8+ KB
+</pre></div>
+</div>
+</div>
+</div>
+<p>For this dataframe, we see that the first column, <code class="docutils literal notranslate"><span class="pre">AtomicNumber</span></code> has the data type of <code class="docutils literal notranslate"><span class="pre">int64</span></code>. Here, <code class="docutils literal notranslate"><span class="pre">int</span></code> means <code class="docutils literal notranslate"><span class="pre">integer</span></code> and <code class="docutils literal notranslate"><span class="pre">64</span></code> means <code class="docutils literal notranslate"><span class="pre">64</span> <span class="pre">bit</span></code>.  The <code class="docutils literal notranslate"><span class="pre">64</span> <span class="pre">bit</span></code> refers to the amount of computer memory the variable can occupy. It won’t really be important for us. Similarly, <code class="docutils literal notranslate"><span class="pre">float64</span></code> means <code class="docutils literal notranslate"><span class="pre">64</span> <span class="pre">bit</span> <span class="pre">floating</span> <span class="pre">point</span></code>. These are decimal numbers.</p>
+<p>The other column names which read <code class="docutils literal notranslate"><span class="pre">object</span></code> are not numeric. They might be strings or they might be something else. We’ll discuss more later.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">describe</span></code> function can be used on a dataframe to quickly see statistics about columns with numerical data. If you look at the columns that statistics are computed for and compare to the data type shown from <code class="docutils literal notranslate"><span class="pre">info</span></code>, you will see that we only get statistics for columns which had <code class="docutils literal notranslate"><span class="pre">int64</span></code> or <code class="docutils literal notranslate"><span class="pre">float64</span></code> data types.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>AtomicNumber</th>
+      <th>AtomicMass</th>
+      <th>Electronegativity</th>
+      <th>AtomicRadius</th>
+      <th>IonizationEnergy</th>
+      <th>ElectronAffinity</th>
+      <th>MeltingPoint</th>
+      <th>BoilingPoint</th>
+      <th>Density</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>count</th>
+      <td>118.000000</td>
+      <td>118.000000</td>
+      <td>95.000000</td>
+      <td>113.000000</td>
+      <td>102.000000</td>
+      <td>57.000000</td>
+      <td>103.000000</td>
+      <td>93.000000</td>
+      <td>96.000000</td>
+    </tr>
+    <tr>
+      <th>mean</th>
+      <td>59.500000</td>
+      <td>146.607635</td>
+      <td>1.732316</td>
+      <td>201.902655</td>
+      <td>7.997255</td>
+      <td>1.072140</td>
+      <td>1273.740553</td>
+      <td>2536.212473</td>
+      <td>7.608001</td>
+    </tr>
+    <tr>
+      <th>std</th>
+      <td>34.207699</td>
+      <td>89.845304</td>
+      <td>0.635187</td>
+      <td>42.025707</td>
+      <td>3.339066</td>
+      <td>0.879163</td>
+      <td>888.853859</td>
+      <td>1588.410919</td>
+      <td>5.878692</td>
+    </tr>
+    <tr>
+      <th>min</th>
+      <td>1.000000</td>
+      <td>1.008000</td>
+      <td>0.700000</td>
+      <td>120.000000</td>
+      <td>3.894000</td>
+      <td>0.079000</td>
+      <td>0.950000</td>
+      <td>4.220000</td>
+      <td>0.000090</td>
+    </tr>
+    <tr>
+      <th>25%</th>
+      <td>30.250000</td>
+      <td>66.480000</td>
+      <td>1.290000</td>
+      <td>180.000000</td>
+      <td>6.020500</td>
+      <td>0.470000</td>
+      <td>516.040000</td>
+      <td>1180.000000</td>
+      <td>2.572500</td>
+    </tr>
+    <tr>
+      <th>50%</th>
+      <td>59.500000</td>
+      <td>142.573850</td>
+      <td>1.620000</td>
+      <td>202.000000</td>
+      <td>6.960000</td>
+      <td>0.754000</td>
+      <td>1191.000000</td>
+      <td>2792.000000</td>
+      <td>7.072000</td>
+    </tr>
+    <tr>
+      <th>75%</th>
+      <td>88.750000</td>
+      <td>226.777165</td>
+      <td>2.170000</td>
+      <td>229.000000</td>
+      <td>8.998500</td>
+      <td>1.350000</td>
+      <td>1806.500000</td>
+      <td>3618.000000</td>
+      <td>10.275250</td>
+    </tr>
+    <tr>
+      <th>max</th>
+      <td>118.000000</td>
+      <td>294.214000</td>
+      <td>3.980000</td>
+      <td>348.000000</td>
+      <td>24.587000</td>
+      <td>3.617000</td>
+      <td>3823.000000</td>
+      <td>5869.000000</td>
+      <td>22.570000</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+</div>
+<div class="section" id="accessing-data">
+<h2>Accessing Data<a class="headerlink" href="#accessing-data" title="Permalink to this headline">¶</a></h2>
+<p>One great thing about pandas dataframes is how easy it is to access information. Pandas allows you to access information in a dataframe using both data indexes and names.</p>
+<p>Pandas dataframes have rows and columns, you can see how many rows and columns using <code class="docutils literal notranslate"><span class="pre">.shape</span></code>. This will return the shape as <code class="docutils literal notranslate"><span class="pre">(num_rows,</span> <span class="pre">num_columns)</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">shape</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(118, 17)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="accessing-with-rows-and-column-numbers">
+<h3>Accessing with rows and column numbers<a class="headerlink" href="#accessing-with-rows-and-column-numbers" title="Permalink to this headline">¶</a></h3>
+<p>Access on a particular row and column using <code class="docutils literal notranslate"><span class="pre">.iloc</span></code> followed by squarre brackets and the row and column numbers yoou want to access. If you only put one number, it will be assumed to be the row number you want.</p>
+<p>The following gets row number 35.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">35</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>AtomicNumber                           36
+Symbol                                 Kr
+Name                              Krypton
+AtomicMass                           83.8
+CPKHexColor                        5CB8D1
+ElectronConfiguration    [Ar]4s2 3d10 4p6
+Electronegativity                     3.0
+AtomicRadius                        202.0
+IonizationEnergy                     14.0
+ElectronAffinity                      NaN
+OxidationStates                         0
+StandardState                         Gas
+MeltingPoint                       115.79
+BoilingPoint                       119.93
+Density                          0.003733
+GroupBlock                      Noble gas
+YearDiscovered                       1898
+Name: 35, dtype: object
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">35</span><span class="p">,</span> <span class="p">:</span><span class="mi">3</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>AtomicNumber         36
+Symbol               Kr
+Name            Krypton
+Name: 35, dtype: object
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="accessing-with-names">
+<h3>Accessing with names<a class="headerlink" href="#accessing-with-names" title="Permalink to this headline">¶</a></h3>
+<p>Each dataframe has an index (rows) and columns. The index can be named, but by default it is usually just numbered.</p>
+<p>You can see information about the index or the columns using <code class="docutils literal notranslate"><span class="pre">df.index</span></code> or <code class="docutils literal notranslate"><span class="pre">df.columns</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">index</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>RangeIndex(start=0, stop=118, step=1)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">columns</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Index([&#39;AtomicNumber&#39;, &#39;Symbol&#39;, &#39;Name&#39;, &#39;AtomicMass&#39;, &#39;CPKHexColor&#39;,
+       &#39;ElectronConfiguration&#39;, &#39;Electronegativity&#39;, &#39;AtomicRadius&#39;,
+       &#39;IonizationEnergy&#39;, &#39;ElectronAffinity&#39;, &#39;OxidationStates&#39;,
+       &#39;StandardState&#39;, &#39;MeltingPoint&#39;, &#39;BoilingPoint&#39;, &#39;Density&#39;,
+       &#39;GroupBlock&#39;, &#39;YearDiscovered&#39;],
+      dtype=&#39;object&#39;)
+</pre></div>
+</div>
+</div>
+</div>
+<p>To access part of a dataframe using the index or column names, would use the <code class="docutils literal notranslate"><span class="pre">loc</span></code> function.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">35</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>AtomicNumber                           36
+Symbol                                 Kr
+Name                              Krypton
+AtomicMass                           83.8
+CPKHexColor                        5CB8D1
+ElectronConfiguration    [Ar]4s2 3d10 4p6
+Electronegativity                     3.0
+AtomicRadius                        202.0
+IonizationEnergy                     14.0
+ElectronAffinity                      NaN
+OxidationStates                         0
+StandardState                         Gas
+MeltingPoint                       115.79
+BoilingPoint                       119.93
+Density                          0.003733
+GroupBlock                      Noble gas
+YearDiscovered                       1898
+Name: 35, dtype: object
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">35</span><span class="p">,</span> <span class="s1">&#39;Electronegativity&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>3.0
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">35</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;Name&#39;</span><span class="p">,</span><span class="s1">&#39;Electronegativity&#39;</span><span class="p">]]</span> 
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Name                 Krypton
+Electronegativity        3.0
+Name: 35, dtype: object
+</pre></div>
+</div>
+</div>
+</div>
+<p>You can also get a column of information by using <code class="docutils literal notranslate"><span class="pre">df[column_name]</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Electronegativity&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0    2.20
+1     NaN
+2    0.98
+3    1.57
+4    2.04
+Name: Electronegativity, dtype: float64
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="p">[[</span><span class="s1">&#39;Name&#39;</span><span class="p">,</span><span class="s1">&#39;Electronegativity&#39;</span><span class="p">]]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Name</th>
+      <th>Electronegativity</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Hydrogen</td>
+      <td>2.20</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Helium</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Lithium</td>
+      <td>0.98</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Beryllium</td>
+      <td>1.57</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Boron</td>
+      <td>2.04</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>113</th>
+      <td>Flerovium</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>114</th>
+      <td>Moscovium</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>115</th>
+      <td>Livermorium</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>116</th>
+      <td>Tennessine</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>117</th>
+      <td>Oganesson</td>
+      <td>NaN</td>
+    </tr>
+  </tbody>
+</table>
+<p>118 rows × 2 columns</p>
+</div></div></div>
+</div>
+</div>
+</div>
+<div class="section" id="performing-operations-on-columns">
+<h2>Performing Operations on Columns<a class="headerlink" href="#performing-operations-on-columns" title="Permalink to this headline">¶</a></h2>
+<p>Both pandas and NumPy dataframes have the convenient feature that they use something called <code class="docutils literal notranslate"><span class="pre">broadcasting</span></code>. This means that if you are doing something like subtracting a number, multiplying, etc to a column or dataframe of information, it can be done all at once instead of with a <code class="docutils literal notranslate"><span class="pre">for</span></code> loop. Consider if we wanted to calculate the melting point in degrees celsius for all of the elements.</p>
+<p>Instead of writing a <code class="docutils literal notranslate"><span class="pre">for</span></code> loop that does this, we can just write the following code. This will return a pandas Series (one dimensional dataframe).</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;MeltingPoint&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="mf">273.15</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0      -259.34
+1      -272.20
+2       180.50
+3      1286.85
+4      2074.85
+        ...   
+113        NaN
+114        NaN
+115        NaN
+116        NaN
+117        NaN
+Name: MeltingPoint, Length: 118, dtype: float64
+</pre></div>
+</div>
+</div>
+</div>
+<p>We could do this one two columns as well.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="p">[[</span><span class="s1">&#39;MeltingPoint&#39;</span><span class="p">,</span> <span class="s1">&#39;BoilingPoint&#39;</span><span class="p">]]</span> <span class="o">-</span> <span class="mf">273.15</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>MeltingPoint</th>
+      <th>BoilingPoint</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>-259.34</td>
+      <td>-252.87</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>-272.20</td>
+      <td>-268.93</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>180.50</td>
+      <td>1341.85</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>1286.85</td>
+      <td>2470.85</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>2074.85</td>
+      <td>3999.85</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>113</th>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>114</th>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>115</th>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>116</th>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>117</th>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+  </tbody>
+</table>
+<p>118 rows × 2 columns</p>
+</div></div></div>
+</div>
+<p>We can capture these in new dataframe columns</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="p">[[</span><span class="s1">&#39;MeltingPointC&#39;</span><span class="p">,</span> <span class="s1">&#39;BoilingPointC&#39;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[[</span><span class="s1">&#39;MeltingPoint&#39;</span><span class="p">,</span> <span class="s1">&#39;BoilingPoint&#39;</span><span class="p">]]</span> <span class="o">-</span> <span class="mf">273.15</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>AtomicNumber</th>
+      <th>Symbol</th>
+      <th>Name</th>
+      <th>AtomicMass</th>
+      <th>CPKHexColor</th>
+      <th>ElectronConfiguration</th>
+      <th>Electronegativity</th>
+      <th>AtomicRadius</th>
+      <th>IonizationEnergy</th>
+      <th>ElectronAffinity</th>
+      <th>OxidationStates</th>
+      <th>StandardState</th>
+      <th>MeltingPoint</th>
+      <th>BoilingPoint</th>
+      <th>Density</th>
+      <th>GroupBlock</th>
+      <th>YearDiscovered</th>
+      <th>MeltingPointC</th>
+      <th>BoilingPointC</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1</td>
+      <td>H</td>
+      <td>Hydrogen</td>
+      <td>1.008000</td>
+      <td>FFFFFF</td>
+      <td>1s1</td>
+      <td>2.20</td>
+      <td>120.0</td>
+      <td>13.598</td>
+      <td>0.754</td>
+      <td>+1, -1</td>
+      <td>Gas</td>
+      <td>13.81</td>
+      <td>20.28</td>
+      <td>0.000090</td>
+      <td>Nonmetal</td>
+      <td>1766</td>
+      <td>-259.34</td>
+      <td>-252.87</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>2</td>
+      <td>He</td>
+      <td>Helium</td>
+      <td>4.002600</td>
+      <td>D9FFFF</td>
+      <td>1s2</td>
+      <td>NaN</td>
+      <td>140.0</td>
+      <td>24.587</td>
+      <td>NaN</td>
+      <td>0</td>
+      <td>Gas</td>
+      <td>0.95</td>
+      <td>4.22</td>
+      <td>0.000179</td>
+      <td>Noble gas</td>
+      <td>1868</td>
+      <td>-272.20</td>
+      <td>-268.93</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>3</td>
+      <td>Li</td>
+      <td>Lithium</td>
+      <td>7.000000</td>
+      <td>CC80FF</td>
+      <td>[He]2s1</td>
+      <td>0.98</td>
+      <td>182.0</td>
+      <td>5.392</td>
+      <td>0.618</td>
+      <td>+1</td>
+      <td>Solid</td>
+      <td>453.65</td>
+      <td>1615.00</td>
+      <td>0.534000</td>
+      <td>Alkali metal</td>
+      <td>1817</td>
+      <td>180.50</td>
+      <td>1341.85</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>4</td>
+      <td>Be</td>
+      <td>Beryllium</td>
+      <td>9.012183</td>
+      <td>C2FF00</td>
+      <td>[He]2s2</td>
+      <td>1.57</td>
+      <td>153.0</td>
+      <td>9.323</td>
+      <td>NaN</td>
+      <td>+2</td>
+      <td>Solid</td>
+      <td>1560.00</td>
+      <td>2744.00</td>
+      <td>1.850000</td>
+      <td>Alkaline earth metal</td>
+      <td>1798</td>
+      <td>1286.85</td>
+      <td>2470.85</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>5</td>
+      <td>B</td>
+      <td>Boron</td>
+      <td>10.810000</td>
+      <td>FFB5B5</td>
+      <td>[He]2s2 2p1</td>
+      <td>2.04</td>
+      <td>192.0</td>
+      <td>8.298</td>
+      <td>0.277</td>
+      <td>+3</td>
+      <td>Solid</td>
+      <td>2348.00</td>
+      <td>4273.00</td>
+      <td>2.370000</td>
+      <td>Metalloid</td>
+      <td>1808</td>
+      <td>2074.85</td>
+      <td>3999.85</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<div class="section" id="the-apply-operator">
+<h3>The <code class="docutils literal notranslate"><span class="pre">.apply</span></code> operator<a class="headerlink" href="#the-apply-operator" title="Permalink to this headline">¶</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>AtomicNumber</th>
+      <th>Symbol</th>
+      <th>Name</th>
+      <th>AtomicMass</th>
+      <th>CPKHexColor</th>
+      <th>ElectronConfiguration</th>
+      <th>Electronegativity</th>
+      <th>AtomicRadius</th>
+      <th>IonizationEnergy</th>
+      <th>ElectronAffinity</th>
+      <th>OxidationStates</th>
+      <th>StandardState</th>
+      <th>MeltingPoint</th>
+      <th>BoilingPoint</th>
+      <th>Density</th>
+      <th>GroupBlock</th>
+      <th>YearDiscovered</th>
+      <th>MeltingPointC</th>
+      <th>BoilingPointC</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1</td>
+      <td>H</td>
+      <td>Hydrogen</td>
+      <td>1.008000</td>
+      <td>FFFFFF</td>
+      <td>1s1</td>
+      <td>2.20</td>
+      <td>120.0</td>
+      <td>13.598</td>
+      <td>0.754</td>
+      <td>+1, -1</td>
+      <td>Gas</td>
+      <td>13.81</td>
+      <td>20.28</td>
+      <td>0.000090</td>
+      <td>Nonmetal</td>
+      <td>1766</td>
+      <td>-259.34</td>
+      <td>-252.87</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>2</td>
+      <td>He</td>
+      <td>Helium</td>
+      <td>4.002600</td>
+      <td>D9FFFF</td>
+      <td>1s2</td>
+      <td>NaN</td>
+      <td>140.0</td>
+      <td>24.587</td>
+      <td>NaN</td>
+      <td>0</td>
+      <td>Gas</td>
+      <td>0.95</td>
+      <td>4.22</td>
+      <td>0.000179</td>
+      <td>Noble gas</td>
+      <td>1868</td>
+      <td>-272.20</td>
+      <td>-268.93</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>3</td>
+      <td>Li</td>
+      <td>Lithium</td>
+      <td>7.000000</td>
+      <td>CC80FF</td>
+      <td>[He]2s1</td>
+      <td>0.98</td>
+      <td>182.0</td>
+      <td>5.392</td>
+      <td>0.618</td>
+      <td>+1</td>
+      <td>Solid</td>
+      <td>453.65</td>
+      <td>1615.00</td>
+      <td>0.534000</td>
+      <td>Alkali metal</td>
+      <td>1817</td>
+      <td>180.50</td>
+      <td>1341.85</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>4</td>
+      <td>Be</td>
+      <td>Beryllium</td>
+      <td>9.012183</td>
+      <td>C2FF00</td>
+      <td>[He]2s2</td>
+      <td>1.57</td>
+      <td>153.0</td>
+      <td>9.323</td>
+      <td>NaN</td>
+      <td>+2</td>
+      <td>Solid</td>
+      <td>1560.00</td>
+      <td>2744.00</td>
+      <td>1.850000</td>
+      <td>Alkaline earth metal</td>
+      <td>1798</td>
+      <td>1286.85</td>
+      <td>2470.85</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>5</td>
+      <td>B</td>
+      <td>Boron</td>
+      <td>10.810000</td>
+      <td>FFB5B5</td>
+      <td>[He]2s2 2p1</td>
+      <td>2.04</td>
+      <td>192.0</td>
+      <td>8.298</td>
+      <td>0.277</td>
+      <td>+3</td>
+      <td>Solid</td>
+      <td>2348.00</td>
+      <td>4273.00</td>
+      <td>2.370000</td>
+      <td>Metalloid</td>
+      <td>1808</td>
+      <td>2074.85</td>
+      <td>3999.85</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Number of letters in name - </span>
+<span class="c1"># point - you can use built in functions</span>
+<span class="n">df</span><span class="p">[</span><span class="s2">&quot;Name&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="nb">len</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0       8
+1       6
+2       7
+3       9
+4       5
+       ..
+113     9
+114     9
+115    11
+116    10
+117     9
+Name: Name, Length: 118, dtype: int64
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Apply with custom functions</span>
+
+<span class="k">def</span> <span class="nf">calculate_num_valence</span><span class="p">(</span><span class="n">electron_configuration</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Calculate the number of valence electrons based on an electron configuration&quot;&quot;&quot;</span>
+    
+    <span class="c1"># Split on spaces</span>
+    <span class="n">split_configuration</span> <span class="o">=</span> <span class="n">electron_configuration</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+    
+    <span class="n">electron_sum</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">split</span> <span class="ow">in</span> <span class="n">split_configuration</span><span class="p">:</span>
+        <span class="n">last_two</span> <span class="o">=</span> <span class="n">split</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">:]</span>
+        
+        <span class="n">electrons</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+        <span class="k">for</span> <span class="n">letter</span> <span class="ow">in</span> <span class="n">last_two</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">letter</span><span class="o">.</span><span class="n">isdigit</span><span class="p">():</span>
+                <span class="n">electrons</span> <span class="o">+=</span> <span class="n">letter</span>
+        <span class="k">if</span> <span class="n">electrons</span><span class="p">:</span>
+            <span class="n">electron_sum</span> <span class="o">+=</span> <span class="nb">int</span><span class="p">(</span><span class="n">electrons</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">electron_sum</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">calculate_num_valence</span><span class="p">(</span><span class="s1">&#39;[He]2s2 2p2&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>4
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;Number of Valence&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;ElectronConfiguration&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">calculate_num_valence</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>AtomicNumber</th>
+      <th>Symbol</th>
+      <th>Name</th>
+      <th>AtomicMass</th>
+      <th>CPKHexColor</th>
+      <th>ElectronConfiguration</th>
+      <th>Electronegativity</th>
+      <th>AtomicRadius</th>
+      <th>IonizationEnergy</th>
+      <th>ElectronAffinity</th>
+      <th>OxidationStates</th>
+      <th>StandardState</th>
+      <th>MeltingPoint</th>
+      <th>BoilingPoint</th>
+      <th>Density</th>
+      <th>GroupBlock</th>
+      <th>YearDiscovered</th>
+      <th>MeltingPointC</th>
+      <th>BoilingPointC</th>
+      <th>Number of Valence</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1</td>
+      <td>H</td>
+      <td>Hydrogen</td>
+      <td>1.008000</td>
+      <td>FFFFFF</td>
+      <td>1s1</td>
+      <td>2.20</td>
+      <td>120.0</td>
+      <td>13.598</td>
+      <td>0.754</td>
+      <td>+1, -1</td>
+      <td>Gas</td>
+      <td>13.81</td>
+      <td>20.28</td>
+      <td>0.000090</td>
+      <td>Nonmetal</td>
+      <td>1766</td>
+      <td>-259.34</td>
+      <td>-252.87</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>2</td>
+      <td>He</td>
+      <td>Helium</td>
+      <td>4.002600</td>
+      <td>D9FFFF</td>
+      <td>1s2</td>
+      <td>NaN</td>
+      <td>140.0</td>
+      <td>24.587</td>
+      <td>NaN</td>
+      <td>0</td>
+      <td>Gas</td>
+      <td>0.95</td>
+      <td>4.22</td>
+      <td>0.000179</td>
+      <td>Noble gas</td>
+      <td>1868</td>
+      <td>-272.20</td>
+      <td>-268.93</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>3</td>
+      <td>Li</td>
+      <td>Lithium</td>
+      <td>7.000000</td>
+      <td>CC80FF</td>
+      <td>[He]2s1</td>
+      <td>0.98</td>
+      <td>182.0</td>
+      <td>5.392</td>
+      <td>0.618</td>
+      <td>+1</td>
+      <td>Solid</td>
+      <td>453.65</td>
+      <td>1615.00</td>
+      <td>0.534000</td>
+      <td>Alkali metal</td>
+      <td>1817</td>
+      <td>180.50</td>
+      <td>1341.85</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>4</td>
+      <td>Be</td>
+      <td>Beryllium</td>
+      <td>9.012183</td>
+      <td>C2FF00</td>
+      <td>[He]2s2</td>
+      <td>1.57</td>
+      <td>153.0</td>
+      <td>9.323</td>
+      <td>NaN</td>
+      <td>+2</td>
+      <td>Solid</td>
+      <td>1560.00</td>
+      <td>2744.00</td>
+      <td>1.850000</td>
+      <td>Alkaline earth metal</td>
+      <td>1798</td>
+      <td>1286.85</td>
+      <td>2470.85</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>5</td>
+      <td>B</td>
+      <td>Boron</td>
+      <td>10.810000</td>
+      <td>FFB5B5</td>
+      <td>[He]2s2 2p1</td>
+      <td>2.04</td>
+      <td>192.0</td>
+      <td>8.298</td>
+      <td>0.277</td>
+      <td>+3</td>
+      <td>Solid</td>
+      <td>2348.00</td>
+      <td>4273.00</td>
+      <td>2.370000</td>
+      <td>Metalloid</td>
+      <td>1808</td>
+      <td>2074.85</td>
+      <td>3999.85</td>
+      <td>3</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+</div>
+</div>
+<div class="section" id="built-in-plotting">
+<h2>Built-in plotting<a class="headerlink" href="#built-in-plotting" title="Permalink to this headline">¶</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;AxesSubplot:&gt;
+</pre></div>
+</div>
+<img alt="_images/1-pandas-dataframes-periodic-table_42_1.png" src="_images/1-pandas-dataframes-periodic-table_42_1.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s2">&quot;Electronegativity&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s2">&quot;AtomicRadius&quot;</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s2">&quot;scatter&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;AxesSubplot:xlabel=&#39;Electronegativity&#39;, ylabel=&#39;AtomicRadius&#39;&gt;
+</pre></div>
+</div>
+<img alt="_images/1-pandas-dataframes-periodic-table_43_1.png" src="_images/1-pandas-dataframes-periodic-table_43_1.png" />
+</div>
+</div>
+</div>
+</div>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+        
+        <div class='prev-next-bottom'>
+            
+
+        </div>
+        
+        </div>
+    </div>
+    <footer class="footer mt-5 mt-md-0">
+    <div class="container">
+      <p>
+        
+          By Jessica A. Nash<br/>
+        
+            &copy; Copyright 2020.<br/>
+      </p>
+    </div>
+  </footer>
+</main>
+
+
+      </div>
+    </div>
+  
+  <script src="_static/js/index.1c5a1a01449ed65a7b51.js"></script>
+
+  
+<script async="" src="https://www.google-analytics.com/analytics.js"></script>
+<script>
+                        window.ga = window.ga || function () {
+                            (ga.q = ga.q || []).push(arguments) };
+                        ga.l = +new Date;
+                        ga('create', 'UA-169902961-1', 'auto');
+                        ga('set', 'anonymizeIp', true);
+                        ga('send', 'pageview');
+                    </script>
+
+  </body>
+</html>

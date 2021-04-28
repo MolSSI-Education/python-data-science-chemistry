@@ -385,26 +385,42 @@
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#performing-operations-on-columns">
-   Performing Operations on Columns
+  <a class="reference internal nav-link" href="#performing-operations-on-multiple-cells">
+   Performing Operations on Multiple Cells
   </a>
   <ul class="nav section-nav flex-column">
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#the-apply-operator">
+    <a class="reference internal nav-link" href="#broadcasting">
+     Broadcasting
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#the-applymap-operator">
+     The
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       .applymap
+      </span>
+     </code>
+     operator
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#the-apply-operator-for-rows-and-columns">
      The
      <code class="docutils literal notranslate">
       <span class="pre">
        .apply
       </span>
      </code>
-     operator
+     operator - for rows and columns
     </a>
    </li>
   </ul>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#built-in-plotting">
-   Built-in Plotting
+  <a class="reference internal nav-link" href="#axes-and-shapes">
+   Axes and Shapes
   </a>
  </li>
 </ul>
@@ -424,17 +440,19 @@
    <p class="overview-title">Overview</p>
     <p>Questions</p>
         <ul>
-            <li>Question 1
+            <li>How can I use pandas to examine data?
         </ul>
     <p>Objectives:</p>
         <ul>
-            <li>Objective 1
-            <li>Objective 2
+            <li>Load a csv file into a pandas data frame.</li>
+            <li>Learn the different ways to access information in a dataframe.</li>
+            <li>Learn how to perform calculattions on a column of data.</li>
+            <li>Learn about built-in plotting in a dataframe</li>
         </ul>
     <p>Keypoints:</p>
         <ul>
-            <li>Keypoint 1</li>
-            <li>Keypoint 2</li>
+            <li>Pandas is used to examine, process, and analyze tabular data.</li>
+            <li>Pandas has many useful features allowing easy data manipulation and extraction.</li>
         </ul>
     </div><p>Pandas is a Python library used for data analysis and manipulation. Within the world of data science, it is a ubiquitous and widely used library. If you are learning how to analyze data in Python, it will be almost impossible to avoid pandas.</p>
 <p>For this workshop, we will be using two types of data structues - NumPy arrays and pandas DataFrames. Pandas dataframes are specifically for data which is two dimensional (rows and columns). NumPy arrays, while similar in some ways, are meant to work with higher dimensional data. We’ll see this in a future lesson.</p>
@@ -485,15 +503,15 @@
   <thead>
     <tr style="text-align: right;">
       <th></th>
-      <th>Compound ID</th>
-      <th>ESOL predicted log solubility in mols per litre</th>
+      <th>Compound</th>
+      <th>ESOL logP (mol/L)</th>
       <th>Minimum Degree</th>
       <th>Molecular Weight</th>
-      <th>Number of H-Bond Donors</th>
-      <th>Number of Rings</th>
+      <th># of H-Bond Donors</th>
+      <th># of Rings</th>
       <th>Number of Rotatable Bonds</th>
       <th>Polar Surface Area</th>
-      <th>measured log solubility in mols per litre</th>
+      <th>measured logP (mol/L)</th>
       <th>smiles</th>
     </tr>
   </thead>
@@ -578,18 +596,18 @@
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;class &#39;pandas.core.frame.DataFrame&#39;&gt;
 RangeIndex: 1128 entries, 0 to 1127
 Data columns (total 10 columns):
- #   Column                                           Non-Null Count  Dtype  
----  ------                                           --------------  -----  
- 0   Compound ID                                      1128 non-null   object 
- 1   ESOL predicted log solubility in mols per litre  1128 non-null   float64
- 2   Minimum Degree                                   1128 non-null   int64  
- 3   Molecular Weight                                 1128 non-null   float64
- 4   Number of H-Bond Donors                          1128 non-null   int64  
- 5   Number of Rings                                  1128 non-null   int64  
- 6   Number of Rotatable Bonds                        1128 non-null   int64  
- 7   Polar Surface Area                               1128 non-null   float64
- 8   measured log solubility in mols per litre        1128 non-null   float64
- 9   smiles                                           1128 non-null   object 
+ #   Column                     Non-Null Count  Dtype  
+---  ------                     --------------  -----  
+ 0   Compound                   1128 non-null   object 
+ 1   ESOL logP (mol/L)          1128 non-null   float64
+ 2   Minimum Degree             1128 non-null   int64  
+ 3   Molecular Weight           1128 non-null   float64
+ 4   # of H-Bond Donors         1128 non-null   int64  
+ 5   # of Rings                 1128 non-null   int64  
+ 6   Number of Rotatable Bonds  1128 non-null   int64  
+ 7   Polar Surface Area         1128 non-null   float64
+ 8   measured logP (mol/L)      1128 non-null   float64
+ 9   smiles                     1128 non-null   object 
 dtypes: float64(4), int64(4), object(2)
 memory usage: 88.2+ KB
 </pre></div>
@@ -625,14 +643,14 @@ memory usage: 88.2+ KB
   <thead>
     <tr style="text-align: right;">
       <th></th>
-      <th>ESOL predicted log solubility in mols per litre</th>
+      <th>ESOL logP (mol/L)</th>
       <th>Minimum Degree</th>
       <th>Molecular Weight</th>
-      <th>Number of H-Bond Donors</th>
-      <th>Number of Rings</th>
+      <th># of H-Bond Donors</th>
+      <th># of Rings</th>
       <th>Number of Rotatable Bonds</th>
       <th>Polar Surface Area</th>
-      <th>measured log solubility in mols per litre</th>
+      <th>measured logP (mol/L)</th>
     </tr>
   </thead>
   <tbody>
@@ -758,16 +776,16 @@ memory usage: 88.2+ KB
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compound ID                                        Valeraldehyde
-ESOL predicted log solubility in mols per litre           -1.103
-Minimum Degree                                                 1
-Molecular Weight                                          86.134
-Number of H-Bond Donors                                        0
-Number of Rings                                                0
-Number of Rotatable Bonds                                      3
-Polar Surface Area                                         17.07
-measured log solubility in mols per litre                  -0.85
-smiles                                                   CCCCC=O
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compound                     Valeraldehyde
+ESOL logP (mol/L)                   -1.103
+Minimum Degree                           1
+Molecular Weight                    86.134
+# of H-Bond Donors                       0
+# of Rings                               0
+Number of Rotatable Bonds                3
+Polar Surface Area                   17.07
+measured logP (mol/L)                -0.85
+smiles                             CCCCC=O
 Name: 35, dtype: object
 </pre></div>
 </div>
@@ -781,9 +799,9 @@ Name: 35, dtype: object
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compound ID                                        Valeraldehyde
-ESOL predicted log solubility in mols per litre           -1.103
-Minimum Degree                                                 1
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compound             Valeraldehyde
+ESOL logP (mol/L)           -1.103
+Minimum Degree                   1
 Name: 35, dtype: object
 </pre></div>
 </div>
@@ -814,10 +832,9 @@ Name: 35, dtype: object
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Index([&#39;Compound ID&#39;, &#39;ESOL predicted log solubility in mols per litre&#39;,
-       &#39;Minimum Degree&#39;, &#39;Molecular Weight&#39;, &#39;Number of H-Bond Donors&#39;,
-       &#39;Number of Rings&#39;, &#39;Number of Rotatable Bonds&#39;, &#39;Polar Surface Area&#39;,
-       &#39;measured log solubility in mols per litre&#39;, &#39;smiles&#39;],
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Index([&#39;Compound&#39;, &#39;ESOL logP (mol/L)&#39;, &#39;Minimum Degree&#39;, &#39;Molecular Weight&#39;,
+       &#39;# of H-Bond Donors&#39;, &#39;# of Rings&#39;, &#39;Number of Rotatable Bonds&#39;,
+       &#39;Polar Surface Area&#39;, &#39;measured logP (mol/L)&#39;, &#39;smiles&#39;],
       dtype=&#39;object&#39;)
 </pre></div>
 </div>
@@ -834,16 +851,16 @@ Name: 35, dtype: object
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compound ID                                        Valeraldehyde
-ESOL predicted log solubility in mols per litre           -1.103
-Minimum Degree                                                 1
-Molecular Weight                                          86.134
-Number of H-Bond Donors                                        0
-Number of Rings                                                0
-Number of Rotatable Bonds                                      3
-Polar Surface Area                                         17.07
-measured log solubility in mols per litre                  -0.85
-smiles                                                   CCCCC=O
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compound                     Valeraldehyde
+ESOL logP (mol/L)                   -1.103
+Minimum Degree                           1
+Molecular Weight                    86.134
+# of H-Bond Donors                       0
+# of Rings                               0
+Number of Rotatable Bonds                3
+Polar Surface Area                   17.07
+measured logP (mol/L)                -0.85
+smiles                             CCCCC=O
 Name: 35, dtype: object
 </pre></div>
 </div>
@@ -876,7 +893,7 @@ Name: 35, dtype: object
 <p>For example</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;Compound ID&quot;</span><span class="p">]</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;Compound&quot;</span><span class="p">]</span>
 </pre></div>
 </div>
 </div>
@@ -892,14 +909,14 @@ Name: 35, dtype: object
 1125         Thiometon
 1126    2-Methylbutane
 1127          Stirofos
-Name: Compound ID, Length: 1128, dtype: object
+Name: Compound, Length: 1128, dtype: object
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="p">[[</span><span class="s2">&quot;Compound ID&quot;</span><span class="p">,</span> <span class="s2">&quot;smiles&quot;</span><span class="p">]]</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="p">[[</span><span class="s2">&quot;Compound&quot;</span><span class="p">,</span> <span class="s2">&quot;smiles&quot;</span><span class="p">]]</span>
 </pre></div>
 </div>
 </div>
@@ -922,7 +939,7 @@ Name: Compound ID, Length: 1128, dtype: object
   <thead>
     <tr style="text-align: right;">
       <th></th>
-      <th>Compound ID</th>
+      <th>Compound</th>
       <th>smiles</th>
     </tr>
   </thead>
@@ -1043,17 +1060,16 @@ Name: Polar Surface Area, Length: 1128, dtype: bool
   <thead>
     <tr style="text-align: right;">
       <th></th>
-      <th>Compound ID</th>
-      <th>ESOL predicted log solubility in mols per litre</th>
+      <th>Compound</th>
+      <th>ESOL logP (mol/L)</th>
       <th>Minimum Degree</th>
       <th>Molecular Weight</th>
-      <th>Number of H-Bond Donors</th>
-      <th>Number of Rings</th>
+      <th># of H-Bond Donors</th>
+      <th># of Rings</th>
       <th>Number of Rotatable Bonds</th>
       <th>Polar Surface Area</th>
-      <th>measured log solubility in mols per litre</th>
+      <th>measured logP (mol/L)</th>
       <th>smiles</th>
-      <th>Polar Surface Area (nm^2)</th>
     </tr>
   </thead>
   <tbody>
@@ -1069,7 +1085,6 @@ Name: Polar Surface Area, Length: 1128, dtype: bool
       <td>202.32</td>
       <td>-0.770</td>
       <td>OCC3OC(OCC2OC(OC(C#N)c1ccccc1)C(O)C(O)C2O)C(O)...</td>
-      <td>2.0232</td>
     </tr>
     <tr>
       <th>1</th>
@@ -1083,7 +1098,6 @@ Name: Polar Surface Area, Length: 1128, dtype: bool
       <td>42.24</td>
       <td>-3.300</td>
       <td>Cc1occc1C(=O)Nc2ccccc2</td>
-      <td>0.4224</td>
     </tr>
     <tr>
       <th>2</th>
@@ -1097,7 +1111,6 @@ Name: Polar Surface Area, Length: 1128, dtype: bool
       <td>17.07</td>
       <td>-2.060</td>
       <td>CC(C)=CCCC(C)=CC(=O)</td>
-      <td>0.1707</td>
     </tr>
     <tr>
       <th>7</th>
@@ -1111,7 +1124,6 @@ Name: Polar Surface Area, Length: 1128, dtype: bool
       <td>40.46</td>
       <td>-5.030</td>
       <td>CC12CCC3C(CCc4cc(O)ccc34)C2CCC1O</td>
-      <td>0.4046</td>
     </tr>
     <tr>
       <th>9</th>
@@ -1125,11 +1137,9 @@ Name: Polar Surface Area, Length: 1128, dtype: bool
       <td>63.22</td>
       <td>-4.420</td>
       <td>COc5cc4OCC3Oc2c1CC(Oc1ccc2C(=O)C3c4cc5OC)C(C)=C</td>
-      <td>0.6322</td>
     </tr>
     <tr>
       <th>...</th>
-      <td>...</td>
       <td>...</td>
       <td>...</td>
       <td>...</td>
@@ -1153,7 +1163,6 @@ Name: Polar Surface Area, Length: 1128, dtype: bool
       <td>47.58</td>
       <td>-2.380</td>
       <td>N#Cc1ccccc1C#N</td>
-      <td>0.4758</td>
     </tr>
     <tr>
       <th>1122</th>
@@ -1167,7 +1176,6 @@ Name: Polar Surface Area, Length: 1128, dtype: bool
       <td>43.14</td>
       <td>-2.440</td>
       <td>Cc1cccc(c1)N(=O)=O</td>
-      <td>0.4314</td>
     </tr>
     <tr>
       <th>1124</th>
@@ -1181,7 +1189,6 @@ Name: Polar Surface Area, Length: 1128, dtype: bool
       <td>71.00</td>
       <td>0.106</td>
       <td>CNC(=O)ON=C(SC)C(=O)N(C)C</td>
-      <td>0.7100</td>
     </tr>
     <tr>
       <th>1125</th>
@@ -1195,7 +1202,6 @@ Name: Polar Surface Area, Length: 1128, dtype: bool
       <td>18.46</td>
       <td>-3.091</td>
       <td>CCSCCSP(=S)(OC)OC</td>
-      <td>0.1846</td>
     </tr>
     <tr>
       <th>1127</th>
@@ -1209,11 +1215,10 @@ Name: Polar Surface Area, Length: 1128, dtype: bool
       <td>44.76</td>
       <td>-4.522</td>
       <td>COP(=O)(OC)OC(=CCl)c1cc(Cl)c(Cl)cc1Cl</td>
-      <td>0.4476</td>
     </tr>
   </tbody>
 </table>
-<p>758 rows × 11 columns</p>
+<p>758 rows × 10 columns</p>
 </div></div></div>
 </div>
 <p>This can also be accomplished using the pandas <code class="docutils literal notranslate"><span class="pre">query</span></code> function. When using the <code class="docutils literal notranslate"><span class="pre">query</span></code> function, you write your query as a string. If your column name has a space, you must surround it with backticks.</p>
@@ -1242,17 +1247,16 @@ Name: Polar Surface Area, Length: 1128, dtype: bool
   <thead>
     <tr style="text-align: right;">
       <th></th>
-      <th>Compound ID</th>
-      <th>ESOL predicted log solubility in mols per litre</th>
+      <th>Compound</th>
+      <th>ESOL logP (mol/L)</th>
       <th>Minimum Degree</th>
       <th>Molecular Weight</th>
-      <th>Number of H-Bond Donors</th>
-      <th>Number of Rings</th>
+      <th># of H-Bond Donors</th>
+      <th># of Rings</th>
       <th>Number of Rotatable Bonds</th>
       <th>Polar Surface Area</th>
-      <th>measured log solubility in mols per litre</th>
+      <th>measured logP (mol/L)</th>
       <th>smiles</th>
-      <th>Polar Surface Area (nm^2)</th>
     </tr>
   </thead>
   <tbody>
@@ -1268,7 +1272,6 @@ Name: Polar Surface Area, Length: 1128, dtype: bool
       <td>202.32</td>
       <td>-0.770</td>
       <td>OCC3OC(OCC2OC(OC(C#N)c1ccccc1)C(O)C(O)C2O)C(O)...</td>
-      <td>2.0232</td>
     </tr>
     <tr>
       <th>1</th>
@@ -1282,7 +1285,6 @@ Name: Polar Surface Area, Length: 1128, dtype: bool
       <td>42.24</td>
       <td>-3.300</td>
       <td>Cc1occc1C(=O)Nc2ccccc2</td>
-      <td>0.4224</td>
     </tr>
     <tr>
       <th>2</th>
@@ -1296,7 +1298,6 @@ Name: Polar Surface Area, Length: 1128, dtype: bool
       <td>17.07</td>
       <td>-2.060</td>
       <td>CC(C)=CCCC(C)=CC(=O)</td>
-      <td>0.1707</td>
     </tr>
     <tr>
       <th>7</th>
@@ -1310,7 +1311,6 @@ Name: Polar Surface Area, Length: 1128, dtype: bool
       <td>40.46</td>
       <td>-5.030</td>
       <td>CC12CCC3C(CCc4cc(O)ccc34)C2CCC1O</td>
-      <td>0.4046</td>
     </tr>
     <tr>
       <th>9</th>
@@ -1324,11 +1324,9 @@ Name: Polar Surface Area, Length: 1128, dtype: bool
       <td>63.22</td>
       <td>-4.420</td>
       <td>COc5cc4OCC3Oc2c1CC(Oc1ccc2C(=O)C3c4cc5OC)C(C)=C</td>
-      <td>0.6322</td>
     </tr>
     <tr>
       <th>...</th>
-      <td>...</td>
       <td>...</td>
       <td>...</td>
       <td>...</td>
@@ -1352,7 +1350,6 @@ Name: Polar Surface Area, Length: 1128, dtype: bool
       <td>47.58</td>
       <td>-2.380</td>
       <td>N#Cc1ccccc1C#N</td>
-      <td>0.4758</td>
     </tr>
     <tr>
       <th>1122</th>
@@ -1366,7 +1363,6 @@ Name: Polar Surface Area, Length: 1128, dtype: bool
       <td>43.14</td>
       <td>-2.440</td>
       <td>Cc1cccc(c1)N(=O)=O</td>
-      <td>0.4314</td>
     </tr>
     <tr>
       <th>1124</th>
@@ -1380,7 +1376,6 @@ Name: Polar Surface Area, Length: 1128, dtype: bool
       <td>71.00</td>
       <td>0.106</td>
       <td>CNC(=O)ON=C(SC)C(=O)N(C)C</td>
-      <td>0.7100</td>
     </tr>
     <tr>
       <th>1125</th>
@@ -1394,7 +1389,6 @@ Name: Polar Surface Area, Length: 1128, dtype: bool
       <td>18.46</td>
       <td>-3.091</td>
       <td>CCSCCSP(=S)(OC)OC</td>
-      <td>0.1846</td>
     </tr>
     <tr>
       <th>1127</th>
@@ -1408,31 +1402,27 @@ Name: Polar Surface Area, Length: 1128, dtype: bool
       <td>44.76</td>
       <td>-4.522</td>
       <td>COP(=O)(OC)OC(=CCl)c1cc(Cl)c(Cl)cc1Cl</td>
-      <td>0.4476</td>
     </tr>
   </tbody>
 </table>
-<p>758 rows × 11 columns</p>
+<p>758 rows × 10 columns</p>
 </div></div></div>
 </div>
 <div class="exercise-this-is-a-title exercise">
 <p class="exercise-title">Check your understanding</p>
     <p>Rewrite the following query to use the mask syntax for filtering data.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s2">&quot;`Number of H-Bond Donors`&gt;3&quot;</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s2">&quot;`# of H-Bond Donors`&gt;3&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="dropdown admonition">
 <p class="admonition-title">Solution</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;Number of H-Bond Donors&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">3</span><span class="p">]</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;# of H-Bond Donors&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">3</span><span class="p">]</span>
 </pre></div>
 </div>
 </div>
-</div></div>
-<div class="section" id="sorting-data">
-<h2>Sorting Data<a class="headerlink" href="#sorting-data" title="Permalink to this headline">¶</a></h2>
-<div class="cell docutils container">
+</div><div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s2">&quot;Number of H-Bond Donors&quot;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s2">&quot;smiles.str.contains(&#39;=&#39;)&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1455,17 +1445,206 @@ Name: Polar Surface Area, Length: 1128, dtype: bool
   <thead>
     <tr style="text-align: right;">
       <th></th>
-      <th>Compound ID</th>
-      <th>ESOL predicted log solubility in mols per litre</th>
+      <th>Compound</th>
+      <th>ESOL logP (mol/L)</th>
       <th>Minimum Degree</th>
       <th>Molecular Weight</th>
-      <th>Number of H-Bond Donors</th>
-      <th>Number of Rings</th>
+      <th># of H-Bond Donors</th>
+      <th># of Rings</th>
       <th>Number of Rotatable Bonds</th>
       <th>Polar Surface Area</th>
-      <th>measured log solubility in mols per litre</th>
+      <th>measured logP (mol/L)</th>
       <th>smiles</th>
-      <th>Polar Surface Area (nm^2)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>1</th>
+      <td>Fenfuram</td>
+      <td>-2.885</td>
+      <td>1</td>
+      <td>201.225</td>
+      <td>1</td>
+      <td>2</td>
+      <td>2</td>
+      <td>42.24</td>
+      <td>-3.300</td>
+      <td>Cc1occc1C(=O)Nc2ccccc2</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>citral</td>
+      <td>-2.579</td>
+      <td>1</td>
+      <td>152.237</td>
+      <td>0</td>
+      <td>0</td>
+      <td>4</td>
+      <td>17.07</td>
+      <td>-2.060</td>
+      <td>CC(C)=CCCC(C)=CC(=O)</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>Dieldrin</td>
+      <td>-4.533</td>
+      <td>1</td>
+      <td>380.913</td>
+      <td>0</td>
+      <td>5</td>
+      <td>0</td>
+      <td>12.53</td>
+      <td>-6.290</td>
+      <td>ClC4=C(Cl)C5(Cl)C3C1CC(C2OC12)C3C4(Cl)C5(Cl)Cl</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>Rotenone</td>
+      <td>-5.246</td>
+      <td>1</td>
+      <td>394.423</td>
+      <td>0</td>
+      <td>5</td>
+      <td>3</td>
+      <td>63.22</td>
+      <td>-4.420</td>
+      <td>COc5cc4OCC3Oc2c1CC(Oc1ccc2C(=O)C3c4cc5OC)C(C)=C</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>2-pyrrolidone</td>
+      <td>0.243</td>
+      <td>1</td>
+      <td>85.106</td>
+      <td>1</td>
+      <td>1</td>
+      <td>0</td>
+      <td>29.10</td>
+      <td>1.070</td>
+      <td>O=C1CCCN1</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>1118</th>
+      <td>Isobutyl acetate</td>
+      <td>-1.463</td>
+      <td>1</td>
+      <td>116.160</td>
+      <td>0</td>
+      <td>0</td>
+      <td>2</td>
+      <td>26.30</td>
+      <td>-1.210</td>
+      <td>CC(C)COC(=O)C</td>
+    </tr>
+    <tr>
+      <th>1122</th>
+      <td>m-Nitrotoluene</td>
+      <td>-2.640</td>
+      <td>1</td>
+      <td>137.138</td>
+      <td>0</td>
+      <td>1</td>
+      <td>1</td>
+      <td>43.14</td>
+      <td>-2.440</td>
+      <td>Cc1cccc(c1)N(=O)=O</td>
+    </tr>
+    <tr>
+      <th>1124</th>
+      <td>Oxamyl</td>
+      <td>-0.908</td>
+      <td>1</td>
+      <td>219.266</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>71.00</td>
+      <td>0.106</td>
+      <td>CNC(=O)ON=C(SC)C(=O)N(C)C</td>
+    </tr>
+    <tr>
+      <th>1125</th>
+      <td>Thiometon</td>
+      <td>-3.323</td>
+      <td>1</td>
+      <td>246.359</td>
+      <td>0</td>
+      <td>0</td>
+      <td>7</td>
+      <td>18.46</td>
+      <td>-3.091</td>
+      <td>CCSCCSP(=S)(OC)OC</td>
+    </tr>
+    <tr>
+      <th>1127</th>
+      <td>Stirofos</td>
+      <td>-4.320</td>
+      <td>1</td>
+      <td>365.964</td>
+      <td>0</td>
+      <td>1</td>
+      <td>5</td>
+      <td>44.76</td>
+      <td>-4.522</td>
+      <td>COP(=O)(OC)OC(=CCl)c1cc(Cl)c(Cl)cc1Cl</td>
+    </tr>
+  </tbody>
+</table>
+<p>595 rows × 10 columns</p>
+</div></div></div>
+</div>
+</div>
+<div class="section" id="sorting-data">
+<h2>Sorting Data<a class="headerlink" href="#sorting-data" title="Permalink to this headline">¶</a></h2>
+<p>Pandas allows you to easily sort data using the <code class="docutils literal notranslate"><span class="pre">sort_values</span></code> method. Inside of the function call you list the column you would like to sort by. By default, the values will be sorted from lowest to highest (or <code class="docutils literal notranslate"><span class="pre">ascending</span></code>). This method will <code class="docutils literal notranslate"><span class="pre">return</span></code> a sorted dataframe.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s2">&quot;# of H-Bond Donors&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Compound</th>
+      <th>ESOL logP (mol/L)</th>
+      <th>Minimum Degree</th>
+      <th>Molecular Weight</th>
+      <th># of H-Bond Donors</th>
+      <th># of Rings</th>
+      <th>Number of Rotatable Bonds</th>
+      <th>Polar Surface Area</th>
+      <th>measured logP (mol/L)</th>
+      <th>smiles</th>
     </tr>
   </thead>
   <tbody>
@@ -1481,7 +1660,6 @@ Name: Polar Surface Area, Length: 1128, dtype: bool
       <td>52.60</td>
       <td>-1.660</td>
       <td>COC(=O)c1ccccc1C(=O)OC</td>
-      <td>0.5260</td>
     </tr>
     <tr>
       <th>632</th>
@@ -1495,7 +1673,6 @@ Name: Polar Surface Area, Length: 1128, dtype: bool
       <td>0.00</td>
       <td>-4.679</td>
       <td>Cc1cccc2c(C)cccc12</td>
-      <td>0.0000</td>
     </tr>
     <tr>
       <th>634</th>
@@ -1509,7 +1686,6 @@ Name: Polar Surface Area, Length: 1128, dtype: bool
       <td>0.00</td>
       <td>-3.960</td>
       <td>C1=Cc2cccc3cccc1c23</td>
-      <td>0.0000</td>
     </tr>
     <tr>
       <th>635</th>
@@ -1523,7 +1699,6 @@ Name: Polar Surface Area, Length: 1128, dtype: bool
       <td>26.30</td>
       <td>-1.280</td>
       <td>CCCCCOC(=O)CC</td>
-      <td>0.2630</td>
     </tr>
     <tr>
       <th>637</th>
@@ -1537,11 +1712,9 @@ Name: Polar Surface Area, Length: 1128, dtype: bool
       <td>0.00</td>
       <td>-8.699</td>
       <td>c1ccc2c(c1)cc3ccc4cccc5ccc2c3c45</td>
-      <td>0.0000</td>
     </tr>
     <tr>
       <th>...</th>
-      <td>...</td>
       <td>...</td>
       <td>...</td>
       <td>...</td>
@@ -1565,7 +1738,6 @@ Name: Polar Surface Area, Length: 1128, dtype: bool
       <td>121.38</td>
       <td>1.090</td>
       <td>OCC(O)C(O)C(O)C(O)CO</td>
-      <td>1.2138</td>
     </tr>
     <tr>
       <th>0</th>
@@ -1579,7 +1751,6 @@ Name: Polar Surface Area, Length: 1128, dtype: bool
       <td>202.32</td>
       <td>-0.770</td>
       <td>OCC3OC(OCC2OC(OC(C#N)c1ccccc1)C(O)C(O)C2O)C(O)...</td>
-      <td>2.0232</td>
     </tr>
     <tr>
       <th>441</th>
@@ -1593,7 +1764,6 @@ Name: Polar Surface Area, Length: 1128, dtype: bool
       <td>189.53</td>
       <td>-0.244</td>
       <td>OCC1OC(OC2C(O)C(O)C(O)OC2CO)C(O)C(O)C1O</td>
-      <td>1.8953</td>
     </tr>
     <tr>
       <th>1025</th>
@@ -1607,7 +1777,6 @@ Name: Polar Surface Area, Length: 1128, dtype: bool
       <td>189.53</td>
       <td>0.790</td>
       <td>OCC2OC(OC1(CO)OC(CO)C(O)C1O)C(O)C(O)C2O</td>
-      <td>1.8953</td>
     </tr>
     <tr>
       <th>298</th>
@@ -1621,16 +1790,17 @@ Name: Polar Surface Area, Length: 1128, dtype: bool
       <td>268.68</td>
       <td>-0.410</td>
       <td>OCC1OC(CO)(OC2OC(COC3OC(CO)C(O)C(O)C3O)C(O)C(O...</td>
-      <td>2.6868</td>
     </tr>
   </tbody>
 </table>
-<p>1128 rows × 11 columns</p>
+<p>1128 rows × 10 columns</p>
 </div></div></div>
 </div>
+<p>If you include more than one column name, the dataframe will be sorted by multiple columns. First, it will be sorted by the first column indicated, then that sort will be sorted by the second. Consider the following examples. We first sort by <code class="docutils literal notranslate"><span class="pre">#</span> <span class="pre">of</span> <span class="pre">H-Bond</span> <span class="pre">Donors</span></code>. Within that sort, we sort by <code class="docutils literal notranslate"><span class="pre">Molecular</span> <span class="pre">Weight</span></code>.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">([</span><span class="s2">&quot;Number of H-Bond Donors&quot;</span><span class="p">,</span> <span class="s2">&quot;Molecular Weight&quot;</span><span class="p">])</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df_sorted</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">([</span><span class="s2">&quot;# of H-Bond Donors&quot;</span><span class="p">,</span> <span class="s2">&quot;Molecular Weight&quot;</span><span class="p">])</span>
+<span class="n">df_sorted</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -1653,17 +1823,16 @@ Name: Polar Surface Area, Length: 1128, dtype: bool
   <thead>
     <tr style="text-align: right;">
       <th></th>
-      <th>Compound ID</th>
-      <th>ESOL predicted log solubility in mols per litre</th>
+      <th>Compound</th>
+      <th>ESOL logP (mol/L)</th>
       <th>Minimum Degree</th>
       <th>Molecular Weight</th>
-      <th>Number of H-Bond Donors</th>
-      <th>Number of Rings</th>
+      <th># of H-Bond Donors</th>
+      <th># of Rings</th>
       <th>Number of Rotatable Bonds</th>
       <th>Polar Surface Area</th>
-      <th>measured log solubility in mols per litre</th>
+      <th>measured logP (mol/L)</th>
       <th>smiles</th>
-      <th>Polar Surface Area (nm^2)</th>
     </tr>
   </thead>
   <tbody>
@@ -1676,10 +1845,9 @@ Name: Polar Surface Area, Length: 1128, dtype: bool
       <td>0</td>
       <td>0</td>
       <td>0</td>
-      <td>0.00</td>
-      <td>-0.900</td>
+      <td>0.0</td>
+      <td>-0.90</td>
       <td>C</td>
-      <td>0.0000</td>
     </tr>
     <tr>
       <th>953</th>
@@ -1690,10 +1858,9 @@ Name: Polar Surface Area, Length: 1128, dtype: bool
       <td>0</td>
       <td>0</td>
       <td>0</td>
-      <td>0.00</td>
-      <td>0.290</td>
+      <td>0.0</td>
+      <td>0.29</td>
       <td>C#C</td>
-      <td>0.0000</td>
     </tr>
     <tr>
       <th>689</th>
@@ -1704,10 +1871,9 @@ Name: Polar Surface Area, Length: 1128, dtype: bool
       <td>0</td>
       <td>0</td>
       <td>0</td>
-      <td>0.00</td>
-      <td>-0.400</td>
+      <td>0.0</td>
+      <td>-0.40</td>
       <td>C=C</td>
-      <td>0.0000</td>
     </tr>
     <tr>
       <th>600</th>
@@ -1718,10 +1884,9 @@ Name: Polar Surface Area, Length: 1128, dtype: bool
       <td>0</td>
       <td>0</td>
       <td>0</td>
-      <td>0.00</td>
-      <td>-1.360</td>
+      <td>0.0</td>
+      <td>-1.36</td>
       <td>CC</td>
-      <td>0.0000</td>
     </tr>
     <tr>
       <th>202</th>
@@ -1732,103 +1897,64 @@ Name: Polar Surface Area, Length: 1128, dtype: bool
       <td>0</td>
       <td>0</td>
       <td>0</td>
-      <td>0.00</td>
-      <td>-0.410</td>
+      <td>0.0</td>
+      <td>-0.41</td>
       <td>CC#C</td>
-      <td>0.0000</td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-    </tr>
-    <tr>
-      <th>555</th>
-      <td>Digoxin (L1=41,8mg/mL, L2=68,2mg/mL, Z=40,1mg/mL)</td>
-      <td>-5.312</td>
-      <td>1</td>
-      <td>780.949</td>
-      <td>6</td>
-      <td>8</td>
-      <td>7</td>
-      <td>203.06</td>
-      <td>-4.081</td>
-      <td>CC1OC(CC(O)C1O)OC2C(O)CC(OC2C)OC8C(O)CC(OC7CCC...</td>
-      <td>2.0306</td>
-    </tr>
-    <tr>
-      <th>0</th>
-      <td>Amigdalin</td>
-      <td>-0.974</td>
-      <td>1</td>
-      <td>457.432</td>
-      <td>7</td>
-      <td>3</td>
-      <td>7</td>
-      <td>202.32</td>
-      <td>-0.770</td>
-      <td>OCC3OC(OCC2OC(OC(C#N)c1ccccc1)C(O)C(O)C2O)C(O)...</td>
-      <td>2.0232</td>
-    </tr>
-    <tr>
-      <th>441</th>
-      <td>Lactose</td>
-      <td>1.071</td>
-      <td>1</td>
-      <td>342.297</td>
-      <td>8</td>
-      <td>2</td>
-      <td>4</td>
-      <td>189.53</td>
-      <td>-0.244</td>
-      <td>OCC1OC(OC2C(O)C(O)C(O)OC2CO)C(O)C(O)C1O</td>
-      <td>1.8953</td>
-    </tr>
-    <tr>
-      <th>1025</th>
-      <td>Sucrose</td>
-      <td>0.310</td>
-      <td>1</td>
-      <td>342.297</td>
-      <td>8</td>
-      <td>2</td>
-      <td>5</td>
-      <td>189.53</td>
-      <td>0.790</td>
-      <td>OCC2OC(OC1(CO)OC(CO)C(O)C1O)C(O)C(O)C2O</td>
-      <td>1.8953</td>
-    </tr>
-    <tr>
-      <th>298</th>
-      <td>Raffinose</td>
-      <td>0.496</td>
-      <td>1</td>
-      <td>504.438</td>
-      <td>11</td>
-      <td>3</td>
-      <td>8</td>
-      <td>268.68</td>
-      <td>-0.410</td>
-      <td>OCC1OC(CO)(OC2OC(COC3OC(CO)C(O)C(O)C3O)C(O)C(O...</td>
-      <td>2.6868</td>
     </tr>
   </tbody>
 </table>
-<p>1128 rows × 11 columns</p>
 </div></div></div>
 </div>
+<p>Note the bolded indices to the left of the dataframe. After we perform our sort, these are no longer in order. In the sorted dataframe, <code class="docutils literal notranslate"><span class="pre">loc</span></code> and <code class="docutils literal notranslate"><span class="pre">iloc</span></code> do not return the same values using the same number.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df_sorted</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">934</span><span class="p">]</span>
+</pre></div>
 </div>
-<div class="section" id="performing-operations-on-columns">
-<h2>Performing Operations on Columns<a class="headerlink" href="#performing-operations-on-columns" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compound                     Methane
+ESOL logP (mol/L)             -0.636
+Minimum Degree                     0
+Molecular Weight              16.043
+# of H-Bond Donors                 0
+# of Rings                         0
+Number of Rotatable Bonds          0
+Polar Surface Area                 0
+measured logP (mol/L)           -0.9
+smiles                             C
+Name: 934, dtype: object
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df_sorted</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">934</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Compound                                                    Bensulide
+ESOL logP (mol/L)                                               -4.99
+Minimum Degree                                                      1
+Molecular Weight                                              397.524
+# of H-Bond Donors                                                  1
+# of Rings                                                          1
+Number of Rotatable Bonds                                          10
+Polar Surface Area                                              64.63
+measured logP (mol/L)                                            -4.2
+smiles                       CC(C)OP(=S)(OC(C)C)SCCNS(=O)(=O)c1ccccc1
+Name: 330, dtype: object
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="performing-operations-on-multiple-cells">
+<h2>Performing Operations on Multiple Cells<a class="headerlink" href="#performing-operations-on-multiple-cells" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="broadcasting">
+<h3>Broadcasting<a class="headerlink" href="#broadcasting" title="Permalink to this headline">¶</a></h3>
 <p>Pandas dataframes have the convenient feature that they use something called <code class="docutils literal notranslate"><span class="pre">broadcasting</span></code>. This means that if you are doing something like subtracting a number, multiplying, etc to a column or dataframe of information, it can be done all at once instead of with a <code class="docutils literal notranslate"><span class="pre">for</span></code> loop. Consider if we wanted to express the molecular surface area in <span class="math notranslate nohighlight">\(nm^2\)</span> instead of Å<span class="math notranslate nohighlight">\(^2\)</span>. To do this, we would need to divide each value by 100.</p>
 <p>Instead of writing a <code class="docutils literal notranslate"><span class="pre">for</span></code> loop that does this, we can just write the following code. This will return a pandas Series (one dimensional dataframe).</p>
 <div class="cell docutils container">
@@ -1865,7 +1991,7 @@ Name: Polar Surface Area, Length: 1128, dtype: float64
 <p>You can also add, subtract, or multiply two columns with one another. For example, we might want to calculate the difference between the predicted and observed values for this solubility model.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;ESOL predicted log solubility in mols per litre&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;measured log solubility in mols per litre&quot;</span><span class="p">]</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;ESOL logP (mol/L)&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;measured logP (mol/L)&quot;</span><span class="p">]</span>
 </pre></div>
 </div>
 </div>
@@ -1891,51 +2017,106 @@ Length: 1128, dtype: float64
     <p> Save the difference between the predicted and measured solubility in a column named "difference" </p>
 <div class="dropdown admonition">
 <p class="admonition-title">Solution</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;difference&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;ESOL predicted log solubility in mols per litre&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;measured log solubility in mols per litre&quot;</span><span class="p">]</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;difference&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;ESOL logP (mol/L)&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;measured logP (mol/L)&quot;</span><span class="p">]</span>
 </pre></div>
 </div>
 </div>
-</div><div class="section" id="the-apply-operator">
-<h3>The <code class="docutils literal notranslate"><span class="pre">.apply</span></code> operator<a class="headerlink" href="#the-apply-operator" title="Permalink to this headline">¶</a></h3>
-<p>Sometimes the operations you want to do on a column can’t be achieved with broadcasting. One might think to use a <code class="docutils literal notranslate"><span class="pre">for</span></code> loop in times like these. However, many modern Python libraries try to make it so that you will rarely need to use a loop.</p>
-<p>In pandas, if you would like to perform an operation on  a column, you can use the <code class="docutils literal notranslate"><span class="pre">apply</span></code> command. For example, if we wanted to know the number of letters in a compound name, we would use the python function <code class="docutils literal notranslate"><span class="pre">len</span></code>.</p>
+</div></div>
+<div class="section" id="the-applymap-operator">
+<h3>The <code class="docutils literal notranslate"><span class="pre">.applymap</span></code> operator<a class="headerlink" href="#the-applymap-operator" title="Permalink to this headline">¶</a></h3>
+<p>Sometimes the operations you want to do on a dataframe can’t be achieved with broadcasting. One might think to use a <code class="docutils literal notranslate"><span class="pre">for</span></code> loop in times like these. However, many modern Python libraries try to make it so that you will rarely need to use a loop.</p>
+<p>In pandas, if you would like to perform an operation on every cell of a dataframe, you can use the <code class="docutils literal notranslate"><span class="pre">applymap</span></code> command. For example, if we wanted to know the number of letters in a compound name, we would use the python function <code class="docutils literal notranslate"><span class="pre">len</span></code>.  The length function only works on strings, so let’s see how we would use it on two columns which are strings.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Compound ID&quot;</span><span class="p">])</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="p">[[</span><span class="s2">&quot;smiles&quot;</span><span class="p">,</span> <span class="s2">&quot;Compound&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">applymap</span><span class="p">(</span><span class="nb">len</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>9
-</pre></div>
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>smiles</th>
+      <th>Compound</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>54</td>
+      <td>9</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>22</td>
+      <td>8</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>20</td>
+      <td>6</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>34</td>
+      <td>6</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>7</td>
+      <td>9</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>1123</th>
+      <td>16</td>
+      <td>9</td>
+    </tr>
+    <tr>
+      <th>1124</th>
+      <td>25</td>
+      <td>6</td>
+    </tr>
+    <tr>
+      <th>1125</th>
+      <td>17</td>
+      <td>9</td>
+    </tr>
+    <tr>
+      <th>1126</th>
+      <td>7</td>
+      <td>14</td>
+    </tr>
+    <tr>
+      <th>1127</th>
+      <td>37</td>
+      <td>8</td>
+    </tr>
+  </tbody>
+</table>
+<p>1128 rows × 2 columns</p>
+</div></div></div>
 </div>
-</div>
-</div>
-<p>If we wanted to perform this operation on every value in the column, we would use <code class="docutils literal notranslate"><span class="pre">.apply</span></code>. This returns a pandas Series with the results of applying this function to each cell.</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;Compound ID&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="nb">len</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0        9
-1        8
-2        6
-3        6
-4        9
-        ..
-1123     9
-1124     6
-1125     9
-1126    14
-1127     8
-Name: Compound ID, Length: 1128, dtype: int64
-</pre></div>
-</div>
-</div>
-</div>
-<p>You can also do this with custom functions. Consider this function which counts the number of carbons in a SMILES string.</p>
+<p>You can also do this with custom functions. Consider this function which counts the number of C’s in a string. For a SMILE string we’ll consider that it counts the number of carbons.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">count_carbons</span><span class="p">(</span><span class="n">smiles</span><span class="p">):</span>
@@ -1953,57 +2134,239 @@ Name: Compound ID, Length: 1128, dtype: int64
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;smiles&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">count_carbons</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="p">[[</span><span class="s2">&quot;smiles&quot;</span><span class="p">,</span> <span class="s2">&quot;Compound&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">applymap</span><span class="p">(</span><span class="n">count_carbons</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0       20
-1       12
-2       10
-3       22
-4        4
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>smiles</th>
+      <th>Compound</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>20</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>12</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>10</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>22</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>4</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>1123</th>
+      <td>3</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>1124</th>
+      <td>7</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>1125</th>
+      <td>6</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>1126</th>
+      <td>5</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>1127</th>
+      <td>14</td>
+      <td>0</td>
+    </tr>
+  </tbody>
+</table>
+<p>1128 rows × 2 columns</p>
+</div></div></div>
+</div>
+</div>
+<div class="section" id="the-apply-operator-for-rows-and-columns">
+<h3>The <code class="docutils literal notranslate"><span class="pre">.apply</span></code> operator - for rows and columns<a class="headerlink" href="#the-apply-operator-for-rows-and-columns" title="Permalink to this headline">¶</a></h3>
+<p>The apply operator is used to apply a function to either the rows or columns of a dataframe.  If you use this on a single column, the function will be applied to every value.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;Compound&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="nb">len</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0        9
+1        8
+2        6
+3        6
+4        9
         ..
-1123     3
-1124     7
-1125     6
-1126     5
-1127    14
-Name: smiles, Length: 1128, dtype: int64
+1123     9
+1124     6
+1125     9
+1126    14
+1127     8
+Name: Compound, Length: 1128, dtype: int64
 </pre></div>
 </div>
-</div>
-</div>
-</div>
-</div>
-<div class="section" id="built-in-plotting">
-<h2>Built-in Plotting<a class="headerlink" href="#built-in-plotting" title="Permalink to this headline">¶</a></h2>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;AxesSubplot:&gt;
-</pre></div>
-</div>
-<img alt="_images/1-pandas-dataframes-esol_52_1.png" src="_images/1-pandas-dataframes-esol_52_1.png" />
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s2">&quot;Number of H-Bond Donors&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s2">&quot;ESOL predicted log solubility in mols per litre&quot;</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s2">&quot;scatter&quot;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="p">[[</span><span class="s2">&quot;smiles&quot;</span><span class="p">,</span> <span class="s2">&quot;Compound&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="nb">len</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;AxesSubplot:xlabel=&#39;Number of H-Bond Donors&#39;, ylabel=&#39;ESOL predicted log solubility in mols per litre&#39;&gt;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>smiles      1128
+Compound    1128
+dtype: int64
 </pre></div>
 </div>
-<img alt="_images/1-pandas-dataframes-esol_53_1.png" src="_images/1-pandas-dataframes-esol_53_1.png" />
 </div>
 </div>
+</div>
+</div>
+<div class="section" id="axes-and-shapes">
+<h2>Axes and Shapes<a class="headerlink" href="#axes-and-shapes" title="Permalink to this headline">¶</a></h2>
+<p>We’ve already discussed the rows and columns in a dataframe. Also relevant here is the idea of an dataframe axis. Most functions in pandas can be used on either the rows or the columns, and can be specified by using the keyword <code class="docutils literal notranslate"><span class="pre">axis</span></code>. Typically, by default this axis will be set to 0 (rows).</p>
+<p>Axis 0 runs down the rows, while axis 1 runs across the columns. When thinking about this, consider the <code class="docutils literal notranslate"><span class="pre">iloc</span></code> function for indexing. You specify the index for the row in element 0 of this function (axis 0) and the index for the column in element 1.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">apply</span></code> operator works on either rows or elements. Consider the result of what happens if we apply this function to axis 1, or the columns. Can you explain why we are seeing this answer?</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="p">[[</span><span class="s2">&quot;smiles&quot;</span><span class="p">,</span> <span class="s2">&quot;Compound&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="nb">len</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0       2
+1       2
+2       2
+3       2
+4       2
+       ..
+1123    2
+1124    2
+1125    2
+1126    2
+1127    2
+Length: 1128, dtype: int64
+</pre></div>
+</div>
+</div>
+</div>
+<p>For example, when we calculate the mean, you will get an average for every column. You do not get the average of all values. This is because the function is applied to axis 0, which runs down the dataframe.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>ESOL logP (mol/L)             -2.988192
+Minimum Degree                 1.058511
+Molecular Weight             203.937074
+# of H-Bond Donors             0.701241
+# of Rings                     1.390957
+Number of Rotatable Bonds      2.177305
+Polar Surface Area            34.872881
+measured logP (mol/L)         -3.050102
+Polar Surface Area (nm^2)      0.348729
+dtype: float64
+</pre></div>
+</div>
+</div>
+</div>
+<p>We can switch this to giving an average for each row by setting the axis to 1.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0       75.336800
+1       27.078044
+2       18.870967
+3       30.096222
+4        9.286778
+          ...    
+1123    21.562556
+1124    32.574889
+1125    29.621067
+1126     7.636222
+1127    45.481067
+Length: 1128, dtype: float64
+</pre></div>
+</div>
+</div>
+</div>
+<p>You’ll notice that when we run a function on axis 0, our returned value has the same number of values as the number of columns in our original dataframe. The converse is true for applying across axis 1.</p>
+<p>If we select a column, the mean of all of the values are returned. This makes sense intuitively - it is how we might expect the function to behave. However, the function behaves this way because the function is acting on axis 0.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;Polar Surface Area&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>34.87288120567376
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;Polar Surface Area&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(1128,)
+</pre></div>
+</div>
+</div>
+</div>
+<p>For this example, there is only one number here describing the shape of the dataframe. This is because selecting a single column of data in DataFrame results in a sightly different data type. Instead of a Pandas DataFrame, we hae a <strong>Pandas Series</strong>. Knowing and understanding the difference between a DataFrame and a Series will be important as you work with Pandas. There are many functions which are shared between the two data types, but there are also some that are specific to one data type or another.</p>
+<p>The concepts covered in this chapter are helpful for data exploration, and will become essential as we continue to work with pandas.</p>
 </div>
 </div>
 
