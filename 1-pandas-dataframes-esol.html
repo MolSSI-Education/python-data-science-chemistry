@@ -395,25 +395,25 @@
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#the-applymap-operator">
+    <a class="reference internal nav-link" href="#the-applymap-method">
      The
      <code class="docutils literal notranslate">
       <span class="pre">
        .applymap
       </span>
      </code>
-     operator
+     method
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#the-apply-operator-for-rows-and-columns">
+    <a class="reference internal nav-link" href="#the-apply-method-for-rows-and-columns">
      The
      <code class="docutils literal notranslate">
       <span class="pre">
        .apply
       </span>
      </code>
-     operator - for rows and columns
+     method - for rows and columns
     </a>
    </li>
   </ul>
@@ -767,7 +767,7 @@ memory usage: 88.2+ KB
 <h3>Accessing with rows and column numbers<a class="headerlink" href="#accessing-with-rows-and-column-numbers" title="Permalink to this headline">¶</a></h3>
 <div class="section" id="the-iloc-function">
 <h4>The <code class="docutils literal notranslate"><span class="pre">.iloc</span></code> function<a class="headerlink" href="#the-iloc-function" title="Permalink to this headline">¶</a></h4>
-<p>Access on a particular row and column using <code class="docutils literal notranslate"><span class="pre">.iloc</span></code> followed by squarre brackets and the row and column numbers yoou want to access. If you only put one number, it will be assumed to be the row number you want.</p>
+<p>Access on a particular row and column using <code class="docutils literal notranslate"><span class="pre">.iloc</span></code> followed by square brackets and the row and column numbers you want to access. If you only put one number, it will be assumed to be the row number you want.</p>
 <p>The following gets row number 35.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -791,7 +791,7 @@ Name: 35, dtype: object
 </div>
 </div>
 </div>
-<p>We can also specify a number of columns, by adding a column then listing the index numbers for the columns we would like.</p>
+<p>We can also specify a number of columns by adding a second number to the slicing.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">35</span><span class="p">,</span> <span class="p">:</span><span class="mi">3</span><span class="p">]</span>
@@ -1920,7 +1920,7 @@ Molecular Weight              16.043
 # of H-Bond Donors                 0
 # of Rings                         0
 Number of Rotatable Bonds          0
-Polar Surface Area                 0
+Polar Surface Area               0.0
 measured logP (mol/L)           -0.9
 smiles                             C
 Name: 934, dtype: object
@@ -2022,8 +2022,8 @@ Length: 1128, dtype: float64
 </div>
 </div>
 </div></div>
-<div class="section" id="the-applymap-operator">
-<h3>The <code class="docutils literal notranslate"><span class="pre">.applymap</span></code> operator<a class="headerlink" href="#the-applymap-operator" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="the-applymap-method">
+<h3>The <code class="docutils literal notranslate"><span class="pre">.applymap</span></code> method<a class="headerlink" href="#the-applymap-method" title="Permalink to this headline">¶</a></h3>
 <p>Sometimes the operations you want to do on a dataframe can’t be achieved with broadcasting. One might think to use a <code class="docutils literal notranslate"><span class="pre">for</span></code> loop in times like these. However, many modern Python libraries try to make it so that you will rarely need to use a loop.</p>
 <p>In pandas, if you would like to perform an operation on every cell of a dataframe, you can use the <code class="docutils literal notranslate"><span class="pre">applymap</span></code> command. For example, if we wanted to know the number of letters in a compound name, we would use the python function <code class="docutils literal notranslate"><span class="pre">len</span></code>.  The length function only works on strings, so let’s see how we would use it on two columns which are strings.</p>
 <div class="cell docutils container">
@@ -2223,9 +2223,9 @@ Length: 1128, dtype: float64
 </div></div></div>
 </div>
 </div>
-<div class="section" id="the-apply-operator-for-rows-and-columns">
-<h3>The <code class="docutils literal notranslate"><span class="pre">.apply</span></code> operator - for rows and columns<a class="headerlink" href="#the-apply-operator-for-rows-and-columns" title="Permalink to this headline">¶</a></h3>
-<p>The apply operator is used to apply a function to either the rows or columns of a dataframe.  If you use this on a single column, the function will be applied to every value.</p>
+<div class="section" id="the-apply-method-for-rows-and-columns">
+<h3>The <code class="docutils literal notranslate"><span class="pre">.apply</span></code> method - for rows and columns<a class="headerlink" href="#the-apply-method-for-rows-and-columns" title="Permalink to this headline">¶</a></h3>
+<p>The apply method is used to apply a function to either the rows or columns of a dataframe.  If you use this on a single column, the function will be applied to every value.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;Compound&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="nb">len</span><span class="p">)</span>
@@ -2269,7 +2269,7 @@ dtype: int64
 <h2>Axes and Shapes<a class="headerlink" href="#axes-and-shapes" title="Permalink to this headline">¶</a></h2>
 <p>We’ve already discussed the rows and columns in a dataframe. Also relevant here is the idea of an dataframe axis. Most functions in pandas can be used on either the rows or the columns, and can be specified by using the keyword <code class="docutils literal notranslate"><span class="pre">axis</span></code>. Typically, by default this axis will be set to 0 (rows).</p>
 <p>Axis 0 runs down the rows, while axis 1 runs across the columns. When thinking about this, consider the <code class="docutils literal notranslate"><span class="pre">iloc</span></code> function for indexing. You specify the index for the row in element 0 of this function (axis 0) and the index for the column in element 1.</p>
-<p>The <code class="docutils literal notranslate"><span class="pre">apply</span></code> operator works on either rows or elements. Consider the result of what happens if we apply this function to axis 1, or the columns. Can you explain why we are seeing this answer?</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">apply</span></code> method works on either rows or elements. Consider the result of what happens if we apply this function to axis 1, or the columns. Can you explain why we are seeing this answer?</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="p">[[</span><span class="s2">&quot;smiles&quot;</span><span class="p">,</span> <span class="s2">&quot;Compound&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="nb">len</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
