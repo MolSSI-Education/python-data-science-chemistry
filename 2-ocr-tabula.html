@@ -342,29 +342,43 @@
                 
   <div class="section" id="reading-data-from-pdfs">
 <h1>Reading data from PDFs<a class="headerlink" href="#reading-data-from-pdfs" title="Permalink to this headline">¶</a></h1>
-<p>So far, we have been working with data that is fairly ‘clean’. This means that, for the most part, our data didn’t have too many missing values and had the right data type. This is more often the case when the data we are working with is prepared to be machine readable in the first place (more ‘modern’ data).</p>
-<p>Data you would like to work with, however, may not always be ‘clean’, particularly if you are working with older data. For example, you might want to work with or analyze data from published papers. In these cases, the data may be in tables in pdf.</p>
-<p>This section covers some python libraries that can be used to get data from pdfs. We will ‘clean’ the data using pandas in the next lesson.</p>
-<p>We’ll be grabbing data from the following paper, cleaning it, and fitting the data using python:</p>
-<blockquote>
-<div><p>Potts, R.O., Guy, R.H. A Predictive Algorithm for Skin Permeability: The Effects of Molecular Size and Hydrogen Bond Activity. Pharm Res 12, 1628–1633 (1995). <a class="reference external" href="https://doi.org/10.1023/A:1016236932339">https://doi.org/10.1023/A:1016236932339</a></p>
-</div></blockquote>
-<p>In this paper, the authors make a model for predicting skin permeability of molecules based on simple molecular descriptors. This paper was published in 1995, so this will definitely not be the best method. It is, however, a nice example of the kinds of things you can do with Python.</p>
-<p>Access and download the paper <a class="reference external" href="https://link.springer.com/article/10.1023/A:1016236932339">here</a>. Save the paper in a directory called <code class="docutils literal notranslate"><span class="pre">pdfs</span></code> to match what we have for this notebook.</p>
+<div class="overview">
+   <p class="overview-title">Overview</p>
+    <p>Questions</p>
+      <ul>
+        <li>How can I tell if I can extract data from a pdf?</li>
+        <li>How can I run optical character recognition on a pdf?</li>
+        <li>How can I extract information from a pdf which has character information?</li>
+    </ul>
+    <p>Objectives:</p>
+        <ul>
+            <li>Use `ocrmypdf` to make sure our pdf has recognizable characters.</li>
+            <li>Use `tabula-py` to extract data from a table in a pdf.</li>
+        </ul>
+    <p>Keypoints:</p>
+        <ul>
+            <li>PDFs usually have text associated with them. If they don't, you can use `ocrmypdf` to perform optical character recognition.</li>
+            <li>You can use the library `tabula-py` to extract data from tables in pdfs.</li>
+        </ul>
+    </div>
+<p>You should have the paper we are going to work with in your <code class="docutils literal notranslate"><span class="pre">pdfs</span></code> folder. The name of the file is <code class="docutils literal notranslate"><span class="pre">Potts-Guy1995_Article_APredictiveAlgorithmForSkinPer.pdf</span></code>. We will be reading the tables on page 3.</p>
+<p>Start by checking to ensure that you have the pdfs folder and the pdf. We will use the special command <code class="docutils literal notranslate"><span class="pre">ls</span></code> for this. We put an exclamation mark at the beginning of this command because it is not Python. In the Jupyter notebook, the commands that start with <code class="docutils literal notranslate"><span class="pre">!</span></code> are commands you could execute in your terminal if you were using a terminal.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ls</span> <span class="n">pdfs</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span> ls pdfs
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Potts-Guy1995_Article_APredictiveAlgorithmForSkinPer.pdf
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>186.full.pdf	   Potts-Guy1995_Article_APredictiveAlgorithmForSkinPer.pdf
+Delaney_paper.pdf  cyclodextrin.pdf
 </pre></div>
 </div>
 </div>
 </div>
-<p>We’re going to use a Python library called <code class="docutils literal notranslate"><span class="pre">tabula-py</span></code> to read the data in <code class="docutils literal notranslate"><span class="pre">Table</span> <span class="pre">1</span></code>. However, this pdf doesn’t have any text information in it yet. One way you can tell this is by clicking and dragging your cursor over the text in a pdf viewer. If the text is not highlighted, the pdf does not contain text information.</p>
+<p>We’re going to use a Python library called <code class="docutils literal notranslate"><span class="pre">tabula-py</span></code> to read the data in <code class="docutils literal notranslate"><span class="pre">Table</span> <span class="pre">1</span></code>. However, this pdf doesn’t have any text information in it yet. One way you can tell this is by clicking and dragging your cursor over the text in a pdf viewer like Adobe Acrobat. If the text is not highlighted, the pdf does not contain text information. If we tried to extract the data in the table at this point, we would get an empty table.</p>
 <p>You can get text information in a pdf by performing optical character recognition, or OCR. If you have Adobe Acrobat Pro, it has an OCR tool built in that you can use. Python also has some free libraries which can be used for OCR. We’ll be using one called <a class="reference external" href="https://ocrmypdf.readthedocs.io/en/latest/">OCRmyPDF</a>.</p>
+<p>Again, this command is not Python. We can tell this because it starts with an exclamation mark <code class="docutils literal notranslate"><span class="pre">!</span></code>. To use this software, we type the command <code class="docutils literal notranslate"><span class="pre">ocrmypdf</span></code> followed by the path to the pdf we would like to convert. Then you put the name you would like your new output file to have.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span> ocrmypdf <span class="s2">&quot;pdfs/Potts-Guy1995_Article_APredictiveAlgorithmForSkinPer.pdf&quot;</span>  <span class="s2">&quot;pdfs/pottsguyocr.pdf&quot;</span>
@@ -372,11 +386,11 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Scanning contents: 100%|████████████████████████| 6/6 [00:00&lt;00:00, 11.50page/s]
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Scanning contents: 100%|███████████████████████| 6/6 [00:00&lt;00:00, 202.22page/s]
 Start processing 6 pages concurrently
-OCR: 100%|██████████████████████████████████| 6.0/6.0 [00:15&lt;00:00,  2.56s/page]
+OCR: 100%|██████████████████████████████████| 6.0/6.0 [00:18&lt;00:00,  3.01s/page]
 Postprocessing...
-PDF/A conversion: 100%|█████████████████████████| 6/6 [00:01&lt;00:00,  4.09page/s]
+PDF/A conversion: 100%|█████████████████████████| 6/6 [00:01&lt;00:00,  3.29page/s]
 JPEGs: 0image [00:00, ?image/s]
 JBIG2: 0item [00:00, ?item/s]
 Optimize ratio: 1.00 savings: -0.2%
@@ -388,20 +402,21 @@ Output file is a PDF/A-2B (as expected)
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ls</span> <span class="n">pdfs</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span> ls pdfs
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Potts-Guy1995_Article_APredictiveAlgorithmForSkinPer.pdf
-pottsguyocr.pdf
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>186.full.pdf						  cyclodextrin.pdf
+Delaney_paper.pdf					  pottsguyocr.pdf
+Potts-Guy1995_Article_APredictiveAlgorithmForSkinPer.pdf
 </pre></div>
 </div>
 </div>
 </div>
 <div class="section" id="reading-tables-with-tabula-py">
 <h2>Reading Tables with <code class="docutils literal notranslate"><span class="pre">tabula-py</span></code><a class="headerlink" href="#reading-tables-with-tabula-py" title="Permalink to this headline">¶</a></h2>
-<p>We now have two pdfs in the folder. The second one, <code class="docutils literal notranslate"><span class="pre">pottsguyocr.pdf</span></code> has text information in the pdf. We can use the library <code class="docutils literal notranslate"><span class="pre">tabula-py</span></code> to get information from table 1. The function we will be using is called <code class="docutils literal notranslate"><span class="pre">tabula.read_pdf</span></code>.</p>
+<p>We now have two pdfs in the folder. The second one, <code class="docutils literal notranslate"><span class="pre">pottsguyocr.pdf</span></code> has text information in the pdf. We can use the library <code class="docutils literal notranslate"><span class="pre">tabula-py</span></code> to get information from table 1. The function we will be using is called <code class="docutils literal notranslate"><span class="pre">tabula.read_pdf</span></code>. We pass the file path to the pdf we would like to read to this function. You should also specify the page number of the table. Otherwise, it will by default try to read page 1.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>

@@ -324,6 +324,36 @@
                 
   <div class="section" id="session-2">
 <h1>Session 2<a class="headerlink" href="#session-2" title="Permalink to this headline">¶</a></h1>
+<div class="overview">
+   <p class="overview-title">Session 2 Overview</p>
+    <p>So far, we have been working with data that is fairly 'clean'. This means that, for the most part, our data didn't have too many missing values and had the right data type. This is more often the case when the data we are working with is prepared to be machine readable in the first place (more 'modern' data).</p>
+<p>Data you would like to work with, however, may not always be 'clean', particularly if you are working with older data. In fact, you may find in some instances, that data cleaning is 90% of the work you have to do to solve a problem. For example, you might want to work with or analyze data from published papers. In these cases, the data may be in tables in pdf.</p>
+<p>This section covers some python libraries that can be used to get data from pdfs, cleaning the data, then doing some basic statistical visualization. We will first use a library called <a href="https://ocrmypdf.readthedocs.io/en/latest/">OCRmyPDF</a> to run optical character recognition on a pdf. This will make the pdf have information about the characters in the pdf. Then, we run another package called <a href="https://github.com/chezou/tabula-py">tabula</a> to get information about tables from the pdf.</p> 
+<p>We'll be grabbing data from the following paper, cleaning it, and fitting the data using python:</p>
+<blockquote>
+<div><p>Potts, R.O., Guy, R.H. A Predictive Algorithm for Skin Permeability: The Effects of Molecular Size and Hydrogen Bond Activity. Pharm Res 12, 1628–1633 (1995). <a class="reference external" href="https://doi.org/10.1023/A:1016236932339">https://doi.org/10.1023/A:1016236932339</a></p>
+</div></blockquote>
+<p>In this paper, the authors make a model for predicting skin permeability of molecules based on simple molecular descriptors. This paper was published in 1995, so this will definitely not be the best method. It is, however, a nice example of the kinds of things you can do with Python.</p>
+<p>Access and download the paper <a href="https://link.springer.com/article/10.1023/A:1016236932339">here</a>. Save the paper in a directory called `pdfs` to match what we have for this notebook.</p>
+<p>At the end of this session, you should be able to answer these questions.</p>
+    <p class="overview-sub">Reading Data from PDFs</p>
+    <ul>
+        <li>How can I tell if I can extract data from a pdf?</li>
+        <li>How can I run optical character recognition on a pdf?</li>
+        <li>How can I extract information from a pdf which has character information?</li>
+    </ul>
+    <p class="overview-sub">Data Cleaning with Pandas</p>
+    <ul>
+        <li>What does 'clean data' mean?</li>
+        <li>How can I drop unnecessary data from my dataframe?</li>
+        <li>How can I change column or row names in a dataframe?</li>
+        <li>How can I cast columns to the correct data type?</li>
+    </ul>
+    <p class="overview-sub">Plotting with seaborn</p>
+    <ul>
+        <li>How can I create statistical plots in seaborn?</li>
+    </ul>
+</div>
 <div class="toctree-wrapper compound">
 </div>
 </div>

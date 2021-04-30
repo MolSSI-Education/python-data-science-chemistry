@@ -361,19 +361,26 @@
    <p class="overview-title">Overview</p>
     <p>Questions</p>
         <ul>
-            <li>Question 1
+            <li>What does 'clean data' mean?</li>
+            <li>How can I drop unnecessary data from my dataframe?</li>
+            <li>How can I change column or row names in a dataframe?</li>
+            <li>How can I cast columns to the correct data type?</li>
         </ul>
     <p>Objectives:</p>
         <ul>
-            <li>Objective 1
-            <li>Objective 2
+            <li>Use pandas to drop unnecessary data from our dataframe.</li>
+            <li>Learn how to rename pandas columns.</li>
+            <li>Use pandas string methods to correct characters.</li>
+            <li>Learn how to cast columns to the correct data type.</li>
         </ul>
     <p>Keypoints:</p>
         <ul>
-            <li>Keypoint 1</li>
-            <li>Keypoint 2</li>
+            <li>Data cleaning prepares data for analysis.</li>
+            <li>Pandas has built-in methods for handling data cleaning, particular missing data.</li>
         </ul>
-    </div><div class="cell docutils container">
+    </div>
+<p>In this section, we’ll read in the data we extracted in the last lesson. You may have noticed in the last session that the data in these dataframes didn’t look great. There were columns that appeared to have no values. Once we start working with the data, we are going to see some additional problems.</p>
+<div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
@@ -530,40 +537,17 @@
 </div>
 <div class="section" id="dropping-unneccessary-data">
 <h2>Dropping unneccessary data<a class="headerlink" href="#dropping-unneccessary-data" title="Permalink to this headline">¶</a></h2>
-<p>In some cases, we might have data in our dataframe that we don’t need. We will want to discard or “drop” this data from the dataframe. For the dataframe we just loaded, for example, we can see that the data in columns 0, 1, 4, 12 won’t be used. We could safely discard these from our dataframe.</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">table1</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
+<p>In some cases, we might have data in our dataframe that we don’t need. We will want to discard or “drop” this data from the dataframe. For the dataframe we just loaded, for example, we can see that the data in columns 0, 1, 4, 12 appear to not have any values.</p>
+<div class="exercise-this-is-a-title exercise">
+<p class="exercise-title">Check your understanding</p>
+    <p>What pandas method can you use to see how many non-null values you have in each column?</p>
+<div class="dropdown admonition">
+<p class="admonition-title">Solution</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">table1</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;class &#39;pandas.core.frame.DataFrame&#39;&gt;
-RangeIndex: 37 entries, 0 to 36
-Data columns (total 14 columns):
- #   Column        Non-Null Count  Dtype  
----  ------        --------------  -----  
- 0   Unnamed: 0    37 non-null     int64  
- 1   Unnamed: 0.1  1 non-null      object 
- 2   Compound      37 non-null     object 
- 3   log P         37 non-null     object 
- 4   Unnamed: 1    0 non-null      float64
- 5   II            37 non-null     float64
- 6   Hy            37 non-null     float64
- 7   H,            37 non-null     float64
- 8   MV            37 non-null     object 
- 9   R,            37 non-null     float64
- 10  log Kou       37 non-null     object 
- 11  log Kyex      31 non-null     object 
- 12  Unnamed: 2    0 non-null      float64
- 13  log Kpep      25 non-null     object 
-dtypes: float64(6), int64(1), object(7)
-memory usage: 4.2+ KB
-</pre></div>
-</div>
-</div>
-</div>
-<p>There are two methods you might use to drop data from a dataframe. These are <code class="docutils literal notranslate"><span class="pre">drop</span></code>, and <code class="docutils literal notranslate"><span class="pre">dropna</span></code>. Drop is used when you have specific rows or columns you want to remove from the dataframe, while <code class="docutils literal notranslate"><span class="pre">dropna</span></code> is used when you want to drop columns or rows which contain <code class="docutils literal notranslate"><span class="pre">NaN</span></code> or “not a number” values. This occurs when there are no values in a data cell.</p>
+</div><p>There are two methods you might use to drop data from a dataframe. These are <code class="docutils literal notranslate"><span class="pre">drop</span></code>, and <code class="docutils literal notranslate"><span class="pre">dropna</span></code>. Drop is used when you have specific rows or columns you want to remove from the dataframe, while <code class="docutils literal notranslate"><span class="pre">dropna</span></code> is used when you want to drop columns or rows which contain <code class="docutils literal notranslate"><span class="pre">NaN</span></code> or “not a number” values. This occurs when there are no values in a data cell.</p>
 <p>In the output of <code class="docutils literal notranslate"><span class="pre">info</span></code> above, we can see that there are two columns which contain 0 non-null values. This means that all of the values in these columns are <code class="docutils literal notranslate"><span class="pre">NaN</span></code>. We can safely discard these columns. We’ll use the <code class="docutils literal notranslate"><span class="pre">dropna</span></code> function to get rid of them.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -789,7 +773,608 @@ memory usage: 2.7+ KB
 </div>
 </div>
 </div>
-<p>This is closer to what we want. However, you’ll notice that this has dropped some columns which have data. We can add <code class="docutils literal notranslate"><span class="pre">how=all</span></code> to drop only columns whose values are all <code class="docutils literal notranslate"><span class="pre">NaN</span></code>. Once we are sure we would like to keep this as our dataframe, we can add <code class="docutils literal notranslate"><span class="pre">inplace=True</span></code> to the function call to overwrite the dataframe.</p>
+<p>This is closer to what we want. However, you’ll notice that this has dropped some columns which have data. By default, pandas will drop a column which contains <strong>any</strong> <code class="docutils literal notranslate"><span class="pre">NaN</span></code> values. This may not be what we want in many cases because some values may simply be missing rather than incorrect.</p>
+<p>We can add an additional argument, <code class="docutils literal notranslate"><span class="pre">how=all</span></code>, to drop only columns whose values are <strong>all</strong> <code class="docutils literal notranslate"><span class="pre">NaN</span></code>. By default, this function argument is <code class="docutils literal notranslate"><span class="pre">how=any</span></code>. Once we are sure we would like to keep this as our dataframe, we can add <code class="docutils literal notranslate"><span class="pre">inplace=True</span></code> to the function call to overwrite the dataframe.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">table1</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Unnamed: 0</th>
+      <th>Unnamed: 0.1</th>
+      <th>Compound</th>
+      <th>log P</th>
+      <th>II</th>
+      <th>Hy</th>
+      <th>H,</th>
+      <th>MV</th>
+      <th>R,</th>
+      <th>log Kou</th>
+      <th>log Kyex</th>
+      <th>log Kpep</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0</td>
+      <td>NaN</td>
+      <td>water</td>
+      <td>— 6.85</td>
+      <td>0.45</td>
+      <td>0.82</td>
+      <td>0.35</td>
+      <td>10.6</td>
+      <td>0.00</td>
+      <td>— 1.38</td>
+      <td>— 4,38</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1</td>
+      <td>'</td>
+      <td>methanol</td>
+      <td>— 6.68</td>
+      <td>0.44</td>
+      <td>0.43</td>
+      <td>0.47</td>
+      <td>21.7</td>
+      <td>0.28</td>
+      <td>—0.73</td>
+      <td>— 2.42</td>
+      <td>— 2.80</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2</td>
+      <td>NaN</td>
+      <td>methanoic acid</td>
+      <td>— 7.08</td>
+      <td>0.60</td>
+      <td>0.75</td>
+      <td>0.38</td>
+      <td>22.3</td>
+      <td>0.30</td>
+      <td>—0.54</td>
+      <td>— 3.93</td>
+      <td>— 3.63</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>3</td>
+      <td>NaN</td>
+      <td>ethanol</td>
+      <td>— 6.66</td>
+      <td>0.42</td>
+      <td>0.37</td>
+      <td>0.48</td>
+      <td>31.9</td>
+      <td>0.25</td>
+      <td>—0.32</td>
+      <td>—2.24</td>
+      <td>—2.10</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>4</td>
+      <td>NaN</td>
+      <td>ethanoic acid</td>
+      <td>—7.01</td>
+      <td>0.65</td>
+      <td>0.61</td>
+      <td>0.45</td>
+      <td>33.4</td>
+      <td>0.27</td>
+      <td>—0.31</td>
+      <td>— 3.28</td>
+      <td>—2.90</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>5</td>
+      <td>NaN</td>
+      <td>n-propanol</td>
+      <td>— 6.41</td>
+      <td>0.42</td>
+      <td>0.37</td>
+      <td>0.48</td>
+      <td>42.2</td>
+      <td>0.24</td>
+      <td>0.34</td>
+      <td>— 1.48</td>
+      <td>—1.52</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>6</td>
+      <td>NaN</td>
+      <td>n-propanoic acid</td>
+      <td>—7.01</td>
+      <td>0.65</td>
+      <td>0.60</td>
+      <td>0.45</td>
+      <td>43.6</td>
+      <td>0.23</td>
+      <td>0.26</td>
+      <td>— 2.64</td>
+      <td>—2.14</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>7</td>
+      <td>NaN</td>
+      <td>butane-2-one</td>
+      <td>— 5.90</td>
+      <td>0.70</td>
+      <td>0.00</td>
+      <td>0.51</td>
+      <td>49.4</td>
+      <td>0.17</td>
+      <td>0.28</td>
+      <td>— 0.25</td>
+      <td>—Q.25</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>8</td>
+      <td>NaN</td>
+      <td>benzene</td>
+      <td>—4,.5]1</td>
+      <td>0.52</td>
+      <td>0.00</td>
+      <td>0.14</td>
+      <td>50.0</td>
+      <td>0.61</td>
+      <td>2.00</td>
+      <td>2.29</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>9</td>
+      <td>NaN</td>
+      <td>diethyl ether</td>
+      <td>— 5.35</td>
+      <td>0.25</td>
+      <td>0.00</td>
+      <td>0.45</td>
+      <td>52.0</td>
+      <td>0.04</td>
+      <td>0.83</td>
+      <td>0.66</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>10</td>
+      <td>NaN</td>
+      <td>n-butanol</td>
+      <td>— 6.16</td>
+      <td>0.42</td>
+      <td>0.37</td>
+      <td>0.48</td>
+      <td>52.4</td>
+      <td>0.22</td>
+      <td>0.88</td>
+      <td>— 1.08</td>
+      <td>—0.70</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>11</td>
+      <td>NaN</td>
+      <td>n-butanoic acid</td>
+      <td>— 6.36</td>
+      <td>0.62</td>
+      <td>0.60</td>
+      <td>0.45</td>
+      <td>53.9</td>
+      <td>0.21</td>
+      <td>0.79</td>
+      <td>— 1.92</td>
+      <td>— 0.96</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>12</td>
+      <td>NaN</td>
+      <td>phenol</td>
+      <td>— 5.64</td>
+      <td>0.89</td>
+      <td>0.52</td>
+      <td>0.30</td>
+      <td>‘53.9</td>
+      <td>0.81</td>
+      <td>1.46</td>
+      <td>— 0.70</td>
+      <td>—0.82</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>13</td>
+      <td>NaN</td>
+      <td>toluene</td>
+      <td>— 3.56</td>
+      <td>0.52</td>
+      <td>0.00</td>
+      <td>0.14</td>
+      <td>60.0</td>
+      <td>0.60</td>
+      <td>2.70</td>
+      <td>2.89</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>14</th>
+      <td>14</td>
+      <td>NaN</td>
+      <td>styrene</td>
+      <td>— 3.75</td>
+      <td>0.65</td>
+      <td>0.00</td>
+      <td>0.16</td>
+      <td>60.2</td>
+      <td>0.85</td>
+      <td>2.95</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>15</th>
+      <td>15</td>
+      <td>NaN</td>
+      <td>n-pentanol</td>
+      <td>— 5.78</td>
+      <td>0.42</td>
+      <td>0.37</td>
+      <td>0.48</td>
+      <td>62.6</td>
+      <td>0.22</td>
+      <td>1.40</td>
+      <td>— 0.39</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>16</td>
+      <td>NaN</td>
+      <td>benzyl-OH</td>
+      <td>— 5.78</td>
+      <td>0.87</td>
+      <td>0.33</td>
+      <td>0.56</td>
+      <td>64.0</td>
+      <td>0.80</td>
+      <td>1.10</td>
+      <td>— 0.62</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>17</th>
+      <td>17</td>
+      <td>NaN</td>
+      <td>n-pentanoic acid</td>
+      <td>—6.01</td>
+      <td>0.60</td>
+      <td>0.60</td>
+      <td>0.45</td>
+      <td>64.1</td>
+      <td>0.21</td>
+      <td>1.33</td>
+      <td>—1.31</td>
+      <td>0.44</td>
+    </tr>
+    <tr>
+      <th>18</th>
+      <td>18</td>
+      <td>NaN</td>
+      <td>2-chlorophenol</td>
+      <td>— 5.04</td>
+      <td>0.88</td>
+      <td>0.32</td>
+      <td>0.31</td>
+      <td>66.0</td>
+      <td>0.85</td>
+      <td>2.15</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>19</th>
+      <td>19</td>
+      <td>NaN</td>
+      <td>4-chlorophenol</td>
+      <td>— 5.00</td>
+      <td>1.08</td>
+      <td>0.67</td>
+      <td>0.20</td>
+      <td>66.0</td>
+      <td>0.92</td>
+      <td>2.39</td>
+      <td>—1.31</td>
+      <td>—0.12</td>
+    </tr>
+    <tr>
+      <th>20</th>
+      <td>20</td>
+      <td>NaN</td>
+      <td>m-cresol</td>
+      <td>— 5.38</td>
+      <td>0.88</td>
+      <td>0.57</td>
+      <td>0.34</td>
+      <td>67.6</td>
+      <td>0.82</td>
+      <td>1.96</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>21</th>
+      <td>21</td>
+      <td>NaN</td>
+      <td>o-cresol</td>
+      <td>~— 5,36</td>
+      <td>0.86</td>
+      <td>0.52</td>
+      <td>0.30</td>
+      <td>67.6</td>
+      <td>0.84</td>
+      <td>1.95</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>22</th>
+      <td>22</td>
+      <td>NaN</td>
+      <td>p-cresol</td>
+      <td>— 5.29</td>
+      <td>0.87</td>
+      <td>0.57</td>
+      <td>0.31</td>
+      <td>67.6</td>
+      <td>0.82</td>
+      <td>1.96</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>23</th>
+      <td>23</td>
+      <td>NaN</td>
+      <td>4-bromophenol</td>
+      <td>— 5.00</td>
+      <td>1.17</td>
+      <td>0.67</td>
+      <td>0.20</td>
+      <td>70.0</td>
+      <td>1.08</td>
+      <td>2.59</td>
+      <td>—0.11</td>
+      <td>—0.20</td>
+    </tr>
+    <tr>
+      <th>24</th>
+      <td>24</td>
+      <td>NaN</td>
+      <td>4-nitrophenol</td>
+      <td>—5.81</td>
+      <td>1.72</td>
+      <td>0.82</td>
+      <td>0.26</td>
+      <td>71.0</td>
+      <td>1.07</td>
+      <td>1.96</td>
+      <td>—2.0</td>
+      <td>—2.15</td>
+    </tr>
+    <tr>
+      <th>25</th>
+      <td>25</td>
+      <td>NaN</td>
+      <td>3-nitrophenol</td>
+      <td>—5.81</td>
+      <td>1.57</td>
+      <td>0.79</td>
+      <td>0.23</td>
+      <td>71.0</td>
+      <td>1.05</td>
+      <td>2.00</td>
+      <td>—1.4</td>
+      <td>— 1.23</td>
+    </tr>
+    <tr>
+      <th>26</th>
+      <td>26</td>
+      <td>NaN</td>
+      <td>2-nitrophenol</td>
+      <td>— 4,56</td>
+      <td>1.05</td>
+      <td>0.05</td>
+      <td>0.37</td>
+      <td>71.0</td>
+      <td>1.02</td>
+      <td>1.80</td>
+      <td>—1.4</td>
+      <td>1.04</td>
+    </tr>
+    <tr>
+      <th>27</th>
+      <td>27</td>
+      <td>NaN</td>
+      <td>ethylbenzene</td>
+      <td>— 3.48</td>
+      <td>0.51</td>
+      <td>0.00</td>
+      <td>0.15</td>
+      <td>72.3</td>
+      <td>0.60</td>
+      <td>3.15</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>28</th>
+      <td>28</td>
+      <td>NaN</td>
+      <td>n-hexanol</td>
+      <td>—5.45</td>
+      <td>0.42</td>
+      <td>0.37</td>
+      <td>0.48</td>
+      <td>72.9</td>
+      <td>0.21</td>
+      <td>2.03</td>
+      <td>0.11</td>
+      <td>0.45</td>
+    </tr>
+    <tr>
+      <th>29</th>
+      <td>29</td>
+      <td>NaN</td>
+      <td>n-hexanoic acid</td>
+      <td>—5.44</td>
+      <td>0.60</td>
+      <td>0.60</td>
+      <td>0.45</td>
+      <td>74.3</td>
+      <td>0.17</td>
+      <td>1.89</td>
+      <td>— 0.85</td>
+      <td>0.24</td>
+    </tr>
+    <tr>
+      <th>30</th>
+      <td>30</td>
+      <td>NaN</td>
+      <td>B-naphthol</td>
+      <td>—5.11</td>
+      <td>1.08</td>
+      <td>0.61</td>
+      <td>0.40</td>
+      <td>79.5</td>
+      <td>1.52</td>
+      <td>2.84</td>
+      <td>1.77</td>
+      <td>0.30</td>
+    </tr>
+    <tr>
+      <th>31</th>
+      <td>31</td>
+      <td>NaN</td>
+      <td>n-heptanol</td>
+      <td>— 5.05</td>
+      <td>0.42</td>
+      <td>0.37</td>
+      <td>0.48</td>
+      <td>83.1</td>
+      <td>0.21</td>
+      <td>2.49</td>
+      <td>0.77</td>
+      <td>1.01</td>
+    </tr>
+    <tr>
+      <th>32</th>
+      <td>32</td>
+      <td>NaN</td>
+      <td>n-heptanoic acid</td>
+      <td>— 5.28</td>
+      <td>0.60</td>
+      <td>0.60</td>
+      <td>0.45</td>
+      <td>84.6</td>
+      <td>0.15</td>
+      <td>2.33</td>
+      <td>— 0.29</td>
+      <td>1.16</td>
+    </tr>
+    <tr>
+      <th>33</th>
+      <td>33</td>
+      <td>NaN</td>
+      <td>n-octanol</td>
+      <td>— 4.84</td>
+      <td>0.42</td>
+      <td>0.37</td>
+      <td>0.48</td>
+      <td>93.3</td>
+      <td>0.20</td>
+      <td>3.15</td>
+      <td>1.62</td>
+      <td>1.65</td>
+    </tr>
+    <tr>
+      <th>34</th>
+      <td>34</td>
+      <td>NaN</td>
+      <td>n-octanoic acid</td>
+      <td>—5.21</td>
+      <td>0.60</td>
+      <td>0.60</td>
+      <td>0.45</td>
+      <td>94.8</td>
+      <td>0.15</td>
+      <td>2.83</td>
+      <td>0.41</td>
+      <td>1.95</td>
+    </tr>
+    <tr>
+      <th>35</th>
+      <td>35</td>
+      <td>NaN</td>
+      <td>n-nonanol</td>
+      <td>—4.77</td>
+      <td>0.42</td>
+      <td>0.37</td>
+      <td>0.48</td>
+      <td>104</td>
+      <td>0.19</td>
+      <td>3.68</td>
+      <td>1.97</td>
+      <td>2.28</td>
+    </tr>
+    <tr>
+      <th>36</th>
+      <td>36</td>
+      <td>NaN</td>
+      <td>n-decanol</td>
+      <td>— 4.66</td>
+      <td>0.42</td>
+      <td>0.37</td>
+      <td>0.48</td>
+      <td>114</td>
+      <td>0.19</td>
+      <td>4,24</td>
+      <td>2.56</td>
+      <td>2.91</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<p>The output above looks like something to keep, so we will add <code class="docutils literal notranslate"><span class="pre">inplace=True</span></code> to overwrite the original dataframe.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">table1</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -838,6 +1423,7 @@ memory usage: 3.6+ KB
 </div>
 <div class="section" id="changing-column-names">
 <h2>Changing column names<a class="headerlink" href="#changing-column-names" title="Permalink to this headline">¶</a></h2>
+<p>Our column names are still incorrect. You will likely want to change them to make the table more legible.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">table1</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
@@ -866,7 +1452,10 @@ memory usage: 3.0+ KB
 </div>
 </div>
 </div>
-<p>We might now want to clean up the column names and make sure they are descriptive. You can see the column names using <code class="docutils literal notranslate"><span class="pre">table1.columns</span></code>. You can either rename the columns by setting <code class="docutils literal notranslate"><span class="pre">table1.columns</span></code> to a list of the appropriate length, or you can use <code class="docutils literal notranslate"><span class="pre">table1.rename</span></code>.</p>
+<p>We might now want to clean up the column names and make sure they are descriptive. You can see the column names using <code class="docutils literal notranslate"><span class="pre">table1.columns</span></code>. You can either rename the columns by setting <code class="docutils literal notranslate"><span class="pre">table1.columns</span></code> to a list of the appropriate length, or you can use <code class="docutils literal notranslate"><span class="pre">table1.rename</span></code>. In the <code class="docutils literal notranslate"><span class="pre">.rename</span></code> method, you put the argument <code class="docutils literal notranslate"><span class="pre">columns</span></code> and set it equal to a dictionary (curly brackets) where you use the syntax</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;current_column_name&quot;</span><span class="p">:</span> <span class="s2">&quot;new_column_name&quot;</span>
+</pre></div>
+</div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">table1</span><span class="o">.</span><span class="n">columns</span>
@@ -1007,7 +1596,8 @@ memory usage: 3.0+ KB
 </div>
 <div class="section" id="fixing-data-types">
 <h2>Fixing Data Types<a class="headerlink" href="#fixing-data-types" title="Permalink to this headline">¶</a></h2>
-<p>When examining <code class="docutils literal notranslate"><span class="pre">.info</span></code> , you’ll notice that a lot of our columns which should be numbers are still ‘objects’ or strings. We would like <code class="docutils literal notranslate"><span class="pre">log</span> <span class="pre">P</span></code>, for example to be numeric. There are a few ways to do this, but we’ll use the pandas function <code class="docutils literal notranslate"><span class="pre">to_numeric</span></code>.</p>
+<p>When examining <code class="docutils literal notranslate"><span class="pre">.info</span></code> , you’ll notice that a lot of our columns which should be numbers are still ‘objects’ or strings. We would like <code class="docutils literal notranslate"><span class="pre">log</span> <span class="pre">P</span></code>, for example to be numeric. Typically if a column appears that it should be numeric, but pandas does not automatically cast it as such, it is because there are some non-numeric characters in the column which pandas could not decide what to do with. We will need to examine these, decide what to do with them, then cast the column as numeric.</p>
+<p>There are a few ways to do this, but we’ll use the pandas function <code class="docutils literal notranslate"><span class="pre">to_numeric</span></code>.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">table1</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
@@ -1036,7 +1626,7 @@ memory usage: 3.0+ KB
 </div>
 </div>
 </div>
-<p>Using the <code class="docutils literal notranslate"><span class="pre">to_numeric</span></code> function without any additional inputs will fail on this data set, however, because of the characters used for minus signs.</p>
+<p>Using the <code class="docutils literal notranslate"><span class="pre">to_numeric</span></code> function without any additional inputs will fail on this data set.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pd</span><span class="o">.</span><span class="n">to_numeric</span><span class="p">(</span><span class="n">table1</span><span class="p">[</span><span class="s2">&quot;log P&quot;</span><span class="p">])</span>
@@ -1070,7 +1660,9 @@ memory usage: 3.0+ KB
 </div>
 </div>
 </div>
-<p>You could choose to handle the errors differently. For example, you could set errors to be ignored (which would result in the column being unchanged, there would just be no error raised) or to “coerce” the values. Choosing “coerce” means that anything that can’t be cast as numeric will be put as <code class="docutils literal notranslate"><span class="pre">NaN</span></code>.</p>
+<p>Scrolling to the bottom of this message and reading the error, you will see it is having a problem reading the value <code class="docutils literal notranslate"><span class="pre">&quot;—</span> <span class="pre">6.85&quot;</span></code>. It may not seem obvious what this problem is at first.</p>
+<p>When we run into a problem like this we have a few options. You could choose to handle the errors differently. Pandas will let you set what you would like for it to do when it is unable to cast a value. By default, it will fail (which is what se wee above). For example, you could also set errors to be ignored (which would result in the column being unchanged, there would just be no error raised) or to “coerce” the values. Choosing “coerce” means that anything that can’t be cast as numeric will be put as <code class="docutils literal notranslate"><span class="pre">NaN</span></code>.</p>
+<p>Let’s see what happens when we set errors to coerce.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pd</span><span class="o">.</span><span class="n">to_numeric</span><span class="p">(</span><span class="n">table1</span><span class="p">[</span><span class="s2">&quot;log P&quot;</span><span class="p">],</span> <span class="n">errors</span><span class="o">=</span><span class="s2">&quot;coerce&quot;</span><span class="p">)</span>
@@ -1120,6 +1712,7 @@ Name: log P, dtype: float64
 </div>
 </div>
 </div>
+<p>This unfortunately results in no numeric characters being recognized.</p>
 <p>We have to do a little bit more processing to the values for this to work. If you examine the columns, you may notice that the negative sign is a little off. It is <code class="docutils literal notranslate"><span class="pre">—</span></code> when it should be <code class="docutils literal notranslate"><span class="pre">-</span></code>. This is very slight, and might be hard to see, but it is important to change for this data set.</p>
 <p>We will want to replace all <code class="docutils literal notranslate"><span class="pre">—</span></code> with <code class="docutils literal notranslate"><span class="pre">-</span></code>. We could accomplish this using the string method <code class="docutils literal notranslate"><span class="pre">replace</span></code>. Strings in Python have a number of methods. The <code class="docutils literal notranslate"><span class="pre">replace</span></code> method allows us to replace a substring within a string.</p>
 <div class="cell docutils container">

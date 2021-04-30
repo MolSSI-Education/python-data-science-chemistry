@@ -6,6 +6,14 @@
     background-color: #ffc10733;
 }
 
+.overview .overview-sub {
+    position: relative;
+    margin: 0 -.1rem!important;
+    padding: .4rem .6rem .4rem 2rem; 
+    font-weight: 700;
+    background-color: #ADD8e688;
+}
+
 .overview {
     margin: 1.5625em auto;
     padding: 0 .6rem .8rem!important;
