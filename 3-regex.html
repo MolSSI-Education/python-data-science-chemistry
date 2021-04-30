@@ -352,6 +352,22 @@
                 
   <div class="section" id="regular-expressions">
 <h1>Regular Expressions<a class="headerlink" href="#regular-expressions" title="Permalink to this headline">¶</a></h1>
+<div class="overview">
+   <p class="overview-title">Overview</p>
+    <p>Questions</p>
+     <ul>
+        <li>What is a regular expression?</li>
+        <li>When should I use regular expressions?</li>
+    </ul>
+    <p>Objectives:</p>
+        <ul>
+            <li>Use regular expressions to pull information from a complex data file.</li>
+        </ul>
+    <p>Keypoints:</p>
+        <ul>
+            <li>Regular expressions allow you to define patterns of strings using special metacharacters.</li>
+        </ul>
+    </div>
 <p>In the first Python and Data Scripting Workshop we learned how to parse files using <code class="docutils literal notranslate"><span class="pre">open</span></code>, <code class="docutils literal notranslate"><span class="pre">readlines</span></code>, then looping through the file to find specific phrases. This works fine for some cases, however, there are some times when this will either be slow or impossible.</p>
 <p>Sometimes, you will want to look for text which resembles a certain pattern.</p>
 <p>Regular expressions will allow us to define patterns of text we are looking for rather than hardcoding specific phrases.</p>
@@ -374,8 +390,8 @@
 </div>
 </div>
 </div>
-<p>Because this is not a file which is tabular or structured, we will read it in using <code class="docutils literal notranslate"><span class="pre">open</span></code>. Note that there are many ways to open files in Python. If you reading a file that is only partially tabular, you may still want to use pandas with appropriate variables on the read functions. However, these files contain a lot of information and are mostly unstructured, so we will first pull out some information using regular expressions.</p>
-<p>We use the syntax <code class="docutils literal notranslate"><span class="pre">with</span> <span class="pre">open</span></code> because this allows us to open and automatically close the file. We will read the file inside the open block. The <code class="docutils literal notranslate"><span class="pre">read</span></code> function in Python is used on an open file object. All of the file contents will be pulled into a string called <code class="docutils literal notranslate"><span class="pre">data</span></code>.</p>
+<p>Because this is not a file which is tabular or structured, we can’t easily read it using NumPy or pandas. We will use a method from the first Python scripting workshop where we read it in using the <code class="docutils literal notranslate"><span class="pre">open</span></code> function. Note that there are many ways to open files in Python. If you reading a file that is only partially tabular, you may still want to use pandas with appropriate variables on the read functions. However, these files contain a lot of information and are mostly unstructured, so we will first pull out some information using regular expressions.</p>
+<p>We use the syntax <code class="docutils literal notranslate"><span class="pre">with</span> <span class="pre">open</span></code> because this allows us to open and automatically close the file. We will read the file inside the open block. The <code class="docutils literal notranslate"><span class="pre">read</span></code> function in Python is used on an open file object. All of the file contents will be pulled into a <code class="docutils literal notranslate"><span class="pre">string</span></code> called <code class="docutils literal notranslate"><span class="pre">data</span></code>.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
