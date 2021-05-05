@@ -50,6 +50,8 @@
         const thebe_selector_output = ".output"
     </script>
     <script async="async" src="_static/sphinx-thebe.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processRefs": false, "processEnvironments": false}})</script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -314,6 +316,29 @@
         <!-- Table of contents -->
         <div class="d-none d-md-block col-md-2 bd-toc show">
             
+            <div class="tocsection onthispage pt-5 pb-3">
+                <i class="fas fa-list"></i> Contents
+            </div>
+            <nav id="bd-toc-nav">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#exercise-1">
+   Exercise 1
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#exercise-2">
+   Exercise 2
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#exercise-3">
+   Exercise 3
+  </a>
+ </li>
+</ul>
+
+            </nav>
         </div>
     </div>
 </div>
@@ -324,6 +349,31 @@
                 
   <div class="section" id="session-2-homework">
 <h1>Session 2 Homework<a class="headerlink" href="#session-2-homework" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="exercise-1">
+<h2>Exercise 1<a class="headerlink" href="#exercise-1" title="Permalink to this headline">¶</a></h2>
+<p>In the first class, we examined a dataset containing molecular descriptors and the results from the ESOL solubility model. In this homework, we are going to use the <code class="docutils literal notranslate"><span class="pre">tabula</span></code> library to extract a table from the associated paper. In your <code class="docutils literal notranslate"><span class="pre">pdf</span></code> folder, you have a file called <code class="docutils literal notranslate"><span class="pre">Delaney_paper.pdf</span></code>. Your task for this homework is to pull information from table 4 and create plots using seaborn showing  the correlation between the various solubility models and the experimental values.</p>
+<p>Using the file <code class="docutils literal notranslate"><span class="pre">pdfs/Delaney_paper.pdf</span></code> and <code class="docutils literal notranslate"><span class="pre">tabula-py</span></code>, read in the data from Table 4. Save this file in your data folder as <code class="docutils literal notranslate"><span class="pre">delaney_table4.csv</span></code>.</p>
+</div>
+<div class="section" id="exercise-2">
+<h2>Exercise 2<a class="headerlink" href="#exercise-2" title="Permalink to this headline">¶</a></h2>
+<p>Read in your saved data and clean the table using pandas.</p>
+<ul class="simple">
+<li><p>Rename the columns to have easy and descriptive names.</p></li>
+<li><p>Use <code class="docutils literal notranslate"><span class="pre">pd.to_numeric</span></code> with the appropriate options to cast columns to floats.</p></li>
+<li><p>Drop rows or columns if necessary.</p></li>
+</ul>
+<p>Your dataframe should have the following column names before you save it:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="s1">&#39;common name&#39;</span><span class="p">,</span> <span class="s1">&#39;CAS no.&#39;</span><span class="p">,</span> <span class="s1">&#39;experimental values&#39;</span><span class="p">,</span> <span class="s1">&#39;ESOL&#39;</span><span class="p">,</span> <span class="s1">&#39;Liu&#39;</span><span class="p">,</span>
+       <span class="s1">&#39;Huuskonen&#39;</span><span class="p">,</span> <span class="s1">&#39;Kuhne&#39;</span><span class="p">,</span> <span class="s1">&#39;Wegner&#39;</span><span class="p">,</span> <span class="s1">&#39;Gasteiger&#39;</span><span class="p">,</span> <span class="s1">&#39;Tetko&#39;</span><span class="p">,</span> <span class="s1">&#39;GSE&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>Save your cleaned dataframe as <code class="docutils literal notranslate"><span class="pre">delaney_table4_clean.csv</span></code></p>
+</div>
+<div class="section" id="exercise-3">
+<h2>Exercise 3<a class="headerlink" href="#exercise-3" title="Permalink to this headline">¶</a></h2>
+<p>Use seaborn <code class="docutils literal notranslate"><span class="pre">lmplot</span></code> to create a plot showing <code class="docutils literal notranslate"><span class="pre">experimental</span> <span class="pre">values</span></code> vs each of the models. You should have one plot per model. Create a plot which has two columns per row.</p>
+<p><strong>Bonus</strong> - Use seaborn to visualize the correlation between experimental values and the models. Which one has the highest correlation? The method <code class="docutils literal notranslate"><span class="pre">df.corr</span></code> gives you Pearson’s correlation coefficient (R). Table 4 reports <span class="math notranslate nohighlight">\(R^2\)</span> - can you get the values to match? (how?)</p>
+</div>
 </div>
 
     <script type="text/x-thebe-config">
