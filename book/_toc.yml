@@ -9,6 +9,7 @@
     - file: 1-numpy-arrays
     - file: 1-matplotlib
     - file: 1-homework
+    - file: homework_1_solutions
 - file: 2-intro-objectives
   sections:
     - file: 2-ocr-tabula
