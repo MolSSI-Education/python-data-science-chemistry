@@ -1,9 +1,10 @@
-name: python-scripting-2
+name: molssi_training
 channels:
   - conda-forge
   - defaults
 dependencies:
   - python>=3.8
+  - openjdk # for java (required for tabula)
   - pip
   - notebook # jupyter noteboook
   - numpy
