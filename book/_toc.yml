@@ -16,6 +16,7 @@
     - file: 2-pandas-datacleaning
     - file: 2-seaborn
     - file: 2-homework
+    - file: homework-2-delaney
 - file: 3-intro-objectives
   sections:
     - file: 3-linear-scikitlearn
