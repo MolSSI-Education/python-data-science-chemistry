@@ -53,7 +53,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Session 3 Homework" href="3-homework.html" />
+    <link rel="next" title="Pulling Data from Multiple Files" href="regex-folders.html" />
     <link rel="prev" title="Linear Fitting with SciKit Learn" href="3-linear-scikitlearn.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="en" />
@@ -184,6 +184,11 @@
    <li class="toctree-l2 current active">
     <a class="current reference internal" href="#">
      Regular Expressions
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="regex-folders.html">
+     Pulling Data from Multiple Files
     </a>
    </li>
    <li class="toctree-l2">
@@ -390,7 +395,7 @@
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">file_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">,</span> <span class="s2">&quot;output&quot;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">file_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">,</span> <span class="s2">&quot;rxnpredict&quot;</span><span class="p">,</span> <span class="s2">&quot;output&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -501,7 +506,6 @@ SCF
 </div>
 </div>
 </div>
-<p>This is just a simple example. Note that we could have also achieved a similar result to the one shown above by specifying <code class="docutils literal notranslate"><span class="pre">re.IGNORECASE</span></code> in our pattern. Then case would be ignored entirely in our matches.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s2">&quot;energy&quot;</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">IGNORECASE</span><span class="p">)</span>
@@ -518,6 +522,21 @@ SCF
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&#39;Energy&#39;, &#39;energy&#39;, &#39;energy&#39;, &#39;Energy&#39;, &#39;Energy&#39;]
+</pre></div>
+</div>
+</div>
+</div>
+<p>Where this is more useful is for finding a range of characters. For example, the pattern below will find any single uppercase letter surrounded by spaces.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s2">&quot; [A-Z] &quot;</span><span class="p">)</span>
+<span class="n">matches</span> <span class="o">=</span> <span class="n">pattern</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">matches</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&#39; A &#39;, &#39; S &#39;, &#39; X &#39;, &#39; Y &#39;, &#39; Z &#39;, &#39; C &#39;, &#39; C &#39;, &#39; C &#39;, &#39; C &#39;, &#39; C &#39;, &#39; C &#39;, &#39; H &#39;, &#39; H &#39;, &#39; H &#39;, &#39; H &#39;, &#39; C &#39;, &#39; F &#39;, &#39; F &#39;, &#39; F &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; X &#39;, &#39; Y &#39;, &#39; Z &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; S &#39;, &#39; X &#39;, &#39; Y &#39;, &#39; Z &#39;, &#39; X &#39;, &#39; Y &#39;, &#39; Z &#39;, &#39; X &#39;, &#39; Y &#39;, &#39; X &#39;, &#39; Y &#39;, &#39; Z &#39;, &#39; X &#39;, &#39; Y &#39;, &#39; Z &#39;, &#39; X &#39;, &#39; Y &#39;, &#39; X &#39;, &#39; Y &#39;, &#39; Z &#39;, &#39; X &#39;, &#39; Y &#39;, &#39; Z &#39;, &#39; X &#39;, &#39; Y &#39;, &#39; X &#39;, &#39; Y &#39;, &#39; Z &#39;, &#39; X &#39;, &#39; Y &#39;, &#39; Z &#39;, &#39; X &#39;, &#39; Y &#39;, &#39; X &#39;, &#39; Y &#39;, &#39; Z &#39;, &#39; X &#39;, &#39; Y &#39;, &#39; Z &#39;, &#39; X &#39;, &#39; Y &#39;, &#39; X &#39;, &#39; Y &#39;, &#39; Z &#39;, &#39; X &#39;, &#39; Y &#39;, &#39; Z &#39;, &#39; X &#39;, &#39; Y &#39;, &#39; X &#39;, &#39; Y &#39;, &#39; Z &#39;, &#39; X &#39;, &#39; Y &#39;, &#39; Z &#39;, &#39; X &#39;, &#39; Y &#39;, &#39; X &#39;, &#39; Y &#39;, &#39; Z &#39;, &#39; X &#39;, &#39; Y &#39;, &#39; Z &#39;, &#39; X &#39;, &#39; Y &#39;, &#39; X &#39;, &#39; Y &#39;, &#39; Z &#39;, &#39; X &#39;, &#39; Y &#39;, &#39; Z &#39;, &#39; X &#39;, &#39; Y &#39;, &#39; X &#39;, &#39; Y &#39;, &#39; Z &#39;, &#39; X &#39;, &#39; Y &#39;, &#39; Z &#39;, &#39; X &#39;, &#39; Y &#39;, &#39; X &#39;, &#39; Y &#39;, &#39; Z &#39;, &#39; X &#39;, &#39; Y &#39;, &#39; Z &#39;, &#39; X &#39;, &#39; Y &#39;, &#39; X &#39;, &#39; Y &#39;, &#39; Z &#39;, &#39; X &#39;, &#39; Y &#39;, &#39; Z &#39;, &#39; X &#39;, &#39; Y &#39;, &#39; X &#39;, &#39; Y &#39;, &#39; Z &#39;, &#39; X &#39;, &#39; Y &#39;, &#39; Z &#39;, &#39; X &#39;, &#39; Y &#39;, &#39; K &#39;, &#39; A &#39;, &#39; B &#39;, &#39; A &#39;, &#39; B &#39;, &#39; A &#39;, &#39; B &#39;, &#39; X &#39;, &#39; Y &#39;, &#39; X &#39;, &#39; Y &#39;, &#39; X &#39;, &#39; Y &#39;, &#39; X &#39;, &#39; Y &#39;]
 </pre></div>
 </div>
 </div>
@@ -580,69 +599,77 @@ SCF
 </div>
 </div>
 </div>
-<p>Within the matches, you can use parenthesis <code class="docutils literal notranslate"><span class="pre">()</span></code> to create groups. For example, if we wanted to separate the word energy from what followed, we could surround relevant parts with parenthesis.</p>
+<div class="exercise-this-is-a-title exercise">
+<p class="exercise-title">Check your understanding</p>
+    <p>Modify the regular expression we wrote above to match uppercase words that are between three and 6 letters long. *Challenge* - Write a regular expression for uppercase words that are at least three characters long (no upper bound on length** </p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s2">&quot; [A-Z] &quot;</span><span class="p">)</span>
+<span class="n">matches</span> <span class="o">=</span> <span class="n">pattern</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">matches</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="dropdown admonition">
+<p class="admonition-title">Solution</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s2">&quot; [A-Z]{3,6} &quot;</span><span class="p">)</span>
+<span class="n">challenge_pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s2">&quot; [A-Z]{3,} &quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div><p>Within the matches, you can use parenthesis <code class="docutils literal notranslate"><span class="pre">()</span></code> to create groups. For example, if we wanted to separate the word energy from what followed, we could surround relevant parts with parenthesis. In the pattern below, we’ve also added a whitespace of length greater than 0 with <code class="docutils literal notranslate"><span class="pre">\s+</span></code>.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s2">&quot;(energy)(.+)&quot;</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">IGNORECASE</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s2">&quot;(energy)\s*(.+)&quot;</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">IGNORECASE</span><span class="p">)</span>
 <span class="n">matches</span> <span class="o">=</span> <span class="n">pattern</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">matches</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[(&#39;Energy&#39;, &#39;          Max Grad.      Max Dist. &#39;), (&#39;energy&#39;, &#39;:   -3142.5663410 hartrees&#39;), (&#39;energy&#39;, &#39;:   -3142.5663410 hartrees&#39;), (&#39;Energy&#39;, &#39; Due to Solvation&#39;), (&#39;Energy&#39;, &#39; SM5.4/A          1.983&#39;)]
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[(&#39;Energy&#39;, &#39;Max Grad.      Max Dist. &#39;), (&#39;energy&#39;, &#39;:   -3142.5663410 hartrees&#39;), (&#39;energy&#39;, &#39;:   -3142.5663410 hartrees&#39;), (&#39;Energy&#39;, &#39;Due to Solvation&#39;), (&#39;Energy&#39;, &#39;SM5.4/A          1.983&#39;)]
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">matches</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">matches</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(&#39;Energy&#39;, &#39;          Max Grad.      Max Dist. &#39;)
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(&#39;energy&#39;, &#39;:   -3142.5663410 hartrees&#39;)
 </pre></div>
 </div>
 </div>
 </div>
 <p>You can imagine how this might be more useful if we wanted to pull out all of the keyword values pairs, ie <code class="docutils literal notranslate"><span class="pre">word</span> <span class="pre">:</span> <span class="pre">value</span></code>.</p>
-<p>In this case, the pattern we would look for is first that a “word” occurs. We could define a “word” as a collection of letters. One way we might express that is <code class="docutils literal notranslate"><span class="pre">[A-Z]</span></code>. This would match all letters <code class="docutils literal notranslate"><span class="pre">A-Z</span></code>, to make this be any case, we would use <code class="docutils literal notranslate"><span class="pre">[A-Za-z]</span></code>.</p>
-<p>Here is an explanation of that pattern:</p>
-<table class="colwidths-auto table">
-<thead>
-<tr class="row-odd"><th class="head"><p>Regex</p></th>
-<th class="head"><p>Explanation</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p>[A-Za-z]</p></td>
-<td><p>matches any character A-Z or any character a-z</p></td>
-</tr>
-<tr class="row-odd"><td><p>+</p></td>
-<td><p>the preceeding pattern occurs one or more times</p></td>
-</tr>
-<tr class="row-even"><td><p>.</p></td>
-<td><p>any character except the newline character</p></td>
-</tr>
-<tr class="row-odd"><td><p>+</p></td>
-<td><p>the preceeding pattern occurs one or more times</p></td>
-</tr>
-<tr class="row-even"><td><p>:</p></td>
-<td><p>matches a literal colon</p></td>
-</tr>
-<tr class="row-odd"><td><p>.</p></td>
-<td><p>matches any character except a newline</p></td>
-</tr>
-<tr class="row-even"><td><p>+</p></td>
-<td><p>the preceeding pattern occurs one or more times</p></td>
-</tr>
-</tbody>
-</table>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s2">&quot;[A-Za-z]+.+:.+&quot;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s2">&quot;.+:.+&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">matches</span> <span class="o">=</span> <span class="n">pattern</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">matches</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>313
+</pre></div>
+</div>
+</div>
+</div>
+<p>When writing a complicated regular expression, it is useful to be able to explain the pattern within the code. You can add a special argument <code class="docutils literal notranslate"><span class="pre">re.VERBOSE</span></code> to allow the use of <code class="docutils literal notranslate"><span class="pre">#</span></code> comments. To make this multiline, use three quotes to start and end your string.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">                        .+             # One or more of any character</span>
+<span class="s2">                        :              # A literal colon</span>
+<span class="s2">                        .+             # One or more of any character excluding newline.</span>
+<span class="s2">                        &quot;&quot;&quot;</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">VERBOSE</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -662,62 +689,36 @@ SCF
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">50</span><span class="p">):</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">matches</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">matches</span><span class="p">[:</span><span class="mi">25</span><span class="p">]</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SPARTAN &#39;14 CONFORMATION SEARCH:   (Win/64b)                      Release  1.1.4
-Reason for exit: Successful completion 
-Conformer Program CPU Time :          .30
-Conformer Program Wall Time:          .07
-SPARTAN &#39;14 Quantum Mechanics Driver:  (Win/64b)         Release  1.1.4
-Job type: Geometry optimization.
-Method: RB3LYP
-Basis set: 6-31G(D)
-Number of shells: 56
-Number of basis functions: 193
-Multiplicity: 1
-Parallel Job: 4 threads
-Job type: Frequency calculation.
-Method: RB3LYP
-Basis set: 6-31G(D)
-Job type: Single point.
-Method: RB3LYP
-Basis set: 6-31G(D)
-SCF total energy:   -3142.5663410 hartrees
-Job type: Molecular property calculation.
-Method: RB3LYP
-Basis set: 6-31G(D)
-SCF total energy:   -3142.5663410 hartrees
-Reason for exit: Successful completion 
-Quantum Calculation CPU Time :     50:25.28
-Quantum Calculation Wall Time:     58:12.93
-SPARTAN &#39;14 Semi-Empirical Program:  (Win/64b)           Release  1.1.4        
-Memory Used:         882.13 Kb
-Reason for exit: Successful completion 
-Semi-Empirical Program CPU Time :          .33
-Semi-Empirical Program Wall Time:          .03
-Surface computation Wall Time: 000:00:04.5
-Surface computation CPU Time: 000:00:04.5
-QSAR CPU Time:  000:00:00.7
-QSAR Wall Time: 000:00:05.2
-SPARTAN &#39;14 Properties Program:  (Win/64b)                     Release  1.1.4  
-Model: B3LYP/6- 
-Number of shells:   56
-Number of basis functions:   193
-Molecular charge:   0
-Spin multiplicity:  1
-Electrons:         108
-Molecular volume:       149.53 (Ang**3)
-Surface area:           171.08 (Ang**2)
-Ovality:                  1.256
-Atomic weight:          225.012 g
-E(HOMO):                 -0.2616
-E(LUMO):                 -0.0413
-Electronegativity:        0.15
-Hardness:                 0.11
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&quot;SPARTAN &#39;14 CONFORMATION SEARCH:   (Win/64b)                      Release  1.1.4&quot;,
+ &#39;  Reason for exit: Successful completion &#39;,
+ &#39;  Conformer Program CPU Time :          .30&#39;,
+ &#39;  Conformer Program Wall Time:          .07&#39;,
+ &quot;SPARTAN &#39;14 Quantum Mechanics Driver:  (Win/64b)         Release  1.1.4&quot;,
+ &#39;Job type: Geometry optimization.&#39;,
+ &#39;Method: RB3LYP&#39;,
+ &#39;Basis set: 6-31G(D)&#39;,
+ &#39;Number of shells: 56&#39;,
+ &#39;Number of basis functions: 193&#39;,
+ &#39;Multiplicity: 1&#39;,
+ &#39;Parallel Job: 4 threads&#39;,
+ &#39;Job type: Frequency calculation.&#39;,
+ &#39;Method: RB3LYP&#39;,
+ &#39;Basis set: 6-31G(D)&#39;,
+ &#39;Job type: Single point.&#39;,
+ &#39;Method: RB3LYP&#39;,
+ &#39;Basis set: 6-31G(D)&#39;,
+ &#39; SCF total energy:   -3142.5663410 hartrees&#39;,
+ &#39;Job type: Molecular property calculation.&#39;,
+ &#39;Method: RB3LYP&#39;,
+ &#39;Basis set: 6-31G(D)&#39;,
+ &#39; SCF total energy:   -3142.5663410 hartrees&#39;,
+ &#39;  Reason for exit: Successful completion &#39;,
+ &#39;  Quantum Calculation CPU Time :     50:25.28&#39;]
 </pre></div>
 </div>
 </div>
@@ -725,19 +726,359 @@ Hardness:                 0.11
 <div class="exercise-this-is-a-title exercise">
 <p class="exercise-title">Check your understanding</p>
     <p> Add parenthesis to the appropriate place in the regular expression so that each match is grouped into (`key`, `value`). </p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s2">&quot;[A-Za-z]+.+:.+&quot;</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s2">&quot;.+:.+&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="dropdown admonition">
 <p class="admonition-title">Solution</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s2">&quot;([A-Za-z]+.+):(.+)&quot;</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s2">&quot;(.+):(.+)&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
-</div><p>If we wanted to limit these responses to digits, we would have to do some additional work. We could use either <code class="docutils literal notranslate"><span class="pre">[0-9]</span></code> or <code class="docutils literal notranslate"><span class="pre">\d</span></code> to indicate that we were looking for digits. However, the presence of a decimal complicates things a bit. Doing <code class="docutils literal notranslate"><span class="pre">\d+</span></code> would only result in integers, while doing something like <code class="docutils literal notranslate"><span class="pre">\d+\.\d+</span></code> (notice the slash in front of the period to escape the decimal) wouldn’t result in any integer matches.</p>
+</div><p>This pattern groups keys and values, but also adds zero or more whitespace with the colon to discard the whitespace before the value.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s2">&quot;([A-Za-z]+.+):\s*(\d+)&quot;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">                        (.+)                    # One or more letters a-z (any case)</span>
+<span class="s2">                        :\s*                    # A literal colon followed by 0 or more whitespace</span>
+<span class="s2">                        (.+)             # One or more of any character excluding newline.</span>
+<span class="s2">                     &quot;&quot;&quot;</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">VERBOSE</span><span class="p">)</span>
+
+<span class="n">matches</span> <span class="o">=</span> <span class="n">pattern</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">matches</span><span class="p">))</span>
+
+<span class="k">for</span> <span class="n">match</span> <span class="ow">in</span> <span class="n">matches</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">match</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>317
+(&quot;SPARTAN &#39;14 CONFORMATION SEARCH&quot;, &#39;(Win/64b)                      Release  1.1.4&#39;)
+(&#39;  Reason for exit&#39;, &#39;Successful completion &#39;)
+(&#39;  Conformer Program CPU Time &#39;, &#39;.30&#39;)
+(&#39;  Conformer Program Wall Time&#39;, &#39;.07&#39;)
+(&quot;SPARTAN &#39;14 Quantum Mechanics Driver&quot;, &#39;(Win/64b)         Release  1.1.4&#39;)
+(&#39;Job type&#39;, &#39;Geometry optimization.&#39;)
+(&#39;Method&#39;, &#39;RB3LYP&#39;)
+(&#39;Basis set&#39;, &#39;6-31G(D)&#39;)
+(&#39;Number of shells&#39;, &#39;56&#39;)
+(&#39;Number of basis functions&#39;, &#39;193&#39;)
+(&#39;Multiplicity&#39;, &#39;1&#39;)
+(&#39;Parallel Job&#39;, &#39;4 threads&#39;)
+(&#39;SCF model&#39;, &#39;A restricted hybrid HF-DFT SCF calculation will be&#39;)
+(&#39;Optimization&#39;, &#39;Step      Energy          Max Grad.      Max Dist. &#39;)
+(&#39;Job type&#39;, &#39;Frequency calculation.&#39;)
+(&#39;Method&#39;, &#39;RB3LYP&#39;)
+(&#39;Basis set&#39;, &#39;6-31G(D)&#39;)
+(&#39;Job type&#39;, &#39;Single point.&#39;)
+(&#39;Method&#39;, &#39;RB3LYP&#39;)
+(&#39;Basis set&#39;, &#39;6-31G(D)&#39;)
+(&#39; SCF total energy&#39;, &#39;-3142.5663410 hartrees&#39;)
+(&#39;Job type&#39;, &#39;Molecular property calculation.&#39;)
+(&#39;Method&#39;, &#39;RB3LYP&#39;)
+(&#39;Basis set&#39;, &#39;6-31G(D)&#39;)
+(&#39; SCF total energy&#39;, &#39;-3142.5663410 hartrees&#39;)
+(&#39;  Reason for exit&#39;, &#39;Successful completion &#39;)
+(&#39;  Quantum Calculation CPU Time :     50&#39;, &#39;25.28&#39;)
+(&#39;  Quantum Calculation Wall Time:     58&#39;, &#39;12.93&#39;)
+(&quot;SPARTAN &#39;14 Semi-Empirical Program&quot;, &#39;(Win/64b)           Release  1.1.4        &#39;)
+(&#39;  Memory Used&#39;, &#39;882.13 Kb&#39;)
+(&#39;  Reason for exit&#39;, &#39;Successful completion &#39;)
+(&#39;  Semi-Empirical Program CPU Time &#39;, &#39;.33&#39;)
+(&#39;  Semi-Empirical Program Wall Time&#39;, &#39;.03&#39;)
+(&#39;Surface computation Wall Time: 000:00&#39;, &#39;04.5&#39;)
+(&#39;Surface computation CPU Time: 000:00&#39;, &#39;04.5&#39;)
+(&#39;QSAR CPU Time:  000:00&#39;, &#39;00.7&#39;)
+(&#39;QSAR Wall Time: 000:00&#39;, &#39;05.2&#39;)
+(&quot;SPARTAN &#39;14 Properties Program&quot;, &#39;(Win/64b)                     Release  1.1.4  &#39;)
+(&#39;  Model&#39;, &#39;B3LYP/6- &#39;)
+(&#39;  Number of shells&#39;, &#39;56&#39;)
+(&#39;  Number of basis functions&#39;, &#39;193&#39;)
+(&#39;  Molecular charge&#39;, &#39;0&#39;)
+(&#39;  Spin multiplicity&#39;, &#39;1&#39;)
+(&#39;  Electrons&#39;, &#39;108&#39;)
+(&#39;Molecular descriptors&#39;, &#39;Molecular volume:       149.53 (Ang**3)&#39;)
+(&#39;Surface area&#39;, &#39;171.08 (Ang**2)&#39;)
+(&#39;Ovality&#39;, &#39;1.256&#39;)
+(&#39;Atomic weight&#39;, &#39;225.012 g&#39;)
+(&#39;E(HOMO)&#39;, &#39;-0.2616&#39;)
+(&#39;E(LUMO)&#39;, &#39;-0.0413&#39;)
+(&#39;Electronegativity&#39;, &#39;0.15&#39;)
+(&#39;Hardness&#39;, &#39;0.11&#39;)
+(&#39;Est. polarizability&#39;, &#39;52.086&#39;)
+(&#39;LogP (Ghose-Crippen)&#39;, &#39;3.78&#39;)
+(&#39;  MO&#39;, &#39;1          2          3          4          5    &#39;)
+(&#39;  Eigenvalues&#39;, &#39;-482.87418  -62.53242  -56.35360  -56.34988  -56.34976&#39;)
+(&#39;  MO&#39;, &#39;6          7          8          9         10    &#39;)
+(&#39;  Eigenvalues&#39;, &#39;-24.73012  -24.73012  -24.72378  -10.43890  -10.26735&#39;)
+(&#39;  MO&#39;, &#39;11         12         13         14         15    &#39;)
+(&#39;  Eigenvalues&#39;, &#39;-10.22875  -10.22411  -10.22408  -10.22282  -10.22282&#39;)
+(&#39;  MO&#39;, &#39;16         17         18         19         20    &#39;)
+(&#39;  Eigenvalues&#39;, &#39;-8.71946   -6.54976   -6.53686   -6.53653   -2.64331&#39;)
+(&#39;  MO&#39;, &#39;21         22         23         24         25    &#39;)
+(&#39;  Eigenvalues&#39;, &#39;-2.63963   -2.63941   -2.62917   -2.62915   -1.30569&#39;)
+(&#39;  MO&#39;, &#39;26         27         28         29         30    &#39;)
+(&#39;  Eigenvalues&#39;, &#39;-1.22058   -1.21529   -0.89659   -0.83068   -0.77898&#39;)
+(&#39;  MO&#39;, &#39;31         32         33         34         35    &#39;)
+(&#39;  Eigenvalues&#39;, &#39;-0.76810   -0.69484   -0.64394   -0.62473   -0.58382&#39;)
+(&#39;  MO&#39;, &#39;36         37         38         39         40    &#39;)
+(&#39;  Eigenvalues&#39;, &#39;-0.58272   -0.57794   -0.49620   -0.48747   -0.47840&#39;)
+(&#39;  MO&#39;, &#39;41         42         43         44         45    &#39;)
+(&#39;  Eigenvalues&#39;, &#39;-0.45875   -0.45851   -0.45487   -0.42628   -0.41857&#39;)
+(&#39;  MO&#39;, &#39;46         47         48         49         50    &#39;)
+(&#39;  Eigenvalues&#39;, &#39;-0.40373   -0.40185   -0.40111   -0.38011   -0.36716&#39;)
+(&#39;  MO&#39;, &#39;51         52         53         54         55    &#39;)
+(&#39;  Eigenvalues&#39;, &#39;-0.32880   -0.30144   -0.28158   -0.26163   -0.04133&#39;)
+(&#39;  MO&#39;, &#39;56         57         58         59         60    &#39;)
+(&#39;  Eigenvalues&#39;, &#39;-0.03083   -0.01484    0.10093    0.10914    0.12276&#39;)
+(&#39;  MO&#39;, &#39;61         62         63         64         65    &#39;)
+(&#39;  Eigenvalues&#39;, &#39;0.13613    0.14724    0.18582    0.18715    0.21082&#39;)
+(&#39;  MO&#39;, &#39;66         67         68         69         70    &#39;)
+(&#39;  Eigenvalues&#39;, &#39;0.21357    0.24266    0.25096    0.26708    0.30527&#39;)
+(&#39;  MO&#39;, &#39;71         72         73         74         75    &#39;)
+(&#39;  Eigenvalues&#39;, &#39;0.31687    0.32036    0.34311    0.35024    0.42380&#39;)
+(&#39;  MO&#39;, &#39;76         77         78         79         80    &#39;)
+(&#39;  Eigenvalues&#39;, &#39;0.47277    0.48094    0.50586    0.51801    0.51818&#39;)
+(&#39;  MO&#39;, &#39;81         82         83         84         85    &#39;)
+(&#39;  Eigenvalues&#39;, &#39;0.55010    0.55814    0.56030    0.56391    0.57779&#39;)
+(&#39;  MO&#39;, &#39;86         87         88         89         90    &#39;)
+(&#39;  Eigenvalues&#39;, &#39;0.58078    0.58427    0.58698    0.60498    0.65053&#39;)
+(&#39;  MO&#39;, &#39;91         92         93         94         95    &#39;)
+(&#39;  Eigenvalues&#39;, &#39;0.67861    0.71020    0.72332    0.74136    0.79291&#39;)
+(&#39;  MO&#39;, &#39;96         97         98         99        100    &#39;)
+(&#39;  Eigenvalues&#39;, &#39;0.80654    0.81106    0.82592    0.84248    0.86627&#39;)
+(&#39;  MO&#39;, &#39;101        102        103        104        105    &#39;)
+(&#39;  Eigenvalues&#39;, &#39;0.87569    0.90676    0.96192    0.96647    0.99502&#39;)
+(&#39;  MO&#39;, &#39;106        107        108        109        110    &#39;)
+(&#39;  Eigenvalues&#39;, &#39;1.05052    1.07442    1.08586    1.12076    1.13496&#39;)
+(&#39;  MO&#39;, &#39;111        112        113        114        115    &#39;)
+(&#39;  Eigenvalues&#39;, &#39;1.13662    1.16888    1.21469    1.21506    1.24578&#39;)
+(&#39;  MO&#39;, &#39;116        117        118        119        120    &#39;)
+(&#39;  Eigenvalues&#39;, &#39;1.32568    1.32818    1.33873    1.36247    1.37563&#39;)
+(&#39;  MO&#39;, &#39;121        122        123        124        125    &#39;)
+(&#39;  Eigenvalues&#39;, &#39;1.37838    1.40237    1.42457    1.43372    1.44270&#39;)
+(&#39;  MO&#39;, &#39;126        127        128        129        130    &#39;)
+(&#39;  Eigenvalues&#39;, &#39;1.47614    1.51746    1.53819    1.64469    1.65565&#39;)
+(&#39;  MO&#39;, &#39;131        132        133        134        135    &#39;)
+(&#39;  Eigenvalues&#39;, &#39;1.66812    1.68761    1.72401    1.76178    1.77351&#39;)
+(&#39;  MO&#39;, &#39;136        137        138        139        140    &#39;)
+(&#39;  Eigenvalues&#39;, &#39;1.83747    1.85068    1.89070    1.90841    1.91736&#39;)
+(&#39;  MO&#39;, &#39;141        142        143        144        145    &#39;)
+(&#39;  Eigenvalues&#39;, &#39;1.94202    1.96284    1.98688    1.98944    2.00606&#39;)
+(&#39;  MO&#39;, &#39;146        147        148        149        150    &#39;)
+(&#39;  Eigenvalues&#39;, &#39;2.03778    2.05113    2.06304    2.08675    2.09427&#39;)
+(&#39;  MO&#39;, &#39;151        152        153        154        155    &#39;)
+(&#39;  Eigenvalues&#39;, &#39;2.11188    2.11863    2.15089    2.16447    2.22791&#39;)
+(&#39;  MO&#39;, &#39;156        157        158        159        160    &#39;)
+(&#39;  Eigenvalues&#39;, &#39;2.23323    2.28021    2.30949    2.37697    2.47973&#39;)
+(&#39;  MO&#39;, &#39;161        162        163        164        165    &#39;)
+(&#39;  Eigenvalues&#39;, &#39;2.49526    2.59063    2.60216    2.62025    2.69276&#39;)
+(&#39;  MO&#39;, &#39;166        167        168        169        170    &#39;)
+(&#39;  Eigenvalues&#39;, &#39;2.71251    2.73635    2.73680    2.76192    2.86154&#39;)
+(&#39;  MO&#39;, &#39;171        172        173        174        175    &#39;)
+(&#39;  Eigenvalues&#39;, &#39;2.90706    3.02095    3.03225    3.07843    3.09087&#39;)
+(&#39;  MO&#39;, &#39;176        177        178        179        180    &#39;)
+(&#39;  Eigenvalues&#39;, &#39;3.36458    4.05458    4.07595    4.08552    4.22065&#39;)
+(&#39;  MO&#39;, &#39;181        182        183        184        185    &#39;)
+(&#39;  Eigenvalues&#39;, &#39;4.29576    4.43412    4.43747    4.54613    4.70124&#39;)
+(&#39;  MO&#39;, &#39;186        187        188        189        190    &#39;)
+(&#39;  Eigenvalues&#39;, &#39;4.70226    4.73711    4.75946    4.86294    4.98169&#39;)
+(&#39;  MO&#39;, &#39;191        192        193    &#39;)
+(&#39;  Eigenvalues&#39;, &#39;5.46282    6.28356   90.36309&#39;)
+(&#39;  Dipole moment&#39;, &#39;X =  -0.747860  Y =  -0.097531  Z =   0.000000&#39;)
+(&#39;  Total Dipole&#39;, &#39;0.754193 Debye&#39;)
+(&#39;  Fitted Dipole &#39;, &#39;x  =   -1.3099,  y  =   -0.0469,  z  =    0.0000  =    1.3107 debye&#39;)
+(&#39;  Total MIN occupancy&#39;, &#39;107.783940&#39;)
+(&#39;  Total RYD occupancy&#39;, &#39;0.216060&#39;)
+(&#39;  Total occupancy&#39;, &#39;108.000000&#39;)
+(&#39;  Fitted Dipole &#39;, &#39;x  =   -3.3259,  y  =   -0.1022,  z  =    0.0000  =    3.3274 debye&#39;)
+(&#39;   OCC. THRESH. = 1.90&#39;, &#39;ANTIBOND/RYDBERG OCCUPANCY =    3.6726&#39;)
+(&#39;   OCC. THRESH. = 1.80&#39;, &#39;ANTIBOND/RYDBERG OCCUPANCY =    3.6726&#39;)
+(&#39;   OCC. THRESH. = 1.70&#39;, &#39;ANTIBOND/RYDBERG OCCUPANCY =    3.6726&#39;)
+(&#39;   OCC. THRESH. = 1.60&#39;, &#39;ANTIBOND/RYDBERG OCCUPANCY =    2.4536&#39;)
+(&#39;   OCC. THRESH. = 1.50&#39;, &#39;ANTIBOND/RYDBERG OCCUPANCY =    2.4536&#39;)
+(&#39;  Total core, lone pair and bond occupancy&#39;, &#39;105.5464 ( 97.73%)&#39;)
+(&#39;  Total Rydberg and antibond occupancy&#39;, &#39;2.4536&#39;)
+(&#39;     *C1      C2       &#39;, &#39;1.825      1.3945 [double]&#39;)
+(&#39;     *C1      *C2      &#39;, &#39;0.991      1.3945 [single]&#39;)
+(&#39;     *C1      Br1      &#39;, &#39;0.993      1.9165 [single]&#39;)
+(&#39;     *C4      *C3      &#39;, &#39;1.817      1.3969 [double]&#39;)
+(&#39;     *C4      C3       &#39;, &#39;0.987      1.3969 [single]&#39;)
+(&#39;     *C4      C7       &#39;, &#39;0.993      1.5050 [single]&#39;)
+(&#39;     C2       C3       &#39;, &#39;0.985      1.3938 [single]&#39;)
+(&#39;     C2       H2       &#39;, &#39;0.990      1.0842 [sing-H]&#39;)
+(&#39;     *C2      *C3      &#39;, &#39;0.985      1.3938 [single]&#39;)
+(&#39;     *C2      *H2      &#39;, &#39;0.990      1.0842 [sing-H]&#39;)
+(&#39;     *C3      *H3      &#39;, &#39;0.990      1.0849 [sing-H]&#39;)
+(&#39;     C3       H3       &#39;, &#39;0.990      1.0849 [sing-H]&#39;)
+(&#39;     C7       F1       &#39;, &#39;0.997      1.3512 [single]&#39;)
+(&#39;     C7       F2       &#39;, &#39;0.996      1.3534 [single]&#39;)
+(&#39;     C7       F3       &#39;, &#39;0.997      1.3512 [single]&#39;)
+(&#39;      ... Q0 &#39;, &#39;-0.163538&#39;)
+(&#39;      ... Qx &#39;, &#39;-1.851396&#39;)
+(&#39;      ... Qy &#39;, &#39;0.016292&#39;)
+(&#39;      ... Qz &#39;, &#39;-0.016028&#39;)
+(&#39;      ... Qxx&#39;, &#39;1.583762&#39;)
+(&#39;      ... Qyy&#39;, &#39;-1.997099&#39;)
+(&#39;      ... Qzz&#39;, &#39;0.413337&#39;)
+(&#39;      ... Qxy&#39;, &#39;-0.023437&#39;)
+(&#39;      ... Qxz&#39;, &#39;-0.001069&#39;)
+(&#39;      ... Qyz&#39;, &#39;0.060847&#39;)
+(&#39;      ... Q0 &#39;, &#39;-0.307790&#39;)
+(&#39;      ... Qx &#39;, &#39;1.468323&#39;)
+(&#39;      ... Qy &#39;, &#39;0.065515&#39;)
+(&#39;      ... Qz &#39;, &#39;-0.007300&#39;)
+(&#39;      ... Qxx&#39;, &#39;0.344085&#39;)
+(&#39;      ... Qyy&#39;, &#39;-0.475027&#39;)
+(&#39;      ... Qzz&#39;, &#39;0.130942&#39;)
+(&#39;      ... Qxy&#39;, &#39;-0.023749&#39;)
+(&#39;      ... Qxz&#39;, &#39;-0.002051&#39;)
+(&#39;      ... Qyz&#39;, &#39;-0.082442&#39;)
+(&#39;      ... Q0 &#39;, &#39;0.178586&#39;)
+(&#39;      ... Qx &#39;, &#39;1.411544&#39;)
+(&#39;      ... Qy &#39;, &#39;0.002053&#39;)
+(&#39;      ... Qz &#39;, &#39;1.267567&#39;)
+(&#39;      ... Qxx&#39;, &#39;0.516127&#39;)
+(&#39;      ... Qyy&#39;, &#39;-1.499046&#39;)
+(&#39;      ... Qzz&#39;, &#39;0.982919&#39;)
+(&#39;      ... Qxy&#39;, &#39;-0.062188&#39;)
+(&#39;      ... Qxz&#39;, &#39;0.076552&#39;)
+(&#39;      ... Qyz&#39;, &#39;-0.047541&#39;)
+(&#39;      ... Q0 &#39;, &#39;0.178551&#39;)
+(&#39;      ... Qx &#39;, &#39;1.408304&#39;)
+(&#39;      ... Qy &#39;, &#39;0.006266&#39;)
+(&#39;      ... Qz &#39;, &#39;-1.286343&#39;)
+(&#39;      ... Qxx&#39;, &#39;0.519581&#39;)
+(&#39;      ... Qyy&#39;, &#39;-1.489739&#39;)
+(&#39;      ... Qzz&#39;, &#39;0.970158&#39;)
+(&#39;      ... Qxy&#39;, &#39;-0.008215&#39;)
+(&#39;      ... Qxz&#39;, &#39;-0.081349&#39;)
+(&#39;      ... Qyz&#39;, &#39;0.000064&#39;)
+(&#39;      ... Q0 &#39;, &#39;-0.226184&#39;)
+(&#39;      ... Qx &#39;, &#39;0.264106&#39;)
+(&#39;      ... Qy &#39;, &#39;-0.047609&#39;)
+(&#39;      ... Qz &#39;, &#39;-0.801573&#39;)
+(&#39;      ... Qxx&#39;, &#39;0.279018&#39;)
+(&#39;      ... Qyy&#39;, &#39;-0.824322&#39;)
+(&#39;      ... Qzz&#39;, &#39;0.545304&#39;)
+(&#39;      ... Qxy&#39;, &#39;0.063086&#39;)
+(&#39;      ... Qxz&#39;, &#39;0.040624&#39;)
+(&#39;      ... Qyz&#39;, &#39;0.033288&#39;)
+(&#39;      ... Q0 &#39;, &#39;-0.228808&#39;)
+(&#39;      ... Qx &#39;, &#39;0.273758&#39;)
+(&#39;      ... Qy &#39;, &#39;-0.052234&#39;)
+(&#39;      ... Qz &#39;, &#39;0.818753&#39;)
+(&#39;      ... Qxx&#39;, &#39;0.263270&#39;)
+(&#39;      ... Qyy&#39;, &#39;-0.813509&#39;)
+(&#39;      ... Qzz&#39;, &#39;0.550239&#39;)
+(&#39;      ... Qxy&#39;, &#39;-0.036747&#39;)
+(&#39;      ... Qxz&#39;, &#39;-0.033769&#39;)
+(&#39;      ... Qyz&#39;, &#39;0.041040&#39;)
+(&#39;      ... Q0 &#39;, &#39;1.313248&#39;)
+(&#39;      ... Qx &#39;, &#39;0.646083&#39;)
+(&#39;      ... Qy &#39;, &#39;0.141190&#39;)
+(&#39;      ... Qz &#39;, &#39;-0.049458&#39;)
+(&#39;      ... Qxx&#39;, &#39;0.158304&#39;)
+(&#39;      ... Qyy&#39;, &#39;-0.073952&#39;)
+(&#39;      ... Qzz&#39;, &#39;-0.084352&#39;)
+(&#39;      ... Qxy&#39;, &#39;0.000739&#39;)
+(&#39;      ... Qxz&#39;, &#39;-0.004590&#39;)
+(&#39;      ... Qyz&#39;, &#39;-0.027778&#39;)
+(&#39;      ... Q0 &#39;, &#39;-0.463736&#39;)
+(&#39;      ... Qx &#39;, &#39;0.424394&#39;)
+(&#39;      ... Qy &#39;, &#39;-0.319386&#39;)
+(&#39;      ... Qz &#39;, &#39;-0.475098&#39;)
+(&#39;      ... Qxx&#39;, &#39;-0.247750&#39;)
+(&#39;      ... Qyy&#39;, &#39;0.133772&#39;)
+(&#39;      ... Qzz&#39;, &#39;0.113979&#39;)
+(&#39;      ... Qxy&#39;, &#39;0.095114&#39;)
+(&#39;      ... Qxz&#39;, &#39;0.047052&#39;)
+(&#39;      ... Qyz&#39;, &#39;-0.009976&#39;)
+(&#39;      ... Q0 &#39;, &#39;-0.481187&#39;)
+(&#39;      ... Qx &#39;, &#39;0.318474&#39;)
+(&#39;      ... Qy &#39;, &#39;0.685491&#39;)
+(&#39;      ... Qz &#39;, &#39;0.008669&#39;)
+(&#39;      ... Qxx&#39;, &#39;-0.086026&#39;)
+(&#39;      ... Qyy&#39;, &#39;-0.038164&#39;)
+(&#39;      ... Qzz&#39;, &#39;0.124190&#39;)
+(&#39;      ... Qxy&#39;, &#39;-0.022439&#39;)
+(&#39;      ... Qxz&#39;, &#39;-0.004279&#39;)
+(&#39;      ... Qyz&#39;, &#39;-0.009291&#39;)
+(&#39;      ... Q0 &#39;, &#39;-0.447727&#39;)
+(&#39;      ... Qx &#39;, &#39;0.388831&#39;)
+(&#39;      ... Qy &#39;, &#39;-0.282775&#39;)
+(&#39;      ... Qz &#39;, &#39;0.436155&#39;)
+(&#39;      ... Qxx&#39;, &#39;-0.240775&#39;)
+(&#39;      ... Qyy&#39;, &#39;0.121889&#39;)
+(&#39;      ... Qzz&#39;, &#39;0.118886&#39;)
+(&#39;      ... Qxy&#39;, &#39;0.064528&#39;)
+(&#39;      ... Qxz&#39;, &#39;-0.006250&#39;)
+(&#39;      ... Qyz&#39;, &#39;-0.041871&#39;)
+(&#39;      ... Q0 &#39;, &#39;-0.110462&#39;)
+(&#39;      ... Qx &#39;, &#39;0.288697&#39;)
+(&#39;      ... Qy &#39;, &#39;-0.006979&#39;)
+(&#39;      ... Qz &#39;, &#39;0.003238&#39;)
+(&#39;      ... Qxx&#39;, &#39;4.913063&#39;)
+(&#39;      ... Qyy&#39;, &#39;-2.410696&#39;)
+(&#39;      ... Qzz&#39;, &#39;-2.502367&#39;)
+(&#39;      ... Qxy&#39;, &#39;-0.081163&#39;)
+(&#39;      ... Qxz&#39;, &#39;0.009367&#39;)
+(&#39;      ... Qyz&#39;, &#39;-0.011689&#39;)
+(&#39;  RMS fit&#39;, &#39;2.518255&#39;)
+(&#39; %RMS fit&#39;, &#39;503.441352&#39;)
+(&#39;  Fitted Dipole &#39;, &#39;x  =   -1.3967,  y  =   -0.0902,  z  =    0.0003  =    1.3996 debye&#39;)
+(&#39;  RMS fit&#39;, &#39;4.372352&#39;)
+(&#39; %RMS fit&#39;, &#39;420.354455&#39;)
+(&#39;  Fitted Dipole &#39;, &#39;x  =   -1.2761,  y  =   -0.1164,  z  =    0.0000  =    1.2814 debye&#39;)
+(&#39; Atomic Charges&#39;, &#39;Electrostatic Mulliken  Natural &#39;)
+(&#39;   1 *C1      &#39;, &#39;-0.093     +0.018   -0.105 &#39;)
+(&#39;   2 *C4      &#39;, &#39;+0.130     -0.008   -0.173 &#39;)
+(&#39;   3 C2       &#39;, &#39;+0.015     -0.149   -0.240 &#39;)
+(&#39;   4 *C2      &#39;, &#39;+0.015     -0.149   -0.240 &#39;)
+(&#39;   5 *C3      &#39;, &#39;-0.223     -0.153   -0.195 &#39;)
+(&#39;   6 C3       &#39;, &#39;-0.223     -0.153   -0.195 &#39;)
+(&#39;   7 H2       &#39;, &#39;+0.100     +0.168   +0.260 &#39;)
+(&#39;   8 *H2      &#39;, &#39;+0.100     +0.168   +0.260 &#39;)
+(&#39;   9 *H3      &#39;, &#39;+0.156     +0.165   +0.258 &#39;)
+(&#39;  10 H3       &#39;, &#39;+0.156     +0.165   +0.258 &#39;)
+(&#39;  11 C7       &#39;, &#39;+0.338     +0.786   +1.132 &#39;)
+(&#39;  12 F1       &#39;, &#39;-0.144     -0.269   -0.364 &#39;)
+(&#39;  13 F2       &#39;, &#39;-0.149     -0.259   -0.362 &#39;)
+(&#39;  14 F3       &#39;, &#39;-0.144     -0.269   -0.364 &#39;)
+(&#39;  15 Br1      &#39;, &#39;-0.036     -0.062   +0.070 &#39;)
+(&#39;   1 *C1      *C4      &#39;, &#39;0.085    ---  &#39;)
+(&#39;   2 *C1      C2       &#39;, &#39;1.412    1.825&#39;)
+(&#39;   3 *C1      *C2      &#39;, &#39;1.412    0.991&#39;)
+(&#39;   4 *C1      Br1      &#39;, &#39;0.978    0.993&#39;)
+(&#39;   5 *C4      *C3      &#39;, &#39;1.414    1.817&#39;)
+(&#39;   6 *C4      C3       &#39;, &#39;1.414    0.987&#39;)
+(&#39;   7 *C4      C7       &#39;, &#39;0.973    0.993&#39;)
+(&#39;   8 C2       *C3      &#39;, &#39;0.092    ---  &#39;)
+(&#39;   9 C2       C3       &#39;, &#39;1.425    0.985&#39;)
+(&#39;  10 C2       H2       &#39;, &#39;0.920    0.990&#39;)
+(&#39;  11 C2       Br1      &#39;, &#39;0.027    ---  &#39;)
+(&#39;  12 *C2      *C3      &#39;, &#39;1.425    0.985&#39;)
+(&#39;  13 *C2      C3       &#39;, &#39;0.092    ---  &#39;)
+(&#39;  14 *C2      *H2      &#39;, &#39;0.920    0.990&#39;)
+(&#39;  15 *C2      Br1      &#39;, &#39;0.027    ---  &#39;)
+(&#39;  16 *C3      *H3      &#39;, &#39;0.916    0.990&#39;)
+(&#39;  17 C3       H3       &#39;, &#39;0.916    0.990&#39;)
+(&#39;  18 C7       F1       &#39;, &#39;1.003    0.997&#39;)
+(&#39;  19 C7       F2       &#39;, &#39;1.035    0.996&#39;)
+(&#39;  20 C7       F3       &#39;, &#39;1.003    0.997&#39;)
+(&#39; Vibrational(v) Corrections&#39;, &#39;Temp. Correction    Hv     274.6411  &#39;)
+(&#39;  Reason for exit&#39;, &#39;Successful completion &#39;)
+(&#39;  Properties CPU Time &#39;, &#39;.78&#39;)
+(&#39;  Properties Wall Time&#39;, &#39;.50&#39;)
+</pre></div>
+</div>
+</div>
+</div>
+<p>If we wanted to limit these results to the values which have digits, we would have to do some additional work. We could use either <code class="docutils literal notranslate"><span class="pre">[0-9]</span></code> or <code class="docutils literal notranslate"><span class="pre">\d</span></code> to indicate that we were looking for digits. However, the presence of a decimal complicates things a bit. Doing <code class="docutils literal notranslate"><span class="pre">\d+</span></code> would only result in integers, while doing something like <code class="docutils literal notranslate"><span class="pre">\d+\.\d+</span></code> (notice the slash in front of the period to escape the decimal) wouldn’t result in any integer matches.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s2">&quot;(.+):\s*(\d+)&quot;</span><span class="p">)</span>
 <span class="n">matches</span> <span class="o">=</span> <span class="n">pattern</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">matches</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
@@ -753,17 +1094,17 @@ Hardness:                 0.11
 (&#39;Basis set&#39;, &#39;6&#39;)
 (&#39;Basis set&#39;, &#39;6&#39;)
 (&#39;Basis set&#39;, &#39;6&#39;)
-(&#39;Quantum Calculation CPU Time :     50&#39;, &#39;25&#39;)
-(&#39;Quantum Calculation Wall Time:     58&#39;, &#39;12&#39;)
+(&#39;  Quantum Calculation CPU Time :     50&#39;, &#39;25&#39;)
+(&#39;  Quantum Calculation Wall Time:     58&#39;, &#39;12&#39;)
 </pre></div>
 </div>
 </div>
 </div>
-<p>In the example above, we’ve also added the possibility of encountering whitespace using <code class="docutils literal notranslate"><span class="pre">\s</span></code>. You’ll notice that we are only pulling out integers.</p>
+<p>You’ll notice that we are only pulling out integers.</p>
 <p>If we modify to have a decimal place (escaped with <code class="docutils literal notranslate"><span class="pre">\</span></code>) followed by more numbers, we will only have decimal numbers.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s2">&quot;([A-Za-z]+.+):\s*(\d+\.\d+)&quot;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s2">&quot;(.+):\s*(\d+\.\d+)&quot;</span><span class="p">)</span>
 <span class="n">matches</span> <span class="o">=</span> <span class="n">pattern</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">matches</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
@@ -771,9 +1112,9 @@ Hardness:                 0.11
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(&#39;Quantum Calculation CPU Time :     50&#39;, &#39;25.28&#39;)
-(&#39;Quantum Calculation Wall Time:     58&#39;, &#39;12.93&#39;)
-(&#39;Memory Used&#39;, &#39;882.13&#39;)
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(&#39;  Quantum Calculation CPU Time :     50&#39;, &#39;25.28&#39;)
+(&#39;  Quantum Calculation Wall Time:     58&#39;, &#39;12.93&#39;)
+(&#39;  Memory Used&#39;, &#39;882.13&#39;)
 (&#39;Surface computation Wall Time: 000:00&#39;, &#39;04.5&#39;)
 (&#39;Surface computation CPU Time: 000:00&#39;, &#39;04.5&#39;)
 (&#39;QSAR CPU Time:  000:00&#39;, &#39;00.7&#39;)
@@ -785,28 +1126,23 @@ Hardness:                 0.11
 </div>
 </div>
 </div>
-<p>We can modify this regular expression and make the decimal optional (matches 1 or 0 times) by following it with a question mark <code class="docutils literal notranslate"><span class="pre">?</span></code>. This means that the decimal is optional. You can then make the first digit have 0 or more repeats. Finally, we need to specify that we might have a negative sign at the start of the number.</p>
+<p>We can modify this regular expression and make the decimal optional (matches 1 or 0 times) by following it with a question mark <code class="docutils literal notranslate"><span class="pre">?</span></code>. This means that the decimal is optional. You can then make the first digit have 0 or more repeats. Finally, we need to specify that we might have a negative sign at the start of the number and add <code class="docutils literal notranslate"><span class="pre">.+</span></code> to indicate that more characters (perhaps as units) may follow.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s2">&quot;([A-Za-z]+.*):\s*(-?\d*\.?\d+)&quot;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s2">&quot;([A-Za-z].*):\s*(-?\d*\.\d+)\s+&quot;</span><span class="p">)</span>
 <span class="n">matches</span> <span class="o">=</span> <span class="n">pattern</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">matches</span><span class="p">)</span><span class="si">}</span><span class="s2"> matches found!&quot;</span><span class="p">)</span>
 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">25</span><span class="p">):</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">matches</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(&#39;Conformer Program CPU Time &#39;, &#39;.30&#39;)
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>226 matches found!
+(&#39;Conformer Program CPU Time &#39;, &#39;.30&#39;)
 (&#39;Conformer Program Wall Time&#39;, &#39;.07&#39;)
-(&#39;Basis set&#39;, &#39;6&#39;)
-(&#39;Number of shells&#39;, &#39;56&#39;)
-(&#39;Number of basis functions&#39;, &#39;193&#39;)
-(&#39;Multiplicity&#39;, &#39;1&#39;)
-(&#39;Parallel Job&#39;, &#39;4&#39;)
-(&#39;Basis set&#39;, &#39;6&#39;)
-(&#39;Basis set&#39;, &#39;6&#39;)
 (&#39;SCF total energy&#39;, &#39;-3142.5663410&#39;)
-(&#39;Basis set&#39;, &#39;6&#39;)
 (&#39;SCF total energy&#39;, &#39;-3142.5663410&#39;)
 (&#39;Quantum Calculation CPU Time :     50&#39;, &#39;25.28&#39;)
 (&#39;Quantum Calculation Wall Time:     58&#39;, &#39;12.93&#39;)
@@ -817,10 +1153,18 @@ Hardness:                 0.11
 (&#39;Surface computation CPU Time: 000:00&#39;, &#39;04.5&#39;)
 (&#39;QSAR CPU Time:  000:00&#39;, &#39;00.7&#39;)
 (&#39;QSAR Wall Time: 000:00&#39;, &#39;05.2&#39;)
-(&#39;Number of shells&#39;, &#39;56&#39;)
-(&#39;Number of basis functions&#39;, &#39;193&#39;)
-(&#39;Molecular charge&#39;, &#39;0&#39;)
-(&#39;Spin multiplicity&#39;, &#39;1&#39;)
+(&#39;Molecular volume&#39;, &#39;149.53&#39;)
+(&#39;Surface area&#39;, &#39;171.08&#39;)
+(&#39;Ovality&#39;, &#39;1.256&#39;)
+(&#39;Atomic weight&#39;, &#39;225.012&#39;)
+(&#39;E(HOMO)&#39;, &#39;-0.2616&#39;)
+(&#39;E(LUMO)&#39;, &#39;-0.0413&#39;)
+(&#39;Electronegativity&#39;, &#39;0.15&#39;)
+(&#39;Hardness&#39;, &#39;0.11&#39;)
+(&#39;Est. polarizability&#39;, &#39;52.086&#39;)
+(&#39;LogP (Ghose-Crippen)&#39;, &#39;3.78&#39;)
+(&#39;Eigenvalues&#39;, &#39;-482.87418&#39;)
+(&#39;Eigenvalues&#39;, &#39;-24.73012&#39;)
 </pre></div>
 </div>
 </div>
@@ -1066,7 +1410,7 @@ Basis set: 6-31G(D)
         <div class='prev-next-bottom'>
             
     <a class='left-prev' id="prev-link" href="3-linear-scikitlearn.html" title="previous page">Linear Fitting with SciKit Learn</a>
-    <a class='right-next' id="next-link" href="3-homework.html" title="next page">Session 3 Homework</a>
+    <a class='right-next' id="next-link" href="regex-folders.html" title="next page">Pulling Data from Multiple Files</a>
 
         </div>
         

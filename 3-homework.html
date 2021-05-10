@@ -50,11 +50,13 @@
         const thebe_selector_output = ".output"
     </script>
     <script async="async" src="_static/sphinx-thebe.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processRefs": false, "processEnvironments": false}})</script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Session 4" href="4-intro-objectives.html" />
-    <link rel="prev" title="Regular Expressions" href="3-regex.html" />
+    <link rel="prev" title="Pulling Data from Multiple Files" href="regex-folders.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="en" />
     
@@ -184,6 +186,11 @@
    <li class="toctree-l2">
     <a class="reference internal" href="3-regex.html">
      Regular Expressions
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="regex-folders.html">
+     Pulling Data from Multiple Files
     </a>
    </li>
    <li class="toctree-l2 current active">
@@ -319,6 +326,29 @@
         <!-- Table of contents -->
         <div class="d-none d-md-block col-md-2 bd-toc show">
             
+            <div class="tocsection onthispage pt-5 pb-3">
+                <i class="fas fa-list"></i> Contents
+            </div>
+            <nav id="bd-toc-nav">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#exercise-1-linear-fitting">
+   Exercise 1 - Linear Fitting
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#exercise-2-regular-expressions">
+   Exercise 2 - Regular Expressions
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#exercise-3-bonus">
+   Exercise 3 - Bonus
+  </a>
+ </li>
+</ul>
+
+            </nav>
         </div>
     </div>
 </div>
@@ -329,6 +359,56 @@
                 
   <div class="section" id="session-3-homework">
 <h1>Session 3 Homework<a class="headerlink" href="#session-3-homework" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="exercise-1-linear-fitting">
+<h2>Exercise 1 - Linear Fitting<a class="headerlink" href="#exercise-1-linear-fitting" title="Permalink to this headline">¶</a></h2>
+<p>Use scikitlearn to perform multiple linear regression for solubility using the dataset <code class="docutils literal notranslate"><span class="pre">delaney-processed.csv</span></code>. Unfortunately the dataset doesn’t contain all of the molecular descriptors as described in the original paper. Use the available descriptors as independent variables in the linear fit.</p>
+<ul class="simple">
+<li><p>Use your model to predict solubilities for the dataset.</p></li>
+<li><p>Compute the <span class="math notranslate nohighlight">\(R^2\)</span> statistic for the fit</p></li>
+</ul>
+</div>
+<div class="section" id="exercise-2-regular-expressions">
+<h2>Exercise 2 - Regular Expressions<a class="headerlink" href="#exercise-2-regular-expressions" title="Permalink to this headline">¶</a></h2>
+<p>Parse the file <code class="docutils literal notranslate"><span class="pre">SBE-b-CD-data.sdf</span></code> in your <code class="docutils literal notranslate"><span class="pre">data</span></code> folder using regular expressions.</p>
+<p>The SDF file contains information for 220 molecules. For each molecule, there is a section which looks like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span>  <span class="o">&lt;</span><span class="n">ID</span><span class="o">&gt;</span>
+<span class="p">(</span><span class="o">-</span><span class="p">)</span><span class="n">__Sulpiride</span>
+
+<span class="o">&gt;</span>  <span class="o">&lt;</span><span class="n">Temperature_K</span><span class="o">&gt;</span>
+<span class="mi">293</span>
+
+<span class="o">&gt;</span>  <span class="o">&lt;</span><span class="n">Kapp</span><span class="o">&gt;</span>
+<span class="mi">35</span>
+</pre></div>
+</div>
+<ul>
+<li><p>Write a regular expression to retrieve the properties in &lt;&gt; along with the values. For example, if you were to parse the text above, the result from your regular expression should look like</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[(</span><span class="s1">&#39;ID&#39;</span><span class="p">,</span> <span class="s1">&#39;(-)__Sulpiride&#39;</span><span class="p">),</span>
+ <span class="p">(</span><span class="s1">&#39;Temperature_K&#39;</span><span class="p">,</span> <span class="s1">&#39;293&#39;</span><span class="p">),</span>
+ <span class="p">(</span><span class="s1">&#39;Kapp&#39;</span><span class="p">,</span> <span class="s1">&#39;35&#39;</span><span class="p">)]</span>
+</pre></div>
+</div>
+</li>
+<li><p>Put results for all of the molecules into a pandas dataframe which has columns <code class="docutils literal notranslate"><span class="pre">ID</span></code>, <code class="docutils literal notranslate"><span class="pre">Temperature_K</span></code>, and <code class="docutils literal notranslate"><span class="pre">Kapp</span></code>. <strong>Hint</strong> - This may be a general Python solution rather than something we have talked aboutin class. The best way to do this may be to construct a Python dictionary with keys <code class="docutils literal notranslate"><span class="pre">ID</span></code>, <code class="docutils literal notranslate"><span class="pre">Temperature</span></code>, <code class="docutils literal notranslate"><span class="pre">Kapp</span></code> with lists of the values for each molecule. You can then create a pandas dataframe using <code class="docutils literal notranslate"><span class="pre">pd.DataFrame.from_dict</span></code></p></li>
+<li></li>
+</ul>
+</div>
+<div class="section" id="exercise-3-bonus">
+<h2>Exercise 3 - Bonus<a class="headerlink" href="#exercise-3-bonus" title="Permalink to this headline">¶</a></h2>
+<p>This exercise directs you how to retrieve papers from ChemRxiv (chemistry preprint server) using their REST API. Your task is then to do some processing in pandas to retrieve article abstracts, then to look for phrases in the abstract using regular expressions. This homework requires learning some extra material, so it is a bonus.</p>
+<p>First, you can use the Python <code class="docutils literal notranslate"><span class="pre">requests</span></code> module (part of the Python Standard Library) to query the rest API for ChemRxiv. This is the URL we will go to. If you visit this url in your browser, you will get a list of the 100 most recent papers uploaded to ChemRxiv.</p>
+<p><code class="docutils literal notranslate"><span class="pre">https://api.figshare.com/v2/articles?institution=259&amp;page_size=100</span></code></p>
+<p>To retrieve this information using Python, do</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">requests</span>
+
+<span class="n">results</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;https://api.figshare.com/v2/articles?institution=259&amp;page_size=100&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The ‘payload’ of this is stored in <code class="docutils literal notranslate"><span class="pre">results.json()</span></code>. This is where the information which you see in your browser. You can convert what you’ve retrieved into a dataframe by doing <code class="docutils literal notranslate"><span class="pre">df</span> <span class="pre">=</span> <span class="pre">pd.DataFrame(results.json())</span></code>.</p>
+<p>You can retrieve the abstracts by calling <code class="docutils literal notranslate"><span class="pre">requests.get</span></code> on the <code class="docutils literal notranslate"><span class="pre">url</span></code> for each paper. Save this in a column called <code class="docutils literal notranslate"><span class="pre">detail</span></code>. This step will take a while to execute.</p>
+<p>After retrieving the details, you must get the json and retreive the “description” field. You can write a custom function which does this and apply it to the <code class="docutils literal notranslate"><span class="pre">detail</span></code> column.</p>
+<p>Next, use <a class="reference external" href="https://pandas.pydata.org/docs/reference/api/pandas.Series.str.contains.html">pandas str contains</a> to search the abstract for phrases of interest. We suggest trying out machine/deep learning. Your results will vary since it will always grab the 100 most recently uploaded papers!</p>
+</div>
 </div>
 
     <script type="text/x-thebe-config">
@@ -356,7 +436,7 @@
         
         <div class='prev-next-bottom'>
             
-    <a class='left-prev' id="prev-link" href="3-regex.html" title="previous page">Regular Expressions</a>
+    <a class='left-prev' id="prev-link" href="regex-folders.html" title="previous page">Pulling Data from Multiple Files</a>
     <a class='right-next' id="next-link" href="4-intro-objectives.html" title="next page">Session 4</a>
 
         </div>

@@ -1,0 +1,2852 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pulling Data from Multiple Files &#8212; Python Data and Scripting - Level 2</title>
+    
+  <link href="_static/css/theme.css" rel="stylesheet" />
+  <link href="_static/css/index.c5995385ac14fb8791e8eb36b4908be2.css" rel="stylesheet" />
+
+    
+  <link rel="stylesheet"
+    href="_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+
+    
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/sphinx-book-theme.acff12b8f9c144ce68a297486a2fa670.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css" />
+    <link rel="stylesheet" type="text/css" href="_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    
+  <link rel="preload" as="script" href="_static/js/index.1c5a1a01449ed65a7b51.js">
+
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/togglebutton.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="_static/sphinx-book-theme.12a9622fbb08dcb3a2a40b2c02b83a57.js"></script>
+    <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
+    <script >
+        const thebe_selector = ".thebe"
+        const thebe_selector_input = "pre"
+        const thebe_selector_output = ".output"
+    </script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Session 3 Homework" href="3-homework.html" />
+    <link rel="prev" title="Regular Expressions" href="3-regex.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="index.html">
+      
+      <img src="_static/molssi_main_logo.png" class="logo" alt="logo">
+      
+      
+      <h1 class="site-logo" id="site-title">Python Data and Scripting - Level 2</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+    <div class="bd-toc-item active">
+        <ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="intro.html">
+   Workshop Template
+  </a>
+ </li>
+</ul>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="setup.html">
+   Set Up
+  </a>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="1-intro-objectives.html">
+   Session 1
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="1-pandas-dataframes-esol.html">
+     Working with Pandas DataFrames
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="1-numpy-arrays.html">
+     Working with NumPy Arrays
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="1-matplotlib.html">
+     Plotting with Matplotlib
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="1-homework.html">
+     Session 1 Homework
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="homework_1_solutions.html">
+     Session 1 Homework Solution
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="2-intro-objectives.html">
+   Session 2
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="2-ocr-tabula.html">
+     Reading data from PDFs
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="2-pandas-datacleaning.html">
+     Data Cleaning with Pandas
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="2-seaborn.html">
+     Plotting with seaborn
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="2-homework.html">
+     Session 2 Homework
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 current active has-children">
+  <a class="reference internal" href="3-intro-objectives.html">
+   Session 3
+  </a>
+  <input checked="" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+  <label for="toctree-checkbox-3">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul class="current">
+   <li class="toctree-l2">
+    <a class="reference internal" href="3-linear-scikitlearn.html">
+     Linear Fitting with SciKit Learn
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="3-regex.html">
+     Regular Expressions
+    </a>
+   </li>
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
+     Pulling Data from Multiple Files
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="3-homework.html">
+     Session 3 Homework
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="4-intro-objectives.html">
+   Session 4
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
+  <label for="toctree-checkbox-4">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="4-nonlinear-scikitlearn.html">
+     Nonlinear Fitting with ScikitLearn
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="4-linear-statsmodels.html">
+     Linear Fitting with statsmodels
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="4-interactive-visualizations.html">
+     Interactive Visualizations with plotly
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+    </div>
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="topbar container-xl fixed-top">
+    <div class="topbar-contents row">
+        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
+        <div class="col pl-md-4 topbar-main">
+            
+            <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+                data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+                aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+                title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+                <i class="fas fa-bars"></i>
+                <i class="fas fa-arrow-left"></i>
+                <i class="fas fa-arrow-up"></i>
+            </button>
+            
+            
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="_sources/regex-folders.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.ipynb</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+</div>
+
+            <!-- Source interaction buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Connect with source repository"><i class="fab fa-github"></i></button>
+    <div class="dropdown-buttons sourcebuttons">
+        <a class="repository-button"
+            href="https://github.com/MolSSI-Education/WORKSHOP_NAME"><button type="button" class="btn btn-secondary topbarbtn"
+                data-toggle="tooltip" data-placement="left" title="Source repository"><i
+                    class="fab fa-github"></i>repository</button></a>
+        <a class="issues-button"
+            href="https://github.com/MolSSI-Education/WORKSHOP_NAME/issues/new?title=Issue%20on%20page%20%2Fregex-folders.html&body=Your%20issue%20content%20here."><button
+                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
+                title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
+        
+    </div>
+</div>
+
+            <!-- Full screen (wrap in <a> to have style consistency -->
+
+<a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+        data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+        title="Fullscreen mode"><i
+            class="fas fa-expand"></i></button></a>
+
+            <!-- Launch buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
+    <div class="dropdown-buttons">
+        
+        <a class="binder-button" href="https://mybinder.org/v2/gh/MolSSI-Education/WORKSHOP_NAME/main?urlpath=tree/book/regex-folders.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
+                data-placement="left"><img class="binder-button-logo"
+                    src="_static/images/logo_binder.svg"
+                    alt="Interact on binder">Binder</button></a>
+        
+        
+        
+        
+    </div>
+</div>
+
+        </div>
+
+        <!-- Table of contents -->
+        <div class="d-none d-md-block col-md-2 bd-toc show">
+            
+        </div>
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+        
+              <div>
+                
+  <div class="section" id="pulling-data-from-multiple-files">
+<h1>Pulling Data from Multiple Files<a class="headerlink" href="#pulling-data-from-multiple-files" title="Permalink to this headline">¶</a></h1>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">glob</span>
+
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">folders</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s2">&quot;data/rxnpredict/spartan_molecules/*.spardir/M0001&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">len</span><span class="p">(</span><span class="n">folders</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>45
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">re</span>
+
+<span class="n">number_pattern</span> <span class="o">=</span> <span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s2">&quot;(?P&lt;key&gt;[A-Za-z].*):\s*(?P&lt;value&gt;-?\d*\.\d+)\s+&quot;</span><span class="p">)</span>
+<span class="n">name_pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s2">&quot;spartan_molecules/(.*).spardir/&quot;</span><span class="p">)</span>
+
+<span class="n">full_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
+
+<span class="k">for</span> <span class="n">folder</span> <span class="ow">in</span> <span class="n">folders</span><span class="p">:</span>
+    <span class="n">molecule_results</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">name_pattern</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">folder</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+    
+    <span class="n">molecule_results</span><span class="p">[</span><span class="s2">&quot;molecule name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">name</span> 
+    
+    <span class="n">file_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">folder</span><span class="p">,</span> <span class="s2">&quot;output&quot;</span><span class="p">)</span>
+    
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+
+    <span class="n">matches</span> <span class="o">=</span> <span class="n">number_pattern</span><span class="o">.</span><span class="n">finditer</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    
+    <span class="n">match_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">match</span> <span class="ow">in</span> <span class="n">matches</span><span class="p">:</span>
+        <span class="n">match_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">match</span><span class="o">.</span><span class="n">groupdict</span><span class="p">())</span>
+    
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">match_list</span><span class="p">)</span>
+    <span class="n">df</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="s2">&quot;key&quot;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">df</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s2">&quot;key&quot;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">T</span>
+    <span class="n">df</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">name</span>
+
+    <span class="n">full_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">full_df</span><span class="p">,</span> <span class="n">df</span><span class="p">])</span>
+        
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1-bromo-4-ethylbenzene
+3-methyl-5-phenylisoxazole
+ethyl-5-methylisoxazole-3-carboxylate
+MTBD
+5-phenylisoxazole
+ethyl-5-methylisoxazole-4-carboxylate
+benzo[c]isoxazole
+ethyl-3-methylisoxazole-5-carboxylate
+methyl-5-(thiophen-2-yl)isoxazole-3-carboxylate
+3-methylisoxazole
+N,N-dibenzylisoxazol-5-amine
+XPhos
+ethyl-isoxazole-3-carboxylate
+3-bromopyridine
+ethyl-isoxazole-4-carboxylate
+methyl-5-(furan-2-yl)isoxazole-3-carboxylate
+5-phenyl-1,2,4-oxadiazole
+1-bromo-4-(trifluoromethyl)benzene
+1-iodo-4-(trifluoromethyl)benzene
+methyl-isoxazole-5-carboxylate
+benzo[d]isoxazole
+1-iodo-4-methoxybenzene
+1-ethyl-4-iodobenzene
+3-chloropyridine
+t-BuXPhos
+AdBrettPhos
+N,N-dibenzylisoxazol-3-amine
+ethyl-3-methoxyisoxazole-5-carboxylate
+4-phenylisoxazole
+3-iodopyridine
+5-methylisoxazole
+1-chloro-4-methoxybenzene
+5-methyl-3-(1H-pyrrol-1-yl)isoxazole
+1-chloro-4-(trifluoromethyl)benzene
+3-phenylisoxazole
+2-bromopyridine
+t-BuBrettPhos
+1-chloro-4-ethylbenzene
+BTMG
+5-(2,6-difluorophenyl)isoxazole
+1-bromo-4-methoxybenzene
+2-iodopyridine
+2-chloropyridine
+P2Et
+3,5-dimethylisoxazole
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">full_df</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>key</th>
+      <th>Conformer Program CPU Time</th>
+      <th>Conformer Program Wall Time</th>
+      <th>SCF total energy</th>
+      <th>Quantum Calculation CPU Time :     49</th>
+      <th>Quantum Calculation Wall Time:     59</th>
+      <th>Memory Used</th>
+      <th>Semi-Empirical Program CPU Time</th>
+      <th>Semi-Empirical Program Wall Time</th>
+      <th>Surface computation Wall Time: 000:00</th>
+      <th>Surface computation CPU Time: 000:00</th>
+      <th>...</th>
+      <th>C12      H35</th>
+      <th>H15</th>
+      <th>N4</th>
+      <th>N5</th>
+      <th>N6</th>
+      <th>N7</th>
+      <th>P1       C5</th>
+      <th>P1       P2</th>
+      <th>N1      H7</th>
+      <th>N1      H20</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>value</th>
+      <td>.28</td>
+      <td>.07</td>
+      <td>-2884.1616715</td>
+      <td>15.41</td>
+      <td>29.99</td>
+      <td>870.98</td>
+      <td>.33</td>
+      <td>.03</td>
+      <td>04.2</td>
+      <td>04.2</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>value</th>
+      <td>.30</td>
+      <td>.08</td>
+      <td>-516.4202748</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>1.385</td>
+      <td>.39</td>
+      <td>.04</td>
+      <td>05.3</td>
+      <td>05.0</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>value</th>
+      <td>.30</td>
+      <td>.07</td>
+      <td>-552.5505976</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>1.187</td>
+      <td>.38</td>
+      <td>.04</td>
+      <td>04.4</td>
+      <td>04.2</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>value</th>
+      <td>.30</td>
+      <td>.09</td>
+      <td>-478.1320714</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>1.668</td>
+      <td>.36</td>
+      <td>.05</td>
+      <td>05.2</td>
+      <td>05.2</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>value</th>
+      <td>.30</td>
+      <td>.08</td>
+      <td>-477.0990963</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>1.047</td>
+      <td>.36</td>
+      <td>.04</td>
+      <td>04.0</td>
+      <td>03.9</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>value</th>
+      <td>.27</td>
+      <td>.07</td>
+      <td>-552.5579025</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>1.187</td>
+      <td>.33</td>
+      <td>.04</td>
+      <td>04.3</td>
+      <td>04.3</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>value</th>
+      <td>.30</td>
+      <td>.06</td>
+      <td>-399.6653105</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>646.52</td>
+      <td>.33</td>
+      <td>.03</td>
+      <td>02.4</td>
+      <td>02.4</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>value</th>
+      <td>.31</td>
+      <td>.08</td>
+      <td>-552.5506634</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>1.187</td>
+      <td>.33</td>
+      <td>.04</td>
+      <td>04.5</td>
+      <td>04.4</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>value</th>
+      <td>.30</td>
+      <td>.07</td>
+      <td>-1025.7150874</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>1.660</td>
+      <td>.44</td>
+      <td>.05</td>
+      <td>07.8</td>
+      <td>07.5</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>value</th>
+      <td>.31</td>
+      <td>.06</td>
+      <td>-285.3558148</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>325.77</td>
+      <td>.33</td>
+      <td>.02</td>
+      <td>01.4</td>
+      <td>01.4</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>value</th>
+      <td>.36</td>
+      <td>.15</td>
+      <td>-842.1122312</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>4.917</td>
+      <td>.45</td>
+      <td>.14</td>
+      <td>18.7</td>
+      <td>18.5</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>value</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>-1628.4242338</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>value</th>
+      <td>.28</td>
+      <td>.07</td>
+      <td>-513.2166119</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>902.99</td>
+      <td>.31</td>
+      <td>.03</td>
+      <td>03.2</td>
+      <td>03.2</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>value</th>
+      <td>.33</td>
+      <td>.05</td>
+      <td>-2821.5648564</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>385.34</td>
+      <td>.31</td>
+      <td>.02</td>
+      <td>02.5</td>
+      <td>02.3</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>value</th>
+      <td>.34</td>
+      <td>.08</td>
+      <td>-513.2325643</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>902.99</td>
+      <td>.33</td>
+      <td>.03</td>
+      <td>03.5</td>
+      <td>03.4</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>value</th>
+      <td>.30</td>
+      <td>.12</td>
+      <td>-702.7336410</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>1.652</td>
+      <td>.39</td>
+      <td>.04</td>
+      <td>05.8</td>
+      <td>05.7</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>value</th>
+      <td>.31</td>
+      <td>.06</td>
+      <td>-493.1543108</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>0.981</td>
+      <td>.33</td>
+      <td>.03</td>
+      <td>03.6</td>
+      <td>03.6</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>value</th>
+      <td>.30</td>
+      <td>.07</td>
+      <td>-3142.5663410</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>882.13</td>
+      <td>.33</td>
+      <td>.03</td>
+      <td>04.5</td>
+      <td>04.5</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>value</th>
+      <td>.28</td>
+      <td>.06</td>
+      <td>-580.0688065</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>882.13</td>
+      <td>.34</td>
+      <td>.03</td>
+      <td>03.8</td>
+      <td>03.8</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>value</th>
+      <td>.30</td>
+      <td>.06</td>
+      <td>-473.9086709</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>646.52</td>
+      <td>.31</td>
+      <td>.02</td>
+      <td>02.5</td>
+      <td>02.5</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>value</th>
+      <td>.28</td>
+      <td>.07</td>
+      <td>-399.6830527</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>646.52</td>
+      <td>.39</td>
+      <td>.03</td>
+      <td>02.6</td>
+      <td>02.6</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>value</th>
+      <td>.30</td>
+      <td>.07</td>
+      <td>-357.5549635</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>757.02</td>
+      <td>.31</td>
+      <td>.03</td>
+      <td>03.1</td>
+      <td>03.1</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>value</th>
+      <td>.30</td>
+      <td>.09</td>
+      <td>-321.6641779</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>870.98</td>
+      <td>.33</td>
+      <td>.03</td>
+      <td>03.5</td>
+      <td>03.5</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>value</th>
+      <td>.30</td>
+      <td>.06</td>
+      <td>-707.8797107</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>385.34</td>
+      <td>.31</td>
+      <td>.02</td>
+      <td>01.8</td>
+      <td>01.8</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>value</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>-1473.5482406</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>value</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>-2167.1279957</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>value</th>
+      <td>.36</td>
+      <td>.14</td>
+      <td>-842.1090289</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>4.917</td>
+      <td>.45</td>
+      <td>.14</td>
+      <td>18.0</td>
+      <td>17.9</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>value</th>
+      <td>.31</td>
+      <td>.08</td>
+      <td>-627.7543192</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>1.385</td>
+      <td>.38</td>
+      <td>.04</td>
+      <td>05.5</td>
+      <td>05.4</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>value</th>
+      <td>.33</td>
+      <td>.16</td>
+      <td>-477.0930590</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>1.047</td>
+      <td>.36</td>
+      <td>.04</td>
+      <td>03.8</td>
+      <td>03.8</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>value</th>
+      <td>.30</td>
+      <td>.05</td>
+      <td>-259.0678768</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>385.34</td>
+      <td>.33</td>
+      <td>.02</td>
+      <td>01.9</td>
+      <td>01.8</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>value</th>
+      <td>.30</td>
+      <td>.07</td>
+      <td>-285.3593086</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>325.77</td>
+      <td>.28</td>
+      <td>.02</td>
+      <td>01.4</td>
+      <td>01.4</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>value</th>
+      <td>.27</td>
+      <td>.06</td>
+      <td>-806.3670946</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>757.02</td>
+      <td>.38</td>
+      <td>.02</td>
+      <td>03.1</td>
+      <td>03.1</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>value</th>
+      <td>.33</td>
+      <td>.08</td>
+      <td>-494.3305221</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>1.116</td>
+      <td>.33</td>
+      <td>.03</td>
+      <td>04.1</td>
+      <td>04.1</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>value</th>
+      <td>.28</td>
+      <td>.07</td>
+      <td>-1028.8815353</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>882.13</td>
+      <td>.33</td>
+      <td>.03</td>
+      <td>03.7</td>
+      <td>03.7</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>value</th>
+      <td>.30</td>
+      <td>.07</td>
+      <td>-477.0956147</td>
+      <td>50.89</td>
+      <td>NaN</td>
+      <td>1.047</td>
+      <td>.31</td>
+      <td>.04</td>
+      <td>03.9</td>
+      <td>03.8</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>value</th>
+      <td>.28</td>
+      <td>.06</td>
+      <td>-2821.5675696</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>385.34</td>
+      <td>.33</td>
+      <td>.02</td>
+      <td>02.3</td>
+      <td>02.3</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>value</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>-1702.5922088</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>11.8</td>
+      <td>NaN</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>value</th>
+      <td>.30</td>
+      <td>.07</td>
+      <td>-770.4766472</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>870.98</td>
+      <td>.33</td>
+      <td>.02</td>
+      <td>03.6</td>
+      <td>03.6</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>value</th>
+      <td>.36</td>
+      <td>.13</td>
+      <td>-519.8170064</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>2.554</td>
+      <td>.39</td>
+      <td>.08</td>
+      <td>07.3</td>
+      <td>07.2</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>value</th>
+      <td>.30</td>
+      <td>.07</td>
+      <td>-675.5595455</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>1.271</td>
+      <td>.33</td>
+      <td>.04</td>
+      <td>04.9</td>
+      <td>04.8</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>value</th>
+      <td>.31</td>
+      <td>.09</td>
+      <td>-2920.0522504</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>757.02</td>
+      <td>.31</td>
+      <td>.03</td>
+      <td>03.7</td>
+      <td>03.7</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>value</th>
+      <td>.30</td>
+      <td>.06</td>
+      <td>-259.0689789</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>385.34</td>
+      <td>.31</td>
+      <td>.02</td>
+      <td>01.8</td>
+      <td>01.8</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>value</th>
+      <td>.28</td>
+      <td>.05</td>
+      <td>-707.8831449</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>385.34</td>
+      <td>.34</td>
+      <td>.02</td>
+      <td>01.8</td>
+      <td>01.8</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>value</th>
+      <td>.56</td>
+      <td>.32</td>
+      <td>-1544.3115726</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>31.9</td>
+      <td>31.8</td>
+      <td>...</td>
+      <td>0.997</td>
+      <td>-0.037</td>
+      <td>-0.636</td>
+      <td>-0.153</td>
+      <td>-0.052</td>
+      <td>-0.027</td>
+      <td>0.050</td>
+      <td>0.103</td>
+      <td>0.043</td>
+      <td>0.034</td>
+    </tr>
+    <tr>
+      <th>value</th>
+      <td>.28</td>
+      <td>.06</td>
+      <td>-324.6803129</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>497.52</td>
+      <td>.31</td>
+      <td>.02</td>
+      <td>01.9</td>
+      <td>01.9</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+  </tbody>
+</table>
+<p>45 rows × 663 columns</p>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df_trim</span> <span class="o">=</span> <span class="n">full_df</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">thresh</span><span class="o">=</span><span class="mi">40</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df_trim</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;class &#39;pandas.core.frame.DataFrame&#39;&gt;
+Index: 45 entries, value to value
+Data columns (total 41 columns):
+ #   Column                                    Non-Null Count  Dtype 
+---  ------                                    --------------  ----- 
+ 0   Conformer Program CPU Time                41 non-null     object
+ 1   Conformer Program Wall Time               41 non-null     object
+ 2   SCF total energy                          45 non-null     object
+ 3   Memory Used                               40 non-null     object
+ 4   Semi-Empirical Program CPU Time           40 non-null     object
+ 5   Semi-Empirical Program Wall Time          40 non-null     object
+ 6   Surface computation Wall Time: 000:00     42 non-null     object
+ 7   Surface computation CPU Time: 000:00      41 non-null     object
+ 8   QSAR CPU Time:  000:00                    45 non-null     object
+ 9   QSAR Wall Time: 000:00                    42 non-null     object
+ 10  Molecular volume                          41 non-null     object
+ 11  Surface area                              41 non-null     object
+ 12  Ovality                                   41 non-null     object
+ 13  Atomic weight                             41 non-null     object
+ 14  E(HOMO)                                   41 non-null     object
+ 15  E(LUMO)                                   41 non-null     object
+ 16  Electronegativity                         41 non-null     object
+ 17  Hardness                                  41 non-null     object
+ 18  Est. polarizability                       41 non-null     object
+ 19  LogP (Ghose-Crippen)                      40 non-null     object
+ 20  Eigenvalues                               45 non-null     object
+ 21  Total Dipole                              45 non-null     object
+ 22  Total MIN occupancy                       45 non-null     object
+ 23  Total RYD occupancy                       45 non-null     object
+ 24  Total occupancy                           45 non-null     object
+ 25  Total core, lone pair and bond occupancy  45 non-null     object
+ 26  Total Rydberg and antibond occupancy      45 non-null     object
+ 27  Q0                                        45 non-null     object
+ 28  Qx                                        45 non-null     object
+ 29  Qy                                        45 non-null     object
+ 30  Qz                                        45 non-null     object
+ 31  Qxx                                       45 non-null     object
+ 32  Qyy                                       45 non-null     object
+ 33  Qzz                                       45 non-null     object
+ 34  Qxy                                       45 non-null     object
+ 35  Qxz                                       45 non-null     object
+ 36  Qyz                                       45 non-null     object
+ 37  RMS fit                                   45 non-null     object
+ 38  Properties CPU Time                       45 non-null     object
+ 39  Properties Wall Time                      45 non-null     object
+ 40  name                                      45 non-null     object
+dtypes: object(41)
+memory usage: 14.8+ KB
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df_trim</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>key</th>
+      <th>Conformer Program CPU Time</th>
+      <th>Conformer Program Wall Time</th>
+      <th>SCF total energy</th>
+      <th>Memory Used</th>
+      <th>Semi-Empirical Program CPU Time</th>
+      <th>Semi-Empirical Program Wall Time</th>
+      <th>Surface computation Wall Time: 000:00</th>
+      <th>Surface computation CPU Time: 000:00</th>
+      <th>QSAR CPU Time:  000:00</th>
+      <th>QSAR Wall Time: 000:00</th>
+      <th>...</th>
+      <th>Qxx</th>
+      <th>Qyy</th>
+      <th>Qzz</th>
+      <th>Qxy</th>
+      <th>Qxz</th>
+      <th>Qyz</th>
+      <th>RMS fit</th>
+      <th>Properties CPU Time</th>
+      <th>Properties Wall Time</th>
+      <th>name</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>value</th>
+      <td>.28</td>
+      <td>.07</td>
+      <td>-2884.1616715</td>
+      <td>870.98</td>
+      <td>.33</td>
+      <td>.03</td>
+      <td>04.2</td>
+      <td>04.2</td>
+      <td>00.7</td>
+      <td>04.9</td>
+      <td>...</td>
+      <td>1.741376</td>
+      <td>-2.157368</td>
+      <td>0.415992</td>
+      <td>-0.015867</td>
+      <td>-0.006774</td>
+      <td>0.081263</td>
+      <td>2.781968</td>
+      <td>.77</td>
+      <td>.45</td>
+      <td>1-bromo-4-ethylbenzene</td>
+    </tr>
+    <tr>
+      <th>value</th>
+      <td>.30</td>
+      <td>.08</td>
+      <td>-516.4202748</td>
+      <td>1.385</td>
+      <td>.39</td>
+      <td>.04</td>
+      <td>05.3</td>
+      <td>05.0</td>
+      <td>00.7</td>
+      <td>06.2</td>
+      <td>...</td>
+      <td>1.408209</td>
+      <td>0.137213</td>
+      <td>-1.545421</td>
+      <td>-0.000178</td>
+      <td>-0.109366</td>
+      <td>0.095875</td>
+      <td>1.724891</td>
+      <td>.78</td>
+      <td>.51</td>
+      <td>3-methyl-5-phenylisoxazole</td>
+    </tr>
+    <tr>
+      <th>value</th>
+      <td>.30</td>
+      <td>.07</td>
+      <td>-552.5505976</td>
+      <td>1.187</td>
+      <td>.38</td>
+      <td>.04</td>
+      <td>04.4</td>
+      <td>04.2</td>
+      <td>00.7</td>
+      <td>05.0</td>
+      <td>...</td>
+      <td>1.131328</td>
+      <td>0.773168</td>
+      <td>-1.904496</td>
+      <td>-0.292758</td>
+      <td>0.144527</td>
+      <td>0.249134</td>
+      <td>1.761835</td>
+      <td>.72</td>
+      <td>.45</td>
+      <td>ethyl-5-methylisoxazole-3-carboxylate</td>
+    </tr>
+    <tr>
+      <th>value</th>
+      <td>.30</td>
+      <td>.09</td>
+      <td>-478.1320714</td>
+      <td>1.668</td>
+      <td>.36</td>
+      <td>.05</td>
+      <td>05.2</td>
+      <td>05.2</td>
+      <td>00.7</td>
+      <td>06.4</td>
+      <td>...</td>
+      <td>-0.006387</td>
+      <td>0.002471</td>
+      <td>0.003917</td>
+      <td>-0.021038</td>
+      <td>-0.010289</td>
+      <td>-0.004669</td>
+      <td>2.126557</td>
+      <td>.91</td>
+      <td>.58</td>
+      <td>MTBD</td>
+    </tr>
+    <tr>
+      <th>value</th>
+      <td>.30</td>
+      <td>.08</td>
+      <td>-477.0990963</td>
+      <td>1.047</td>
+      <td>.36</td>
+      <td>.04</td>
+      <td>04.0</td>
+      <td>03.9</td>
+      <td>00.7</td>
+      <td>04.8</td>
+      <td>...</td>
+      <td>1.001715</td>
+      <td>0.253612</td>
+      <td>-1.255327</td>
+      <td>-0.009770</td>
+      <td>-0.088235</td>
+      <td>-0.027177</td>
+      <td>1.868316</td>
+      <td>.80</td>
+      <td>.45</td>
+      <td>5-phenylisoxazole</td>
+    </tr>
+    <tr>
+      <th>value</th>
+      <td>.27</td>
+      <td>.07</td>
+      <td>-552.5579025</td>
+      <td>1.187</td>
+      <td>.33</td>
+      <td>.04</td>
+      <td>04.3</td>
+      <td>04.3</td>
+      <td>00.7</td>
+      <td>05.0</td>
+      <td>...</td>
+      <td>0.164423</td>
+      <td>1.458377</td>
+      <td>-1.622800</td>
+      <td>0.111382</td>
+      <td>-0.214553</td>
+      <td>0.073053</td>
+      <td>1.800951</td>
+      <td>.73</td>
+      <td>.48</td>
+      <td>ethyl-5-methylisoxazole-4-carboxylate</td>
+    </tr>
+    <tr>
+      <th>value</th>
+      <td>.30</td>
+      <td>.06</td>
+      <td>-399.6653105</td>
+      <td>646.52</td>
+      <td>.33</td>
+      <td>.03</td>
+      <td>02.4</td>
+      <td>02.4</td>
+      <td>00.6</td>
+      <td>03.0</td>
+      <td>...</td>
+      <td>-0.466435</td>
+      <td>1.975396</td>
+      <td>-1.508960</td>
+      <td>-0.072360</td>
+      <td>-0.017347</td>
+      <td>0.066108</td>
+      <td>1.785648</td>
+      <td>.63</td>
+      <td>.31</td>
+      <td>benzo[c]isoxazole</td>
+    </tr>
+    <tr>
+      <th>value</th>
+      <td>.31</td>
+      <td>.08</td>
+      <td>-552.5506634</td>
+      <td>1.187</td>
+      <td>.33</td>
+      <td>.04</td>
+      <td>04.5</td>
+      <td>04.4</td>
+      <td>00.7</td>
+      <td>05.4</td>
+      <td>...</td>
+      <td>1.318543</td>
+      <td>0.050256</td>
+      <td>-1.368799</td>
+      <td>-0.074529</td>
+      <td>0.062812</td>
+      <td>0.252966</td>
+      <td>1.809514</td>
+      <td>.72</td>
+      <td>.46</td>
+      <td>ethyl-3-methylisoxazole-5-carboxylate</td>
+    </tr>
+    <tr>
+      <th>value</th>
+      <td>.30</td>
+      <td>.07</td>
+      <td>-1025.7150874</td>
+      <td>1.660</td>
+      <td>.44</td>
+      <td>.05</td>
+      <td>07.8</td>
+      <td>07.5</td>
+      <td>00.8</td>
+      <td>08.6</td>
+      <td>...</td>
+      <td>1.062404</td>
+      <td>0.155307</td>
+      <td>-1.217710</td>
+      <td>0.083239</td>
+      <td>-0.008575</td>
+      <td>0.099978</td>
+      <td>2.192071</td>
+      <td>1.00</td>
+      <td>.73</td>
+      <td>methyl-5-(thiophen-2-yl)isoxazole-3-carboxylate</td>
+    </tr>
+    <tr>
+      <th>value</th>
+      <td>.31</td>
+      <td>.06</td>
+      <td>-285.3558148</td>
+      <td>325.77</td>
+      <td>.33</td>
+      <td>.02</td>
+      <td>01.4</td>
+      <td>01.4</td>
+      <td>00.6</td>
+      <td>02.0</td>
+      <td>...</td>
+      <td>0.388443</td>
+      <td>1.049275</td>
+      <td>-1.437718</td>
+      <td>-0.586958</td>
+      <td>-0.000968</td>
+      <td>0.020650</td>
+      <td>1.602218</td>
+      <td>.50</td>
+      <td>.22</td>
+      <td>3-methylisoxazole</td>
+    </tr>
+    <tr>
+      <th>value</th>
+      <td>.36</td>
+      <td>.15</td>
+      <td>-842.1122312</td>
+      <td>4.917</td>
+      <td>.45</td>
+      <td>.14</td>
+      <td>18.7</td>
+      <td>18.5</td>
+      <td>00.9</td>
+      <td>19.6</td>
+      <td>...</td>
+      <td>-0.032827</td>
+      <td>0.247578</td>
+      <td>-0.214751</td>
+      <td>0.015966</td>
+      <td>0.047875</td>
+      <td>0.016274</td>
+      <td>1.947168</td>
+      <td>2.02</td>
+      <td>1.67</td>
+      <td>N,N-dibenzylisoxazol-5-amine</td>
+    </tr>
+    <tr>
+      <th>value</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>-1628.4242338</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>01.5</td>
+      <td>NaN</td>
+      <td>...</td>
+      <td>0.014633</td>
+      <td>-0.031880</td>
+      <td>0.017247</td>
+      <td>0.001838</td>
+      <td>0.000652</td>
+      <td>-0.012802</td>
+      <td>2.043349</td>
+      <td>12.05</td>
+      <td>11.60</td>
+      <td>XPhos</td>
+    </tr>
+    <tr>
+      <th>value</th>
+      <td>.28</td>
+      <td>.07</td>
+      <td>-513.2166119</td>
+      <td>902.99</td>
+      <td>.31</td>
+      <td>.03</td>
+      <td>03.2</td>
+      <td>03.2</td>
+      <td>00.6</td>
+      <td>03.9</td>
+      <td>...</td>
+      <td>1.713130</td>
+      <td>0.265151</td>
+      <td>-1.978281</td>
+      <td>-0.068484</td>
+      <td>0.078080</td>
+      <td>0.072948</td>
+      <td>1.657984</td>
+      <td>.64</td>
+      <td>.38</td>
+      <td>ethyl-isoxazole-3-carboxylate</td>
+    </tr>
+    <tr>
+      <th>value</th>
+      <td>.33</td>
+      <td>.05</td>
+      <td>-2821.5648564</td>
+      <td>385.34</td>
+      <td>.31</td>
+      <td>.02</td>
+      <td>02.5</td>
+      <td>02.3</td>
+      <td>00.6</td>
+      <td>03.1</td>
+      <td>...</td>
+      <td>1.274363</td>
+      <td>0.181694</td>
+      <td>-1.456057</td>
+      <td>0.002460</td>
+      <td>-0.018442</td>
+      <td>-0.061429</td>
+      <td>2.929428</td>
+      <td>.58</td>
+      <td>.31</td>
+      <td>3-bromopyridine</td>
+    </tr>
+    <tr>
+      <th>value</th>
+      <td>.34</td>
+      <td>.08</td>
+      <td>-513.2325643</td>
+      <td>902.99</td>
+      <td>.33</td>
+      <td>.03</td>
+      <td>03.5</td>
+      <td>03.4</td>
+      <td>00.7</td>
+      <td>04.2</td>
+      <td>...</td>
+      <td>-1.174548</td>
+      <td>2.414862</td>
+      <td>-1.240314</td>
+      <td>0.178910</td>
+      <td>-0.068647</td>
+      <td>0.059109</td>
+      <td>1.729307</td>
+      <td>.64</td>
+      <td>.39</td>
+      <td>ethyl-isoxazole-4-carboxylate</td>
+    </tr>
+    <tr>
+      <th>value</th>
+      <td>.30</td>
+      <td>.12</td>
+      <td>-702.7336410</td>
+      <td>1.652</td>
+      <td>.39</td>
+      <td>.04</td>
+      <td>05.8</td>
+      <td>05.7</td>
+      <td>00.7</td>
+      <td>06.5</td>
+      <td>...</td>
+      <td>1.867305</td>
+      <td>0.283974</td>
+      <td>-2.151279</td>
+      <td>0.123400</td>
+      <td>-0.092322</td>
+      <td>0.093517</td>
+      <td>1.588351</td>
+      <td>.91</td>
+      <td>.61</td>
+      <td>methyl-5-(furan-2-yl)isoxazole-3-carboxylate</td>
+    </tr>
+    <tr>
+      <th>value</th>
+      <td>.31</td>
+      <td>.06</td>
+      <td>-493.1543108</td>
+      <td>0.981</td>
+      <td>.33</td>
+      <td>.03</td>
+      <td>03.6</td>
+      <td>03.6</td>
+      <td>00.7</td>
+      <td>04.2</td>
+      <td>...</td>
+      <td>0.839212</td>
+      <td>0.219589</td>
+      <td>-1.058800</td>
+      <td>0.005175</td>
+      <td>-0.064239</td>
+      <td>-0.045252</td>
+      <td>1.899600</td>
+      <td>.69</td>
+      <td>.42</td>
+      <td>5-phenyl-1,2,4-oxadiazole</td>
+    </tr>
+    <tr>
+      <th>value</th>
+      <td>.30</td>
+      <td>.07</td>
+      <td>-3142.5663410</td>
+      <td>882.13</td>
+      <td>.33</td>
+      <td>.03</td>
+      <td>04.5</td>
+      <td>04.5</td>
+      <td>00.7</td>
+      <td>05.2</td>
+      <td>...</td>
+      <td>1.583762</td>
+      <td>-1.997099</td>
+      <td>0.413337</td>
+      <td>-0.023437</td>
+      <td>-0.001069</td>
+      <td>0.060847</td>
+      <td>2.518255</td>
+      <td>.78</td>
+      <td>.50</td>
+      <td>1-bromo-4-(trifluoromethyl)benzene</td>
+    </tr>
+    <tr>
+      <th>value</th>
+      <td>.28</td>
+      <td>.06</td>
+      <td>-580.0688065</td>
+      <td>882.13</td>
+      <td>.34</td>
+      <td>.03</td>
+      <td>03.8</td>
+      <td>03.8</td>
+      <td>00.7</td>
+      <td>04.5</td>
+      <td>...</td>
+      <td>2.237192</td>
+      <td>-2.738188</td>
+      <td>0.500996</td>
+      <td>-0.023379</td>
+      <td>0.000599</td>
+      <td>0.091623</td>
+      <td>3.226741</td>
+      <td>.72</td>
+      <td>.42</td>
+      <td>1-iodo-4-(trifluoromethyl)benzene</td>
+    </tr>
+    <tr>
+      <th>value</th>
+      <td>.30</td>
+      <td>.06</td>
+      <td>-473.9086709</td>
+      <td>646.52</td>
+      <td>.31</td>
+      <td>.02</td>
+      <td>02.5</td>
+      <td>02.5</td>
+      <td>00.7</td>
+      <td>03.1</td>
+      <td>...</td>
+      <td>2.058166</td>
+      <td>-0.633295</td>
+      <td>-1.424871</td>
+      <td>-0.052219</td>
+      <td>-0.086669</td>
+      <td>0.010153</td>
+      <td>1.701115</td>
+      <td>.59</td>
+      <td>.31</td>
+      <td>methyl-isoxazole-5-carboxylate</td>
+    </tr>
+    <tr>
+      <th>value</th>
+      <td>.28</td>
+      <td>.07</td>
+      <td>-399.6830527</td>
+      <td>646.52</td>
+      <td>.39</td>
+      <td>.03</td>
+      <td>02.6</td>
+      <td>02.6</td>
+      <td>00.6</td>
+      <td>03.3</td>
+      <td>...</td>
+      <td>1.314441</td>
+      <td>-0.191694</td>
+      <td>-1.122747</td>
+      <td>0.209028</td>
+      <td>-0.062367</td>
+      <td>0.113912</td>
+      <td>1.809617</td>
+      <td>.59</td>
+      <td>.34</td>
+      <td>benzo[d]isoxazole</td>
+    </tr>
+    <tr>
+      <th>value</th>
+      <td>.30</td>
+      <td>.07</td>
+      <td>-357.5549635</td>
+      <td>757.02</td>
+      <td>.31</td>
+      <td>.03</td>
+      <td>03.1</td>
+      <td>03.1</td>
+      <td>00.7</td>
+      <td>03.8</td>
+      <td>...</td>
+      <td>2.034819</td>
+      <td>0.519107</td>
+      <td>-2.553926</td>
+      <td>-0.003563</td>
+      <td>0.011876</td>
+      <td>-0.088693</td>
+      <td>3.347286</td>
+      <td>.63</td>
+      <td>.34</td>
+      <td>1-iodo-4-methoxybenzene</td>
+    </tr>
+    <tr>
+      <th>value</th>
+      <td>.30</td>
+      <td>.09</td>
+      <td>-321.6641779</td>
+      <td>870.98</td>
+      <td>.33</td>
+      <td>.03</td>
+      <td>03.5</td>
+      <td>03.5</td>
+      <td>00.7</td>
+      <td>04.3</td>
+      <td>...</td>
+      <td>2.280955</td>
+      <td>-2.756562</td>
+      <td>0.475607</td>
+      <td>-0.026282</td>
+      <td>-0.005271</td>
+      <td>0.097896</td>
+      <td>3.458467</td>
+      <td>.70</td>
+      <td>.42</td>
+      <td>1-ethyl-4-iodobenzene</td>
+    </tr>
+    <tr>
+      <th>value</th>
+      <td>.30</td>
+      <td>.06</td>
+      <td>-707.8797107</td>
+      <td>385.34</td>
+      <td>.31</td>
+      <td>.02</td>
+      <td>01.8</td>
+      <td>01.8</td>
+      <td>00.7</td>
+      <td>02.5</td>
+      <td>...</td>
+      <td>0.433032</td>
+      <td>0.144563</td>
+      <td>-0.577595</td>
+      <td>-0.034091</td>
+      <td>-0.019878</td>
+      <td>0.010345</td>
+      <td>2.358718</td>
+      <td>.48</td>
+      <td>.25</td>
+      <td>3-chloropyridine</td>
+    </tr>
+    <tr>
+      <th>value</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>-1473.5482406</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>01.4</td>
+      <td>NaN</td>
+      <td>...</td>
+      <td>0.018400</td>
+      <td>-0.025697</td>
+      <td>0.007297</td>
+      <td>-0.020387</td>
+      <td>-0.008896</td>
+      <td>0.000094</td>
+      <td>2.046991</td>
+      <td>8.89</td>
+      <td>8.69</td>
+      <td>t-BuXPhos</td>
+    </tr>
+    <tr>
+      <th>value</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>-2167.1279957</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>01.6</td>
+      <td>NaN</td>
+      <td>...</td>
+      <td>0.028303</td>
+      <td>-0.038563</td>
+      <td>0.010260</td>
+      <td>0.005173</td>
+      <td>0.002522</td>
+      <td>-0.003164</td>
+      <td>2.075851</td>
+      <td>25.45</td>
+      <td>25.53</td>
+      <td>AdBrettPhos</td>
+    </tr>
+    <tr>
+      <th>value</th>
+      <td>.36</td>
+      <td>.14</td>
+      <td>-842.1090289</td>
+      <td>4.917</td>
+      <td>.45</td>
+      <td>.14</td>
+      <td>18.0</td>
+      <td>17.9</td>
+      <td>01.0</td>
+      <td>19.4</td>
+      <td>...</td>
+      <td>0.120605</td>
+      <td>-0.009417</td>
+      <td>-0.111188</td>
+      <td>-0.042318</td>
+      <td>0.024893</td>
+      <td>0.006685</td>
+      <td>1.913226</td>
+      <td>1.86</td>
+      <td>1.60</td>
+      <td>N,N-dibenzylisoxazol-3-amine</td>
+    </tr>
+    <tr>
+      <th>value</th>
+      <td>.31</td>
+      <td>.08</td>
+      <td>-627.7543192</td>
+      <td>1.385</td>
+      <td>.38</td>
+      <td>.04</td>
+      <td>05.5</td>
+      <td>05.4</td>
+      <td>00.8</td>
+      <td>06.3</td>
+      <td>...</td>
+      <td>0.433704</td>
+      <td>0.247799</td>
+      <td>-0.681504</td>
+      <td>0.018745</td>
+      <td>-0.047598</td>
+      <td>0.212030</td>
+      <td>1.867710</td>
+      <td>.88</td>
+      <td>.58</td>
+      <td>ethyl-3-methoxyisoxazole-5-carboxylate</td>
+    </tr>
+    <tr>
+      <th>value</th>
+      <td>.33</td>
+      <td>.16</td>
+      <td>-477.0930590</td>
+      <td>1.047</td>
+      <td>.36</td>
+      <td>.04</td>
+      <td>03.8</td>
+      <td>03.8</td>
+      <td>00.7</td>
+      <td>05.0</td>
+      <td>...</td>
+      <td>0.416548</td>
+      <td>1.178004</td>
+      <td>-1.594552</td>
+      <td>0.074531</td>
+      <td>0.016927</td>
+      <td>0.276406</td>
+      <td>1.884102</td>
+      <td>.70</td>
+      <td>.46</td>
+      <td>4-phenylisoxazole</td>
+    </tr>
+    <tr>
+      <th>value</th>
+      <td>.30</td>
+      <td>.05</td>
+      <td>-259.0678768</td>
+      <td>385.34</td>
+      <td>.33</td>
+      <td>.02</td>
+      <td>01.9</td>
+      <td>01.8</td>
+      <td>00.6</td>
+      <td>02.5</td>
+      <td>...</td>
+      <td>1.603990</td>
+      <td>0.173970</td>
+      <td>-1.777960</td>
+      <td>0.014987</td>
+      <td>-0.033952</td>
+      <td>-0.088890</td>
+      <td>3.572837</td>
+      <td>.50</td>
+      <td>.24</td>
+      <td>3-iodopyridine</td>
+    </tr>
+    <tr>
+      <th>value</th>
+      <td>.30</td>
+      <td>.07</td>
+      <td>-285.3593086</td>
+      <td>325.77</td>
+      <td>.28</td>
+      <td>.02</td>
+      <td>01.4</td>
+      <td>01.4</td>
+      <td>00.6</td>
+      <td>02.4</td>
+      <td>...</td>
+      <td>2.313334</td>
+      <td>-1.004585</td>
+      <td>-1.308749</td>
+      <td>0.270307</td>
+      <td>-0.000281</td>
+      <td>0.008611</td>
+      <td>1.695501</td>
+      <td>.50</td>
+      <td>.22</td>
+      <td>5-methylisoxazole</td>
+    </tr>
+    <tr>
+      <th>value</th>
+      <td>.27</td>
+      <td>.06</td>
+      <td>-806.3670946</td>
+      <td>757.02</td>
+      <td>.38</td>
+      <td>.02</td>
+      <td>03.1</td>
+      <td>03.1</td>
+      <td>00.7</td>
+      <td>03.8</td>
+      <td>...</td>
+      <td>0.970212</td>
+      <td>0.396144</td>
+      <td>-1.366355</td>
+      <td>-0.041214</td>
+      <td>-0.011147</td>
+      <td>-0.139426</td>
+      <td>2.095931</td>
+      <td>.61</td>
+      <td>.33</td>
+      <td>1-chloro-4-methoxybenzene</td>
+    </tr>
+    <tr>
+      <th>value</th>
+      <td>.33</td>
+      <td>.08</td>
+      <td>-494.3305221</td>
+      <td>1.116</td>
+      <td>.33</td>
+      <td>.03</td>
+      <td>04.1</td>
+      <td>04.1</td>
+      <td>00.7</td>
+      <td>04.8</td>
+      <td>...</td>
+      <td>1.894339</td>
+      <td>0.444792</td>
+      <td>-2.339131</td>
+      <td>-0.220227</td>
+      <td>0.091318</td>
+      <td>-0.043877</td>
+      <td>1.684227</td>
+      <td>.77</td>
+      <td>.45</td>
+      <td>5-methyl-3-(1H-pyrrol-1-yl)isoxazole</td>
+    </tr>
+    <tr>
+      <th>value</th>
+      <td>.28</td>
+      <td>.07</td>
+      <td>-1028.8815353</td>
+      <td>882.13</td>
+      <td>.33</td>
+      <td>.03</td>
+      <td>03.7</td>
+      <td>03.7</td>
+      <td>00.7</td>
+      <td>04.4</td>
+      <td>...</td>
+      <td>1.209839</td>
+      <td>-1.600829</td>
+      <td>0.390990</td>
+      <td>-0.020618</td>
+      <td>-0.002036</td>
+      <td>0.169593</td>
+      <td>1.868775</td>
+      <td>.69</td>
+      <td>.41</td>
+      <td>1-chloro-4-(trifluoromethyl)benzene</td>
+    </tr>
+    <tr>
+      <th>value</th>
+      <td>.30</td>
+      <td>.07</td>
+      <td>-477.0956147</td>
+      <td>1.047</td>
+      <td>.31</td>
+      <td>.04</td>
+      <td>03.9</td>
+      <td>03.8</td>
+      <td>00.7</td>
+      <td>04.6</td>
+      <td>...</td>
+      <td>1.099463</td>
+      <td>0.727238</td>
+      <td>-1.826701</td>
+      <td>-0.098150</td>
+      <td>0.065516</td>
+      <td>0.024328</td>
+      <td>1.784786</td>
+      <td>.73</td>
+      <td>.45</td>
+      <td>3-phenylisoxazole</td>
+    </tr>
+    <tr>
+      <th>value</th>
+      <td>.28</td>
+      <td>.06</td>
+      <td>-2821.5675696</td>
+      <td>385.34</td>
+      <td>.33</td>
+      <td>.02</td>
+      <td>02.3</td>
+      <td>02.3</td>
+      <td>00.6</td>
+      <td>02.9</td>
+      <td>...</td>
+      <td>1.196169</td>
+      <td>0.141418</td>
+      <td>-1.337587</td>
+      <td>0.013675</td>
+      <td>-0.018093</td>
+      <td>-0.033319</td>
+      <td>3.016312</td>
+      <td>.58</td>
+      <td>.29</td>
+      <td>2-bromopyridine</td>
+    </tr>
+    <tr>
+      <th>value</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>-1702.5922088</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>11.8</td>
+      <td>NaN</td>
+      <td>01.3</td>
+      <td>13.7</td>
+      <td>...</td>
+      <td>0.028698</td>
+      <td>0.001379</td>
+      <td>-0.030077</td>
+      <td>-0.004119</td>
+      <td>0.012939</td>
+      <td>-0.001368</td>
+      <td>1.993062</td>
+      <td>13.25</td>
+      <td>12.82</td>
+      <td>t-BuBrettPhos</td>
+    </tr>
+    <tr>
+      <th>value</th>
+      <td>.30</td>
+      <td>.07</td>
+      <td>-770.4766472</td>
+      <td>870.98</td>
+      <td>.33</td>
+      <td>.02</td>
+      <td>03.6</td>
+      <td>03.6</td>
+      <td>00.7</td>
+      <td>04.3</td>
+      <td>...</td>
+      <td>1.292779</td>
+      <td>-1.656896</td>
+      <td>0.364118</td>
+      <td>-0.032613</td>
+      <td>-0.007746</td>
+      <td>0.134999</td>
+      <td>2.151525</td>
+      <td>.70</td>
+      <td>.37</td>
+      <td>1-chloro-4-ethylbenzene</td>
+    </tr>
+    <tr>
+      <th>value</th>
+      <td>.36</td>
+      <td>.13</td>
+      <td>-519.8170064</td>
+      <td>2.554</td>
+      <td>.39</td>
+      <td>.08</td>
+      <td>07.3</td>
+      <td>07.2</td>
+      <td>00.8</td>
+      <td>08.1</td>
+      <td>...</td>
+      <td>0.015964</td>
+      <td>-0.020010</td>
+      <td>0.004046</td>
+      <td>-0.000941</td>
+      <td>0.186960</td>
+      <td>-0.145221</td>
+      <td>2.052713</td>
+      <td>1.03</td>
+      <td>.76</td>
+      <td>BTMG</td>
+    </tr>
+    <tr>
+      <th>value</th>
+      <td>.30</td>
+      <td>.07</td>
+      <td>-675.5595455</td>
+      <td>1.271</td>
+      <td>.33</td>
+      <td>.04</td>
+      <td>04.9</td>
+      <td>04.8</td>
+      <td>00.7</td>
+      <td>05.6</td>
+      <td>...</td>
+      <td>0.894879</td>
+      <td>-0.106748</td>
+      <td>-0.788131</td>
+      <td>-0.056266</td>
+      <td>-0.030592</td>
+      <td>-0.059792</td>
+      <td>1.683025</td>
+      <td>.81</td>
+      <td>.54</td>
+      <td>5-(2,6-difluorophenyl)isoxazole</td>
+    </tr>
+    <tr>
+      <th>value</th>
+      <td>.31</td>
+      <td>.09</td>
+      <td>-2920.0522504</td>
+      <td>757.02</td>
+      <td>.31</td>
+      <td>.03</td>
+      <td>03.7</td>
+      <td>03.7</td>
+      <td>00.7</td>
+      <td>04.4</td>
+      <td>...</td>
+      <td>0.377788</td>
+      <td>-2.088400</td>
+      <td>1.710612</td>
+      <td>0.094098</td>
+      <td>0.008975</td>
+      <td>0.012679</td>
+      <td>2.813454</td>
+      <td>.73</td>
+      <td>.44</td>
+      <td>1-bromo-4-methoxybenzene</td>
+    </tr>
+    <tr>
+      <th>value</th>
+      <td>.30</td>
+      <td>.06</td>
+      <td>-259.0689789</td>
+      <td>385.34</td>
+      <td>.31</td>
+      <td>.02</td>
+      <td>01.8</td>
+      <td>01.8</td>
+      <td>00.7</td>
+      <td>02.5</td>
+      <td>...</td>
+      <td>1.542485</td>
+      <td>0.074614</td>
+      <td>-1.617099</td>
+      <td>0.015704</td>
+      <td>-0.024002</td>
+      <td>-0.013346</td>
+      <td>3.687572</td>
+      <td>.55</td>
+      <td>.24</td>
+      <td>2-iodopyridine</td>
+    </tr>
+    <tr>
+      <th>value</th>
+      <td>.28</td>
+      <td>.05</td>
+      <td>-707.8831449</td>
+      <td>385.34</td>
+      <td>.34</td>
+      <td>.02</td>
+      <td>01.8</td>
+      <td>01.8</td>
+      <td>00.6</td>
+      <td>02.4</td>
+      <td>...</td>
+      <td>0.470494</td>
+      <td>0.213189</td>
+      <td>-0.683683</td>
+      <td>0.034319</td>
+      <td>0.021735</td>
+      <td>-0.112892</td>
+      <td>2.373742</td>
+      <td>.53</td>
+      <td>.27</td>
+      <td>2-chloropyridine</td>
+    </tr>
+    <tr>
+      <th>value</th>
+      <td>.56</td>
+      <td>.32</td>
+      <td>-1544.3115726</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>31.9</td>
+      <td>31.8</td>
+      <td>01.1</td>
+      <td>33.6</td>
+      <td>...</td>
+      <td>0.009063</td>
+      <td>-0.018473</td>
+      <td>0.009410</td>
+      <td>0.006215</td>
+      <td>-0.008569</td>
+      <td>0.006939</td>
+      <td>2.046141</td>
+      <td>3.36</td>
+      <td>3.07</td>
+      <td>P2Et</td>
+    </tr>
+    <tr>
+      <th>value</th>
+      <td>.28</td>
+      <td>.06</td>
+      <td>-324.6803129</td>
+      <td>497.52</td>
+      <td>.31</td>
+      <td>.02</td>
+      <td>01.9</td>
+      <td>01.9</td>
+      <td>00.7</td>
+      <td>02.5</td>
+      <td>...</td>
+      <td>1.436470</td>
+      <td>0.348944</td>
+      <td>-1.785414</td>
+      <td>0.157489</td>
+      <td>-0.071069</td>
+      <td>-0.010127</td>
+      <td>1.733728</td>
+      <td>.53</td>
+      <td>.26</td>
+      <td>3,5-dimethylisoxazole</td>
+    </tr>
+  </tbody>
+</table>
+<p>45 rows × 41 columns</p>
+</div></div></div>
+</div>
+</div>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+        
+        <div class='prev-next-bottom'>
+            
+    <a class='left-prev' id="prev-link" href="3-regex.html" title="previous page">Regular Expressions</a>
+    <a class='right-next' id="next-link" href="3-homework.html" title="next page">Session 3 Homework</a>
+
+        </div>
+        
+        </div>
+    </div>
+    <footer class="footer mt-5 mt-md-0">
+    <div class="container">
+      <p>
+        
+          By Jessica A. Nash<br/>
+        
+            &copy; Copyright 2020.<br/>
+      </p>
+    </div>
+  </footer>
+</main>
+
+
+      </div>
+    </div>
+  
+  <script src="_static/js/index.1c5a1a01449ed65a7b51.js"></script>
+
+  
+<script async="" src="https://www.google-analytics.com/analytics.js"></script>
+<script>
+                        window.ga = window.ga || function () {
+                            (ga.q = ga.q || []).push(arguments) };
+                        ga.l = +new Date;
+                        ga('create', 'UA-169902961-1', 'auto');
+                        ga('set', 'anonymizeIp', true);
+                        ga('send', 'pageview');
+                    </script>
+
+  </body>
+</html>
