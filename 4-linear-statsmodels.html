@@ -54,7 +54,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Interactive Visualizations with plotly" href="4-interactive-visualizations.html" />
-    <link rel="prev" title="Nonlinear Fitting with ScikitLearn" href="4-nonlinear-scikitlearn.html" />
+    <link rel="prev" title="Fitting with ScikitLearn - Part 2" href="4-nonlinear-scikitlearn.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="en" />
     
@@ -215,7 +215,7 @@
   <ul class="current">
    <li class="toctree-l2">
     <a class="reference internal" href="4-nonlinear-scikitlearn.html">
-     Nonlinear Fitting with ScikitLearn
+     Fitting with ScikitLearn - Part 2
     </a>
    </li>
    <li class="toctree-l2 current active">
@@ -329,6 +329,19 @@
         <!-- Table of contents -->
         <div class="d-none d-md-block col-md-2 bd-toc show">
             
+            <div class="tocsection onthispage pt-5 pb-3">
+                <i class="fas fa-list"></i> Contents
+            </div>
+            <nav id="bd-toc-nav">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#multiple-regression">
+   Multiple Regression
+  </a>
+ </li>
+</ul>
+
+            </nav>
         </div>
     </div>
 </div>
@@ -339,6 +352,532 @@
                 
   <div class="section" id="linear-fitting-with-statsmodels">
 <h1>Linear Fitting with statsmodels<a class="headerlink" href="#linear-fitting-with-statsmodels" title="Permalink to this headline">¶</a></h1>
+<div class="overview">
+   <p class="overview-title">Overview</p>
+    <p>Questions</p>
+        <ul>
+            <li>How can I fit a linear equation using statsmodels?</li>
+            <li>How can I fit a linear equation with multiple variables using statsmodels?</li>
+        </ul>
+    <p>Objectives:</p>
+        <ul>
+            <li>Use the formula interface of statsmodels to perform a linear fit.</li>
+        </ul>
+    <p>Keypoints:</p>
+        <ul>
+            <li>Statsmodels allows you to specify your equations using dataframe and column names.</li>
+            <li>Calling .summary on the fit gives you a nice summary of the fit and parameters.</li>
+            <li>You can use .predict to predict new values using the fitted model.</li>
+            <li>You must give the predict method a dataframe with the same column names as the original dataframe.</li>
+        </ul>
+    </div>
+<p>In this module, we are going to use statsmodels to fit our linear model. We are going to use an interface which allows us to use dataframes and text formulas to specify the equations we want to fit. To import statsmodels, use <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">statsmodels.formula.api</span></code> as <code class="docutils literal notranslate"><span class="pre">smf</span></code>.</p>
+<p>First, we’ll use pandas to load the data we cleaned in session 2.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="kn">import</span> <span class="nn">statsmodels.formula.api</span> <span class="k">as</span> <span class="nn">smf</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">file_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">,</span> <span class="s2">&quot;potts_table1_clean.csv&quot;</span><span class="p">)</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;class &#39;pandas.core.frame.DataFrame&#39;&gt;
+RangeIndex: 37 entries, 0 to 36
+Data columns (total 10 columns):
+ #   Column     Non-Null Count  Dtype  
+---  ------     --------------  -----  
+ 0   Compound   37 non-null     object 
+ 1   log P      34 non-null     float64
+ 2   pi         37 non-null     float64
+ 3   Hd         37 non-null     float64
+ 4   Ha         37 non-null     float64
+ 5   MV         36 non-null     float64
+ 6   R_2        37 non-null     float64
+ 7   log K_oct  36 non-null     float64
+ 8   log K_hex  30 non-null     float64
+ 9   log K_hep  24 non-null     float64
+dtypes: float64(9), object(1)
+memory usage: 3.0+ KB
+</pre></div>
+</div>
+</div>
+</div>
+<p>Next, we will use ordinary least squares (<code class="docutils literal notranslate"><span class="pre">ols</span></code>) to fit our equation. When you call <code class="docutils literal notranslate"><span class="pre">ols</span></code>, you give it a formula you would like to fit. The dependent variable goes on the left side, followed by a <code class="docutils literal notranslate"><span class="pre">~</span></code>. Then you put the independent variables you want to fit. To fit <code class="docutils literal notranslate"><span class="pre">log</span> <span class="pre">P</span></code> as a function of <code class="docutils literal notranslate"><span class="pre">MV</span></code>, we would expect put <code class="docutils literal notranslate"><span class="pre">log</span> <span class="pre">P</span> <span class="pre">~</span> <span class="pre">MV</span></code>. However, since our dependent variable has a space in it, we must group it using a special syntax - <code class="docutils literal notranslate"><span class="pre">Q('log</span> <span class="pre">P')</span></code>. Finally, we fit the model using <code class="docutils literal notranslate"><span class="pre">.fit()</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">regression</span> <span class="o">=</span> <span class="n">smf</span><span class="o">.</span><span class="n">ols</span><span class="p">(</span><span class="s2">&quot;Q(&#39;log P&#39;) ~ MV&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>This performs a fit to your equation using ordinary least squares. You can get a summary of your model by calling <code class="docutils literal notranslate"><span class="pre">.summary</span></code> on the fit.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">regression</span><span class="o">.</span><span class="n">summary</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><table class="simpletable">
+<caption>OLS Regression Results</caption>
+<tr>
+  <th>Dep. Variable:</th>       <td>Q('log P')</td>    <th>  R-squared:         </th> <td>   0.446</td>
+</tr>
+<tr>
+  <th>Model:</th>                   <td>OLS</td>       <th>  Adj. R-squared:    </th> <td>   0.428</td>
+</tr>
+<tr>
+  <th>Method:</th>             <td>Least Squares</td>  <th>  F-statistic:       </th> <td>   24.98</td>
+</tr>
+<tr>
+  <th>Date:</th>             <td>Wed, 12 May 2021</td> <th>  Prob (F-statistic):</th> <td>2.16e-05</td>
+</tr>
+<tr>
+  <th>Time:</th>                 <td>13:54:47</td>     <th>  Log-Likelihood:    </th> <td> -34.474</td>
+</tr>
+<tr>
+  <th>No. Observations:</th>      <td>    33</td>      <th>  AIC:               </th> <td>   72.95</td>
+</tr>
+<tr>
+  <th>Df Residuals:</th>          <td>    31</td>      <th>  BIC:               </th> <td>   75.94</td>
+</tr>
+<tr>
+  <th>Df Model:</th>              <td>     1</td>      <th>                     </th>     <td> </td>   
+</tr>
+<tr>
+  <th>Covariance Type:</th>      <td>nonrobust</td>    <th>                     </th>     <td> </td>   
+</tr>
+</table>
+<table class="simpletable">
+<tr>
+      <td></td>         <th>coef</th>     <th>std err</th>      <th>t</th>      <th>P>|t|</th>  <th>[0.025</th>    <th>0.975]</th>  
+</tr>
+<tr>
+  <th>Intercept</th> <td>   -7.2469</td> <td>    0.362</td> <td>  -20.002</td> <td> 0.000</td> <td>   -7.986</td> <td>   -6.508</td>
+</tr>
+<tr>
+  <th>MV</th>        <td>    0.0271</td> <td>    0.005</td> <td>    4.998</td> <td> 0.000</td> <td>    0.016</td> <td>    0.038</td>
+</tr>
+</table>
+<table class="simpletable">
+<tr>
+  <th>Omnibus:</th>       <td>21.287</td> <th>  Durbin-Watson:     </th> <td>   1.639</td>
+</tr>
+<tr>
+  <th>Prob(Omnibus):</th> <td> 0.000</td> <th>  Jarque-Bera (JB):  </th> <td>  28.520</td>
+</tr>
+<tr>
+  <th>Skew:</th>          <td> 1.802</td> <th>  Prob(JB):          </th> <td>6.41e-07</td>
+</tr>
+<tr>
+  <th>Kurtosis:</th>      <td> 5.783</td> <th>  Cond. No.          </th> <td>    196.</td>
+</tr>
+</table><br/><br/>Notes:<br/>[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.</div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">regression</span><span class="o">.</span><span class="n">params</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Intercept   -7.246871
+MV           0.027056
+dtype: float64
+</pre></div>
+</div>
+</div>
+</div>
+<p>Fitted values are stored automatically in <code class="docutils literal notranslate"><span class="pre">regression.fittedvalues</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">regression</span><span class="o">.</span><span class="n">fittedvalues</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0    -6.960075
+1    -6.659752
+2    -6.643518
+3    -6.383779
+4    -6.343195
+5    -6.105100
+6    -6.067222
+7    -5.910296
+9    -5.839950
+10   -5.829127
+11   -5.788543
+13   -5.623500
+14   -5.618089
+15   -5.553154
+16   -5.515276
+17   -5.512570
+18   -5.461163
+19   -5.461163
+20   -5.417873
+22   -5.417873
+23   -5.352939
+24   -5.325882
+25   -5.325882
+27   -5.290709
+28   -5.274476
+29   -5.236597
+30   -5.095905
+31   -4.998503
+32   -4.957918
+33   -4.722530
+34   -4.681945
+35   -4.433029
+36   -4.162467
+dtype: float64
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;predicted_values&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">regression</span><span class="o">.</span><span class="n">fittedvalues</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Compound</th>
+      <th>log P</th>
+      <th>pi</th>
+      <th>Hd</th>
+      <th>Ha</th>
+      <th>MV</th>
+      <th>R_2</th>
+      <th>log K_oct</th>
+      <th>log K_hex</th>
+      <th>log K_hep</th>
+      <th>predicted_values</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>water</td>
+      <td>-6.85</td>
+      <td>0.45</td>
+      <td>0.82</td>
+      <td>0.35</td>
+      <td>10.6</td>
+      <td>0.00</td>
+      <td>-1.38</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>-6.960075</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>methanol</td>
+      <td>-6.68</td>
+      <td>0.44</td>
+      <td>0.43</td>
+      <td>0.47</td>
+      <td>21.7</td>
+      <td>0.28</td>
+      <td>-0.73</td>
+      <td>-2.42</td>
+      <td>-2.80</td>
+      <td>-6.659752</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>methanoicacid</td>
+      <td>-7.08</td>
+      <td>0.60</td>
+      <td>0.75</td>
+      <td>0.38</td>
+      <td>22.3</td>
+      <td>0.30</td>
+      <td>-0.54</td>
+      <td>-3.93</td>
+      <td>-3.63</td>
+      <td>-6.643518</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>ethanol</td>
+      <td>-6.66</td>
+      <td>0.42</td>
+      <td>0.37</td>
+      <td>0.48</td>
+      <td>31.9</td>
+      <td>0.25</td>
+      <td>-0.32</td>
+      <td>-2.24</td>
+      <td>-2.10</td>
+      <td>-6.383779</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>ethanoicacid</td>
+      <td>-7.01</td>
+      <td>0.65</td>
+      <td>0.61</td>
+      <td>0.45</td>
+      <td>33.4</td>
+      <td>0.27</td>
+      <td>-0.31</td>
+      <td>-3.28</td>
+      <td>-2.90</td>
+      <td>-6.343195</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<p>You can make predictions using the fitted model by calling <code class="docutils literal notranslate"><span class="pre">regression.predict</span></code> and passing in values for which you want a prediction as part of a pandas dataframe with appropriate column names. Your column names <strong>must</strong> match the column names you performed the fit with.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">help</span><span class="p">(</span><span class="n">regression</span><span class="o">.</span><span class="n">predict</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Help on method predict in module statsmodels.base.model:
+
+predict(exog=None, transform=True, *args, **kwargs) method of statsmodels.regression.linear_model.OLSResults instance
+    Call self.model.predict with self.params as the first argument.
+    
+    Parameters
+    ----------
+    exog : array_like, optional
+        The values for which you want to predict. see Notes below.
+    transform : bool, optional
+        If the model was fit via a formula, do you want to pass
+        exog through the formula. Default is True. E.g., if you fit
+        a model y ~ log(x1) + log(x2), and transform is True, then
+        you can pass a data structure that contains x1 and x2 in
+        their original form. Otherwise, you&#39;d need to log the data
+        first.
+    *args
+        Additional arguments to pass to the model, see the
+        predict method of the model for the details.
+    **kwargs
+        Additional keywords arguments to pass to the model, see the
+        predict method of the model for the details.
+    
+    Returns
+    -------
+    array_like
+        See self.model.predict.
+    
+    Notes
+    -----
+    The types of exog that are supported depends on whether a formula
+    was used in the specification of the model.
+    
+    If a formula was used, then exog is processed in the same way as
+    the original data. This transformation needs to have key access to the
+    same variable names, and can be a pandas DataFrame or a dict like
+    object that contains numpy arrays.
+    
+    If no formula was used, then the provided exog needs to have the
+    same number of columns as the original exog in the model. No
+    transformation of the data is performed except converting it to
+    a numpy array.
+    
+    Row indices as in pandas data frames are supported, and added to the
+    returned prediction.
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">to_predict</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
+<span class="n">to_predict</span><span class="p">[</span><span class="s2">&quot;MV&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">75</span><span class="p">,</span> <span class="mi">90</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">regression</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">to_predict</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>0   -5.217658
+1   -4.811815
+dtype: float64
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+
+<span class="n">g</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">lmplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s2">&quot;log P&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s2">&quot;predicted_values&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/4-linear-statsmodels_17_0.png" src="_images/4-linear-statsmodels_17_0.png" />
+</div>
+</div>
+<div class="section" id="multiple-regression">
+<h2>Multiple Regression<a class="headerlink" href="#multiple-regression" title="Permalink to this headline">¶</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">columns</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Index([&#39;Compound&#39;, &#39;log P&#39;, &#39;pi&#39;, &#39;Hd&#39;, &#39;Ha&#39;, &#39;MV&#39;, &#39;R_2&#39;, &#39;log K_oct&#39;,
+       &#39;log K_hex&#39;, &#39;log K_hep&#39;, &#39;predicted_values&#39;],
+      dtype=&#39;object&#39;)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">multiple_regression</span> <span class="o">=</span> <span class="n">smf</span><span class="o">.</span><span class="n">ols</span><span class="p">(</span><span class="s2">&quot;Q(&#39;log P&#39;) ~ pi + Hd + Ha + MV + R_2&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">multiple_regression</span><span class="o">.</span><span class="n">summary</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><table class="simpletable">
+<caption>OLS Regression Results</caption>
+<tr>
+  <th>Dep. Variable:</th>       <td>Q('log P')</td>    <th>  R-squared:         </th> <td>   0.965</td>
+</tr>
+<tr>
+  <th>Model:</th>                   <td>OLS</td>       <th>  Adj. R-squared:    </th> <td>   0.959</td>
+</tr>
+<tr>
+  <th>Method:</th>             <td>Least Squares</td>  <th>  F-statistic:       </th> <td>   150.4</td>
+</tr>
+<tr>
+  <th>Date:</th>             <td>Wed, 12 May 2021</td> <th>  Prob (F-statistic):</th> <td>7.87e-19</td>
+</tr>
+<tr>
+  <th>Time:</th>                 <td>13:55:34</td>     <th>  Log-Likelihood:    </th> <td>  11.249</td>
+</tr>
+<tr>
+  <th>No. Observations:</th>      <td>    33</td>      <th>  AIC:               </th> <td>  -10.50</td>
+</tr>
+<tr>
+  <th>Df Residuals:</th>          <td>    27</td>      <th>  BIC:               </th> <td>  -1.518</td>
+</tr>
+<tr>
+  <th>Df Model:</th>              <td>     5</td>      <th>                     </th>     <td> </td>   
+</tr>
+<tr>
+  <th>Covariance Type:</th>      <td>nonrobust</td>    <th>                     </th>     <td> </td>   
+</tr>
+</table>
+<table class="simpletable">
+<tr>
+      <td></td>         <th>coef</th>     <th>std err</th>      <th>t</th>      <th>P>|t|</th>  <th>[0.025</th>    <th>0.975]</th>  
+</tr>
+<tr>
+  <th>Intercept</th> <td>   -4.4861</td> <td>    0.199</td> <td>  -22.501</td> <td> 0.000</td> <td>   -4.895</td> <td>   -4.077</td>
+</tr>
+<tr>
+  <th>pi</th>        <td>   -0.9319</td> <td>    0.220</td> <td>   -4.237</td> <td> 0.000</td> <td>   -1.383</td> <td>   -0.481</td>
+</tr>
+<tr>
+  <th>Hd</th>        <td>   -1.3037</td> <td>    0.185</td> <td>   -7.038</td> <td> 0.000</td> <td>   -1.684</td> <td>   -0.924</td>
+</tr>
+<tr>
+  <th>Ha</th>        <td>   -4.3756</td> <td>    0.371</td> <td>  -11.784</td> <td> 0.000</td> <td>   -5.138</td> <td>   -3.614</td>
+</tr>
+<tr>
+  <th>MV</th>        <td>    0.0260</td> <td>    0.002</td> <td>   17.193</td> <td> 0.000</td> <td>    0.023</td> <td>    0.029</td>
+</tr>
+<tr>
+  <th>R_2</th>       <td>    0.5135</td> <td>    0.177</td> <td>    2.900</td> <td> 0.007</td> <td>    0.150</td> <td>    0.877</td>
+</tr>
+</table>
+<table class="simpletable">
+<tr>
+  <th>Omnibus:</th>       <td> 0.688</td> <th>  Durbin-Watson:     </th> <td>   1.300</td>
+</tr>
+<tr>
+  <th>Prob(Omnibus):</th> <td> 0.709</td> <th>  Jarque-Bera (JB):  </th> <td>   0.200</td>
+</tr>
+<tr>
+  <th>Skew:</th>          <td> 0.179</td> <th>  Prob(JB):          </th> <td>   0.905</td>
+</tr>
+<tr>
+  <th>Kurtosis:</th>      <td> 3.132</td> <th>  Cond. No.          </th> <td>    835.</td>
+</tr>
+</table><br/><br/>Notes:<br/>[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.</div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;MR_predicted_values&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">multiple_regression</span><span class="o">.</span><span class="n">fittedvalues</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">g</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">lmplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s2">&quot;log P&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s2">&quot;MR_predicted_values&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/4-linear-statsmodels_23_0.png" src="_images/4-linear-statsmodels_23_0.png" />
+</div>
+</div>
+</div>
 </div>
 
     <script type="text/x-thebe-config">
@@ -366,7 +905,7 @@
         
         <div class='prev-next-bottom'>
             
-    <a class='left-prev' id="prev-link" href="4-nonlinear-scikitlearn.html" title="previous page">Nonlinear Fitting with ScikitLearn</a>
+    <a class='left-prev' id="prev-link" href="4-nonlinear-scikitlearn.html" title="previous page">Fitting with ScikitLearn - Part 2</a>
     <a class='right-next' id="next-link" href="4-interactive-visualizations.html" title="next page">Interactive Visualizations with plotly</a>
 
         </div>
