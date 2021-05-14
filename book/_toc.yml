@@ -23,6 +23,7 @@
     - file: 3-regex
     - file: regex-folders
     - file: 3-homework
+    - file: 3-homework-solution
 - file: 4-intro-objectives
   sections:
     - file: 4-nonlinear-scikitlearn
