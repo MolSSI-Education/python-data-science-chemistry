@@ -5,12 +5,12 @@ format: jb-book
 root: intro
 chapters:
 - file: setup
-- file: 1-intro-objectives
+- file: 1-1-intro-objectives
   sections:
-    - file: 1-pandas-dataframes-esol
-    - file: 1-numpy-arrays
-    - file: 1-matplotlib
-    - file: 1-homework
+    - file: 1-2-pandas-dataframes-esol
+    - file: 1-3-numpy-arrays
+    - file: 1-4-matplotlib
+    - file: 1-5-homework
     - file: homework_1_solutions
 - file: 2-intro-objectives
   sections:
