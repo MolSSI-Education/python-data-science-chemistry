@@ -54,7 +54,7 @@ const thebe_selector_output = ".output, .cell_output"
     <script async="async" src="_static/sphinx-thebe.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Working with Pandas DataFrames" href="1-pandas-dataframes-esol.html" />
+    <link rel="next" title="Working with Pandas DataFrames" href="1-2-pandas-dataframes-esol.html" />
     <link rel="prev" title="Set Up" href="setup.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
@@ -140,22 +140,22 @@ const thebe_selector_output = ".output, .cell_output"
   </label>
   <ul>
    <li class="toctree-l2">
-    <a class="reference internal" href="1-pandas-dataframes-esol.html">
+    <a class="reference internal" href="1-2-pandas-dataframes-esol.html">
      Working with Pandas DataFrames
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="1-numpy-arrays.html">
+    <a class="reference internal" href="1-3-numpy-arrays.html">
      Working with NumPy Arrays
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="1-matplotlib.html">
+    <a class="reference internal" href="1-4-matplotlib.html">
      Plotting with Matplotlib
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="1-homework.html">
+    <a class="reference internal" href="1-5-homework.html">
      Session 1 Homework
     </a>
    </li>
@@ -326,7 +326,7 @@ title="Toggle navigation"
   <div class="menu-dropdown__content">
     <ul>
       <li>
-        <a href="https://mybinder.org/v2/gh/MolSSI-Education/python-scripting-level-2/main?urlpath=tree/book/1-intro-objectives.ipynb"
+        <a href="https://mybinder.org/v2/gh/MolSSI-Education/python-scripting-level-2/main?urlpath=tree/book/1-1-intro-objectives.ipynb"
    class="headerbtn"
    data-toggle="tooltip"
 data-placement="left"
@@ -386,7 +386,7 @@ title="Source repository"
       </li>
       
       <li>
-        <a href="https://github.com/MolSSI-Education/python-scripting-level-2/issues/new?title=Issue%20on%20page%20%2F1-intro-objectives.html&body=Your%20issue%20content%20here."
+        <a href="https://github.com/MolSSI-Education/python-scripting-level-2/issues/new?title=Issue%20on%20page%20%2F1-1-intro-objectives.html&body=Your%20issue%20content%20here."
    class="headerbtn"
    data-toggle="tooltip"
 data-placement="left"
@@ -414,7 +414,7 @@ title="Open an issue"
   <div class="menu-dropdown__content">
     <ul>
       <li>
-        <a href="_sources/1-intro-objectives.ipynb"
+        <a href="_sources/1-1-intro-objectives.ipynb"
    class="headerbtn"
    data-toggle="tooltip"
 data-placement="left"
@@ -477,26 +477,38 @@ title="Print to PDF"
                 
   <section class="tex2jax_ignore mathjax_ignore" id="session-1">
 <h1>Session 1<a class="headerlink" href="#session-1" title="Permalink to this headline">#</a></h1>
-<div class="overview">
-   <p class="overview-title">Session 1 Overview</p>
-    <p>In this session, we will see how to use the libraries <a href="https://pandas.pydata.org/">Pandas</a>, <a href="https://numpy.org/">NumPy</a>, and <a href="https://matplotlib.org/">Matplotlib</a>. Pandas is a library for working with tabular data which is widely used in data science. NumPy, short for <strong>nu</strong>merical <strong>py</strong>thon is used for working with numerical data. Its core data type, the n-dimensional NumPy array allows for much faster calculations than standard Python, and forms the base of the scientific Python eco-system. Matplotlib is a well-established plotting library for Python.</p>
-    <p>These three libraries are fundamental for scientific work as well as data science in Python. In this session, we will learn some basics about pandas dataframes, NumPy arrays, and creating plots using matplotlib.</p>
-    <p>At the end of this session, you should be able to answer these questions.</p>
-    <p class="overview-sub">Working with Pandas DataFrames</p>
-        <ul>
-            <li>How can I use pandas to examine data?</li>
-        </ul>
-    <p class="overview-sub">Working with NumPy Arrays</p>
-        <ul>
-            <li>When should I use NumPy arrays instead of Pandas dataframes?</li>
-            <li>What does the shape of a NumPy array mean?</li>
-            <li>How can I reshape arrays?</li>
-        </ul>
-    <p class="overview-sub">Creating plots using matplotlib</p>
-        <ul>
-            <li>How can I create plots using matplotlib?</li>
-        </ul>
-</div><div class="toctree-wrapper compound">
+<div class="day-overview admonition">
+<p class="admonition-title">Session 1 Overview</p>
+<p>In this session, we will see how to use the libraries <a class="reference external" href="https://pandas.pydata.org/">Pandas</a>, <a class="reference external" href="https://numpy.org/">NumPy</a>, and <a class="reference external" href="https://matplotlib.org/">Matplotlib</a>.
+Pandas is a library for working with tabular data which is widely used in data science.
+NumPy, short for <strong>nu</strong>merical <strong>py</strong>thon is used for working with numerical data.
+Its core data type, the n-dimensional NumPy array allows for much faster calculations than standard Python,
+and forms the base of the scientific Python eco-system.
+Matplotlib is a well-established plotting library for Python.</p>
+<p>These three libraries are fundamental for scientific work as well as data science in Python.
+In this session, we will learn some basics about pandas dataframes, NumPy arrays, and creating plots using matplotlib.</p>
+<div class="overview admonition">
+<p class="admonition-title">Working with Pandas Dataframes</p>
+<ul class="simple">
+<li><p>How can I use pandas to examine data?</p></li>
+</ul>
+</div>
+<div class="overview admonition">
+<p class="admonition-title">Working with NumPy Arrays</p>
+<ul class="simple">
+<li><p>When should I use NumPy arrays instead of Pandas dataframes?</p></li>
+<li><p>What does the shape of a NumPy array mean?</p></li>
+<li><p>How can I reshape arrays?</p></li>
+</ul>
+</div>
+<div class="overview admonition">
+<p class="admonition-title">Creating plots using matplotlib</p>
+<ul class="simple">
+<li><p>How can I create plots using matplotlib?</p></li>
+</ul>
+</div>
+</div>
+<div class="toctree-wrapper compound">
 </div>
 </section>
 
@@ -534,7 +546,7 @@ title="Print to PDF"
             <p class="prev-next-title">Set Up</p>
         </div>
     </a>
-    <a class='right-next' id="next-link" href="1-pandas-dataframes-esol.html" title="next page">
+    <a class='right-next' id="next-link" href="1-2-pandas-dataframes-esol.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
         <p class="prev-next-title">Working with Pandas DataFrames</p>

@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>Working with NumPy Arrays &#8212; Python Data and Scripting - Level 2</title>
+    <title>Plotting with Matplotlib &#8212; Python Data and Scripting - Level 2</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -54,8 +54,8 @@ const thebe_selector_output = ".output, .cell_output"
     <script async="async" src="_static/sphinx-thebe.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Plotting with Matplotlib" href="1-matplotlib.html" />
-    <link rel="prev" title="Working with Pandas DataFrames" href="1-pandas-dataframes-esol.html" />
+    <link rel="next" title="Session 1 Homework" href="1-5-homework.html" />
+    <link rel="prev" title="Working with NumPy Arrays" href="1-3-numpy-arrays.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -130,7 +130,7 @@ const thebe_selector_output = ".output, .cell_output"
   </a>
  </li>
  <li class="toctree-l1 current active has-children">
-  <a class="reference internal" href="1-intro-objectives.html">
+  <a class="reference internal" href="1-1-intro-objectives.html">
    Session 1
   </a>
   <input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
@@ -140,22 +140,22 @@ const thebe_selector_output = ".output, .cell_output"
   </label>
   <ul class="current">
    <li class="toctree-l2">
-    <a class="reference internal" href="1-pandas-dataframes-esol.html">
+    <a class="reference internal" href="1-2-pandas-dataframes-esol.html">
      Working with Pandas DataFrames
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="1-3-numpy-arrays.html">
+     Working with NumPy Arrays
     </a>
    </li>
    <li class="toctree-l2 current active">
     <a class="current reference internal" href="#">
-     Working with NumPy Arrays
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="1-matplotlib.html">
      Plotting with Matplotlib
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="1-homework.html">
+    <a class="reference internal" href="1-5-homework.html">
      Session 1 Homework
     </a>
    </li>
@@ -326,7 +326,7 @@ title="Toggle navigation"
   <div class="menu-dropdown__content">
     <ul>
       <li>
-        <a href="https://mybinder.org/v2/gh/MolSSI-Education/python-scripting-level-2/main?urlpath=tree/book/1-numpy-arrays.ipynb"
+        <a href="https://mybinder.org/v2/gh/MolSSI-Education/python-scripting-level-2/main?urlpath=tree/book/1-4-matplotlib.ipynb"
    class="headerbtn"
    data-toggle="tooltip"
 data-placement="left"
@@ -386,7 +386,7 @@ title="Source repository"
       </li>
       
       <li>
-        <a href="https://github.com/MolSSI-Education/python-scripting-level-2/issues/new?title=Issue%20on%20page%20%2F1-numpy-arrays.html&body=Your%20issue%20content%20here."
+        <a href="https://github.com/MolSSI-Education/python-scripting-level-2/issues/new?title=Issue%20on%20page%20%2F1-4-matplotlib.html&body=Your%20issue%20content%20here."
    class="headerbtn"
    data-toggle="tooltip"
 data-placement="left"
@@ -414,7 +414,7 @@ title="Open an issue"
   <div class="menu-dropdown__content">
     <ul>
       <li>
-        <a href="_sources/1-numpy-arrays.ipynb"
+        <a href="_sources/1-4-matplotlib.ipynb"
    class="headerbtn"
    data-toggle="tooltip"
 data-placement="left"
@@ -474,13 +474,18 @@ title="Print to PDF"
     <nav id="bd-toc-nav" aria-label="Page">
         <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#converting-a-pandas-dataframe-to-a-numpy-array">
-   Converting a Pandas DataFrame to a NumPy Array
+  <a class="reference internal nav-link" href="#object-oriented-interface">
+   Object Oriented Interface
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#reshaping-arrays">
-   Reshaping Arrays
+  <a class="reference internal nav-link" href="#subplots">
+   Subplots
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#plot-customization">
+   Plot Customization
   </a>
  </li>
 </ul>
@@ -492,7 +497,7 @@ title="Print to PDF"
         <div class="col pl-md-3 pl-lg-5 content-container">
             <!-- Table of contents that is only displayed when printing the page -->
             <div id="jb-print-docs-body" class="onlyprint">
-                <h1>Working with NumPy Arrays</h1>
+                <h1>Plotting with Matplotlib</h1>
                 <!-- Table of contents -->
                 <div id="print-main-content">
                     <div id="jb-print-toc">
@@ -503,13 +508,18 @@ title="Print to PDF"
                         <nav aria-label="Page">
                             <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#converting-a-pandas-dataframe-to-a-numpy-array">
-   Converting a Pandas DataFrame to a NumPy Array
+  <a class="reference internal nav-link" href="#object-oriented-interface">
+   Object Oriented Interface
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#reshaping-arrays">
-   Reshaping Arrays
+  <a class="reference internal nav-link" href="#subplots">
+   Subplots
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#plot-customization">
+   Plot Customization
   </a>
  </li>
 </ul>
@@ -522,57 +532,43 @@ title="Print to PDF"
                 
               <div>
                 
-  <section class="tex2jax_ignore mathjax_ignore" id="working-with-numpy-arrays">
-<h1>Working with NumPy Arrays<a class="headerlink" href="#working-with-numpy-arrays" title="Permalink to this headline">#</a></h1>
-<div class="overview">
-   <p class="overview-title">Overview</p>
-    <p>Questions</p>
-        <ul>
-            <li>When should I use NumPy arrays instead of Pandas dataframes?</li>
-            <li>What does the shape of a NumPy array mean?</li>
-            <li>How can I reshape arrays?</li>
-        </ul>
-    <p>Objectives:</p>
-        <ul>
-            <li>Convert data from a pandas dataframe to a NumPy array.</li>
-            <li>Use the `reshape` function to reshape a NumPy array.</li>
-        </ul>
-    <p>Keypoints:</p>
-        <ul>
-            <li>Pandas dataframes are built on top of NumPy arrays.</li>
-            <li>NumPy arrays have all the same data type.</li>
-            <li>NumPy is used for numerical applications</li>
-        </ul>
-    </div><p>Pandas dataframes are built on top of a data structure known as the NumPy Array. If you completed the first MolSSI Python scripting workshop, you are already familiar with some properties of NumPy arrays.</p>
-<p>In general, you should use pandas dataframe when working with data which is:</p>
+  <section class="tex2jax_ignore mathjax_ignore" id="plotting-with-matplotlib">
+<h1>Plotting with Matplotlib<a class="headerlink" href="#plotting-with-matplotlib" title="Permalink to this headline">#</a></h1>
+<div class="overview admonition">
+<p class="admonition-title">Overview</p>
+<p>Questions:</p>
 <ul class="simple">
-<li><p>Two dimensional (rows and columns).</p></li>
-<li><p>Labeled.</p></li>
-<li><p>Mixed type.</p></li>
-<li><p>Something for which you would like to be able to easily get statistics.</p></li>
+<li><p>How can I create plots using matplotlib?</p></li>
 </ul>
-<p>You should work with NumPy arrays when:</p>
+<p>Objectives:</p>
 <ul class="simple">
-<li><p>You have higher dimensional data (collection of two dimensional arrays).</p></li>
-<li><p>You need to perform advanced mathematics like linear algebra.</p></li>
-<li><p>You are using a library which requires NumPy arrays (scikitlearn).</p></li>
+<li><p>Use pandas built-in plotting.</p></li>
+<li><p>Use matplotlib’s object oriented interface to make figures with subplots.</p></li>
 </ul>
-<p>For our discussion of NumPy, we are first going to load our data into a pandas dataframe then convert this data into a NumPy array. In our previous workshop, we used <code class="docutils literal notranslate"><span class="pre">np.genfromtxt</span></code>. This function might be ideal if you are working with a file that contains only numbers. However, since our data is mixed, we will first read it using pandas, then convert to a NumPy array.</p>
+</div>
+<p>Matplotlib is among the oldest and most widely used plotting libraries in Python.
+Some plotting libraries, such as seaborn, are built-in top of Matplotlib. Matplotlib is very flexible and customizable.</p>
+<p>In this section, we will see how three ways we can use matplotlib to create plots.
+The most customizable interface is the object oriented interface.
+Learning to use matplotlib will allow you to make beautiful, publication-quality plots and will help you more effectively use libraries which interface with matplotlib.</p>
+<p>We’ll start by reading in the same data file we’ve been using for this session. We’ll look at the visualization built in the pandas dataframe, then discuss making custom visualizations with matplotlib.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">file_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">,</span> <span class="s2">&quot;delaney-processed.csv&quot;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;data/delaney-processed.csv&quot;</span><span class="p">)</span>
 
-<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
+<span class="n">df</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span> <span class="n">columns</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;ESOL predicted log solubility in mols per litre&quot;</span><span class="p">:</span> <span class="s2">&quot;ESOL solubility (mol/L)&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;measured log solubility in mols per litre&quot;</span> <span class="p">:</span> <span class="s2">&quot;measured solubility (mol/L)&quot;</span>
+<span class="p">},</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
 <span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -596,15 +592,15 @@ title="Print to PDF"
   <thead>
     <tr style="text-align: right;">
       <th></th>
-      <th>Compound</th>
-      <th>ESOL logP (mol/L)</th>
+      <th>Compound ID</th>
+      <th>ESOL solubility (mol/L)</th>
       <th>Minimum Degree</th>
       <th>Molecular Weight</th>
-      <th># of H-Bond Donors</th>
-      <th># of Rings</th>
+      <th>Number of H-Bond Donors</th>
+      <th>Number of Rings</th>
       <th>Number of Rotatable Bonds</th>
       <th>Polar Surface Area</th>
-      <th>measured logP (mol/L)</th>
+      <th>measured solubility (mol/L)</th>
       <th>smiles</th>
     </tr>
   </thead>
@@ -678,214 +674,185 @@ title="Print to PDF"
 </table>
 </div></div></div>
 </div>
-<section id="converting-a-pandas-dataframe-to-a-numpy-array">
-<h2>Converting a Pandas DataFrame to a NumPy Array<a class="headerlink" href="#converting-a-pandas-dataframe-to-a-numpy-array" title="Permalink to this headline">#</a></h2>
-<p>To convert a dataframe to a numpy array, use the function <code class="docutils literal notranslate"><span class="pre">.to_numpy()</span></code>. You will notice that both the numpy array and the pandas dataframe have the same shape after conversion.</p>
+<p>The pandas dataframe has built-in plotting using the command <code class="docutils literal notranslate"><span class="pre">df.plot</span></code>. By default, this function will plot the numerical columns against the index.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">np_array</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;AxesSubplot: &gt;
+</pre></div>
+</div>
+<img alt="_images/1-4-matplotlib_4_1.png" src="_images/1-4-matplotlib_4_1.png" />
+</div>
+</div>
+<p>You can also create plots using specific columns for x and y values by setting the appropriate options.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s2">&quot;Molecular Weight&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s2">&quot;measured solubility (mol/L)&quot;</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s2">&quot;scatter&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;AxesSubplot: xlabel=&#39;Molecular Weight&#39;, ylabel=&#39;measured solubility (mol/L)&#39;&gt;
+</pre></div>
+</div>
+<img alt="_images/1-4-matplotlib_6_1.png" src="_images/1-4-matplotlib_6_1.png" />
+</div>
+</div>
+<p>Behind the scenes, <code class="docutils literal notranslate"><span class="pre">df.plot</span></code> is calling matplotlib. Pandas is constantly being developed and new capabilties being added. The built-in plotting function for pandas has many options you can specify, which you can read about <a class="reference external" href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.plot.html">here</a>. In this section we are going to see how to use and customize matplotlib plots in detail.</p>
+<p>Understanding how matplotlib works will help you work with other libraries, including seaborn, which build on top of matplotlib.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>If you’ve used matplotlib before, it’s likely that you’ve worked with the matplotlib procedural interface. When you use this interface, each command is added to the current figure.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># procedural interface - if you&#39;ve programmed in python before this is what you&#39;ve used</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="n">np_array</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="s2">&quot;Molecular Weight&quot;</span><span class="p">,</span> <span class="s2">&quot;measured solubility (mol/L)&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Molecular Weight&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Solubility (mol/L)&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[[&#39;Amigdalin&#39; -0.974 1 ... 202.32 -0.77
-  &#39;OCC3OC(OCC2OC(OC(C#N)c1ccccc1)C(O)C(O)C2O)C(O)C(O)C3O &#39;]
- [&#39;Fenfuram&#39; -2.885 1 ... 42.24 -3.3 &#39;Cc1occc1C(=O)Nc2ccccc2&#39;]
- [&#39;citral&#39; -2.579 1 ... 17.07 -2.06 &#39;CC(C)=CCCC(C)=CC(=O)&#39;]
- ...
- [&#39;Thiometon&#39; -3.323 1 ... 18.46 -3.091 &#39;CCSCCSP(=S)(OC)OC&#39;]
- [&#39;2-Methylbutane&#39; -2.245 1 ... 0.0 -3.18 &#39;CCC(C)C&#39;]
- [&#39;Stirofos&#39; -4.32 1 ... 44.76000000000001 -4.522
-  &#39;COP(=O)(OC)OC(=CCl)c1cc(Cl)c(Cl)cc1Cl&#39;]]
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0, 0.5, &#39;Solubility (mol/L)&#39;)
+</pre></div>
+</div>
+<img alt="_images/1-4-matplotlib_10_1.png" src="_images/1-4-matplotlib_10_1.png" />
+</div>
+</div>
+<section id="object-oriented-interface">
+<h2>Object Oriented Interface<a class="headerlink" href="#object-oriented-interface" title="Permalink to this headline">#</a></h2>
+<p>This lesson discusses creating plots using matplotlib’s object oriented interface. “Object oriented” here refers to the fact that when we use this interface, the figure, figure axes and other plot components will be available to use as variables or objects. Using matplotlib this way will allow us to have greater control over our plots.</p>
+<p>Let’s see how we can make the same plots we made with the procedural interface using an object oriented approach.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># object oriented interface</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/1-4-matplotlib_12_0.png" src="_images/1-4-matplotlib_12_0.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="s2">&quot;Molecular Weight&quot;</span><span class="p">,</span> <span class="s2">&quot;measured solubility (mol/L)&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Molecular Weight&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Solubility (mol/L)&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0, 0.5, &#39;Solubility (mol/L)&#39;)
+</pre></div>
+</div>
+<img alt="_images/1-4-matplotlib_13_1.png" src="_images/1-4-matplotlib_13_1.png" />
+</div>
+</div>
+<p>You can add more data to the plot by continuing to add plotting commands.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="s2">&quot;Molecular Weight&quot;</span><span class="p">,</span> <span class="s2">&quot;ESOL Solubility (mol/L)&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;upper right&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="subplots">
+<h2>Subplots<a class="headerlink" href="#subplots" title="Permalink to this headline">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/1-4-matplotlib_16_0.png" src="_images/1-4-matplotlib_16_0.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ax</span><span class="o">.</span><span class="n">shape</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(2, 2)
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">shape</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(1128, 10)
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">np_array</span><span class="o">.</span><span class="n">shape</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(1128, 10)
-</pre></div>
-</div>
-</div>
-</div>
-<p>At the end of the numpy array, you will see <code class="docutils literal notranslate"><span class="pre">dtype=object</span></code>. When we converted the dataframe to a NumPy array, pandas attempted to give the dataframe the simplest type possible. Since we had a mix of strings and numbers, the assigned type of the numpy array is object.</p>
-<p>Note that we have both strings and numbers in the array.</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">np_array</span><span class="o">.</span><span class="n">dtype</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>dtype(&#39;O&#39;)
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">np_array</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
-<span class="nb">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">np_array</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]))</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="s2">&quot;Number of Rings&quot;</span><span class="p">,</span> <span class="s2">&quot;ESOL solubility (mol/L)&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">)</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="n">np_array</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
-<span class="nb">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">np_array</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]))</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="s2">&quot;Number of Rings&quot;</span><span class="p">,</span> <span class="s2">&quot;measured solubility (mol/L)&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Number of Rings&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;ESOL Predicted Solubility&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Amigdalin
-&lt;class &#39;str&#39;&gt;
--0.974
-&lt;class &#39;float&#39;&gt;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0, 0.5, &#39;ESOL Predicted Solubility&#39;)
 </pre></div>
 </div>
+<img alt="_images/1-4-matplotlib_18_1.png" src="_images/1-4-matplotlib_18_1.png" />
+</div>
+</div>
+<p>Adding <code class="docutils literal notranslate"><span class="pre">fig.tight_layout()</span></code> as the last function will fix the overlapping of text and plots.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="s2">&quot;Number of Rings&quot;</span><span class="p">,</span> <span class="s2">&quot;ESOL solubility (mol/L)&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">)</span>
+
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="s2">&quot;Number of Rings&quot;</span><span class="p">,</span> <span class="s2">&quot;measured solubility (mol/L)&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Number of Rings&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;ESOL Predicted Solubility&quot;</span><span class="p">)</span>
+
+<span class="n">fig</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/1-4-matplotlib_20_0.png" src="_images/1-4-matplotlib_20_0.png" />
 </div>
 </div>
 </section>
-<section id="reshaping-arrays">
-<h2>Reshaping Arrays<a class="headerlink" href="#reshaping-arrays" title="Permalink to this headline">#</a></h2>
-<p>NumPy arrays have shapes just like Pandas DataFrames. One major difference is that they can have more dimensions than two. NumPy arrays are n-dimensional, meaning they can have any number of dimensions. Unlike pandas dataframes, NumPy arrays can be reshaped.</p>
-<p>When we fit our data using scikit-learn later in this workshop, we will need to make sure our arrays are the proper shape. Unlike pandas dataframes, NumPy arrays can have more than two dimensions. Let’s see how we might reshape an array.</p>
+<section id="plot-customization">
+<h2>Plot Customization<a class="headerlink" href="#plot-customization" title="Permalink to this headline">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">numbers</span> <span class="o">=</span> <span class="n">df</span><span class="p">[[</span><span class="s2">&quot;ESOL logP (mol/L)&quot;</span><span class="p">,</span> <span class="s2">&quot;measured logP (mol/L)&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">numbers</span><span class="o">.</span><span class="n">shape</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="s2">&quot;Number of Rings&quot;</span><span class="p">,</span> <span class="s2">&quot;ESOL solubility (mol/L)&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;red&quot;</span><span class="p">)</span>
+
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="s2">&quot;Number of Rings&quot;</span><span class="p">,</span> <span class="s2">&quot;measured solubility (mol/L)&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;blue&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Number of Rings&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;ESOL&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+
+<span class="n">fig</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(1128, 2)
-</pre></div>
+<img alt="_images/1-4-matplotlib_22_0.png" src="_images/1-4-matplotlib_22_0.png" />
 </div>
 </div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">numbers</span><span class="o">.</span><span class="n">dtype</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>dtype(&#39;float64&#39;)
-</pre></div>
-</div>
-</div>
-</div>
-<p>To change the shape of an array, use the function <code class="docutils literal notranslate"><span class="pre">.reshape</span></code>. Inside the reshape function, you list the size you would like for each dimension of the array to be. We could shape the <code class="docutils literal notranslate"><span class="pre">numbers</span></code> array we just created to be three dimensional rather than two dimensional. We might want rows with one column. For the third dimension you can think of it as being two columns stacked on one another.</p>
-<p>If you do not care what the shape of one of the dimensions is when doing a reshape, you can specify a <code class="docutils literal notranslate"><span class="pre">-1</span></code> for that dimension (or <code class="docutils literal notranslate"><span class="pre">unknown</span></code>). It essentially means to make that dimension whatever size it needs to be to fit the other specified dimensions.</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># reshape so each &quot;category&quot; is its own two dimensional array</span>
-<span class="n">numbers_reshaped</span> <span class="o">=</span> <span class="n">numbers</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">numbers_reshaped</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(1128, 1, 2)
-</pre></div>
-</div>
-</div>
-</div>
-<p>We can slice into our reshaped array.</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Get ESOL values</span>
-<span class="n">numbers_reshaped</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">]</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([[-0.974],
-       [-2.885],
-       [-2.579],
-       ...,
-       [-3.323],
-       [-2.245],
-       [-4.32 ]])
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">numbers</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([-0.974, -2.885, -2.579, ..., -3.323, -2.245, -4.32 ])
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Get measured values</span>
-<span class="n">numbers_reshaped</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">1</span><span class="p">]</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([[-0.77 ],
-       [-3.3  ],
-       [-2.06 ],
-       ...,
-       [-3.091],
-       [-3.18 ],
-       [-4.522]])
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># By default pandas Series are one-dimensional. We will have to reshape the arrays sometimes.</span>
-<span class="n">names</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;Compound&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">names</span><span class="p">)</span>
-<span class="n">names</span> <span class="o">=</span> <span class="n">names</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">names</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&#39;Amigdalin&#39; &#39;Fenfuram&#39; &#39;citral&#39; ... &#39;Thiometon&#39; &#39;2-Methylbutane&#39;
- &#39;Stirofos&#39;]
-[[&#39;Amigdalin&#39;]
- [&#39;Fenfuram&#39;]
- [&#39;citral&#39;]
- ...
- [&#39;Thiometon&#39;]
- [&#39;2-Methylbutane&#39;]
- [&#39;Stirofos&#39;]]
-</pre></div>
-</div>
-</div>
+<div class="key admonition">
+<p class="admonition-title">Key Points</p>
+<ul class="simple">
+<li><p>Pandas dataframes have built in plotting.</p></li>
+<li><p>You can use matplotlib to create figures with multiple plots.</p></li>
+</ul>
 </div>
 </section>
 </section>
@@ -917,17 +884,17 @@ title="Print to PDF"
                 
     <!-- Previous / next buttons -->
 <div class='prev-next-area'>
-    <a class='left-prev' id="prev-link" href="1-pandas-dataframes-esol.html" title="previous page">
+    <a class='left-prev' id="prev-link" href="1-3-numpy-arrays.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">Working with Pandas DataFrames</p>
+            <p class="prev-next-title">Working with NumPy Arrays</p>
         </div>
     </a>
-    <a class='right-next' id="next-link" href="1-matplotlib.html" title="next page">
+    <a class='right-next' id="next-link" href="1-5-homework.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Plotting with Matplotlib</p>
+        <p class="prev-next-title">Session 1 Homework</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>
