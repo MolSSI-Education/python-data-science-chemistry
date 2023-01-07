@@ -12,12 +12,12 @@ chapters:
     - file: 1-4-matplotlib
     - file: 1-5-homework
     - file: homework_1_solutions
-- file: 2-intro-objectives
+- file: 2-1-intro-objectives
   sections:
-    - file: 2-ocr-tabula
-    - file: 2-pandas-datacleaning
-    - file: 2-seaborn
-    - file: 2-homework
+    - file: 2-2-ocr-tabula
+    - file: 2-3-pandas-datacleaning
+    - file: 2-4-seaborn
+    - file: 2-5-homework
     - file: homework-2-delaney
 - file: 3-intro-objectives
   sections:
