@@ -1,9 +1,9 @@
-name: molssi_training
+name: molssi-training
 channels:
   - conda-forge
   - defaults
 dependencies:
-  - python>=3.8
+  - "python>=3.11"
   - openjdk # for java (required for tabula)
   - pip
   - notebook # jupyter noteboook
