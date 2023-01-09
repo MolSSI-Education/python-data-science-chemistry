@@ -5,32 +5,36 @@ format: jb-book
 root: intro
 chapters:
 - file: setup
-- file: 1-1-intro-objectives
+- file: intro_science_libraries
   sections:
-    - file: 1-2-pandas-dataframes-esol
-    - file: 1-3-numpy-arrays
-    - file: 1-4-matplotlib
-    - file: 1-5-homework
-    - file: homework_1_solutions
-- file: 2-1-intro-objectives
+    - file: intro_science_libraries/pandas-dataframes-esol
+    - file: intro_science_libraries/numpy-arrays
+    - file: intro_science_libraries/matplotlib
+    - file: intro_science_libraries/1-homework
+- file: data_processing_cleaning
   sections:
-    - file: 2-2-ocr-tabula
-    - file: 2-3-pandas-datacleaning
-    - file: 2-4-seaborn
-    - file: 2-5-homework
-    - file: homework-2-delaney
-- file: 3-intro-objectives
+    - file: data_processing_cleaning/regex
+    - file: data_processing_cleaning/ocr-tabula
+    - file: data_processing_cleaning/pandas-datacleaning
+    - file: data_processing_cleaning/2-5-homework
+- file: visualization
   sections:
-    - file: 3-linear-scikitlearn
-    - file: 3-regex
-    - file: regex-folders
-    - file: 3-homework
-    - file: 3-homework-solution
-- file: 4-intro-objectives
+    - file: visualization/seaborn
+    - file: visualization/interactive
+- file: scikitlearn_fitting
   sections:
-    - file: 4-nonlinear-scikitlearn
-    - file: 4-linear-statsmodels
-    - file: 4-interactive-visualizations
+    - file: scikitlearn_fitting/linear-scikitlearn
+    - file: scikitlearn_fitting/homework-linear-fit
+    - file: scikitlearn_fitting/random-forest-scikitlearn
+- file: rdkit_descriptors
+  sections:
+    - file: rdkit_descriptors/rdkit
+    - file: rdkit_descriptors/rdkit-analysis
+- file: homework-solutions
+  sections:
+    - file: homework-solutions/homework_1_solutions
+    - file: homework-solutions/homework-2-delaney
+    - file: homework-solutions/3-homework-solution
         
         
 
