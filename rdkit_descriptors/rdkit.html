@@ -1,0 +1,825 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Introduction to RDKit &#8212; Python for Data Science in Chemistry</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Generating and analyzing a dataset using RDKit" href="rdkit-analysis.html" />
+    <link rel="prev" title="Molecules and Datasets with RDKit" href="../rdkit_descriptors.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-FHKVGE8HKZ"></script>
+<script>
+                    window.dataLayer = window.dataLayer || [];
+                    function gtag(){ dataLayer.push(arguments); }
+                    gtag('js', new Date());
+                    gtag('config', 'G-FHKVGE8HKZ');
+                </script>
+
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="../_static/molssi_main_logo.png" class="logo" alt="logo">
+      
+      
+      <h1 class="site-logo" id="site-title">Python for Data Science in Chemistry</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../intro.html">
+                    Python for Data Science in Chemistry
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../setup.html">
+   Set Up
+  </a>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../intro_science_libraries.html">
+   Introduction to Scientific Python Libraries
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../intro_science_libraries/pandas-dataframes-esol.html">
+     Working with Pandas DataFrames
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../intro_science_libraries/numpy-arrays.html">
+     Working with NumPy Arrays
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../intro_science_libraries/matplotlib.html">
+     Plotting with Matplotlib
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../intro_science_libraries/1-homework.html">
+     Section 1 Homework
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../data_processing_cleaning.html">
+   File Processing and Data Cleaning
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../data_processing_cleaning/regex.html">
+     Regular Expressions
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../data_processing_cleaning/ocr-tabula.html">
+     Reading data from PDFs
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../data_processing_cleaning/pandas-datacleaning.html">
+     Data Cleaning with Pandas
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../data_processing_cleaning/2-5-homework.html">
+     Session 2 Homework
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../visualization.html">
+   Statistical and Interactive Visualizations
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+  <label for="toctree-checkbox-3">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../visualization/seaborn.html">
+     Plotting with seaborn
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../visualization/interactive.html">
+     Interactive Visualizations with plotly
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../scikitlearn_fitting.html">
+   Fitting Data with SciKitLearn
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
+  <label for="toctree-checkbox-4">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../scikitlearn_fitting/linear-scikitlearn.html">
+     Linear Fitting with SciKit Learn
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../scikitlearn_fitting/homework-linear-fit.html">
+     Session 3 Homework
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../scikitlearn_fitting/random-forest-scikitlearn.html">
+     Fitting with ScikitLearn - Part 2
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 current active has-children">
+  <a class="reference internal" href="../rdkit_descriptors.html">
+   Molecules and Datasets with RDKit
+  </a>
+  <input checked="" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/>
+  <label for="toctree-checkbox-5">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul class="current">
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
+     Introduction to RDKit
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="rdkit-analysis.html">
+     Generating and analyzing a dataset using RDKit
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<div class="menu-dropdown menu-dropdown-launch-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Launch interactive content">
+      <i class="fas fa-rocket"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://mybinder.org/v2/gh/MolSSI-Education/python-scripting-level-2/main?urlpath=tree/book/rdkit_descriptors/rdkit.ipynb"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Launch on Binder"
+>
+  
+
+<span class="headerbtn__icon-container">
+  
+    <img src="../_static/images/logo_binder.svg">
+  </span>
+<span class="headerbtn__text-container">Binder</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-repository-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Source repositories">
+      <i class="fab fa-github"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://github.com/MolSSI-Education/python-scripting-level-2"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="headerbtn__text-container">repository</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/MolSSI-Education/python-scripting-level-2/issues/new?title=Issue%20on%20page%20%2Frdkit_descriptors/rdkit.html&body=Your%20issue%20content%20here."
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="headerbtn__text-container">open issue</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="../_sources/rdkit_descriptors/rdkit.ipynb"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.ipynb</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#creating-molecules-with-rdkit">
+   Creating Molecules with RDKit
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#retrieving-molecule-information">
+   Retrieving Molecule Information
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#molecular-descriptors">
+   Molecular Descriptors
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#substructure-search">
+   Substructure Search
+  </a>
+ </li>
+</ul>
+
+    </nav>
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>Introduction to RDKit</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#creating-molecules-with-rdkit">
+   Creating Molecules with RDKit
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#retrieving-molecule-information">
+   Retrieving Molecule Information
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#molecular-descriptors">
+   Molecular Descriptors
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#substructure-search">
+   Substructure Search
+  </a>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <section class="tex2jax_ignore mathjax_ignore" id="introduction-to-rdkit">
+<h1>Introduction to RDKit<a class="headerlink" href="#introduction-to-rdkit" title="Permalink to this headline">#</a></h1>
+<p>There are also libraries in Python that are made for working just with chemical data. One commonly used library in Python for data science (or cheminformatics) is called RDKit.</p>
+<p>RDKit lets us create variables which represent molecules and retrieve information about the molecules.</p>
+<p>We are going to use a part of RDKit called <code class="docutils literal notranslate"><span class="pre">Chem</span></code>. To use <code class="docutils literal notranslate"><span class="pre">Chem</span></code>, we first have to import it.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">rdkit</span> <span class="kn">import</span> <span class="n">Chem</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section id="creating-molecules-with-rdkit">
+<h2>Creating Molecules with RDKit<a class="headerlink" href="#creating-molecules-with-rdkit" title="Permalink to this headline">#</a></h2>
+<p>To get information about molecules in RDKit, we have to have RDKit retreive the information. The molecule name has to be communicated to RDKit in a way that computers understand. We could open info from molecular file formats like <code class="docutils literal notranslate"><span class="pre">mol</span></code>.</p>
+<p>We are going to use a format called SMILES. SMILES stands for “Simplified Molecular-Input Line-entry System” and is a string representation of a molecule. You usually will be looking up SMILES or having a program generate them for you.</p>
+<p>In SMILES, if we want methane, we specify that with “C”. We can create a representation of methane using RDKit by using the <code class="docutils literal notranslate"><span class="pre">MolFromSmiles</span></code> function in <code class="docutils literal notranslate"><span class="pre">rdkit.Chem</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">methane</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">MolFromSmiles</span><span class="p">(</span><span class="s2">&quot;C&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">methane</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/rdkit_4_0.png" src="../_images/rdkit_4_0.png" />
+</div>
+</div>
+</section>
+<section id="retrieving-molecule-information">
+<h2>Retrieving Molecule Information<a class="headerlink" href="#retrieving-molecule-information" title="Permalink to this headline">#</a></h2>
+<p>RDKit will allow us to access information about our molecule. For example, we can have RDKit tell us the number of atoms in our molecule.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">num_methane</span> <span class="o">=</span> <span class="n">methane</span><span class="o">.</span><span class="n">GetNumAtoms</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;The number of atoms in methane is </span><span class="si">{</span><span class="n">num_methane</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The number of atoms in methane is 1
+</pre></div>
+</div>
+</div>
+</div>
+<p>This isn’t exactly what we expect. By default, RDKit only counts “heavy atoms”. This means that hydrogen isn’t included. We can tell RDKit to count hydrogens by adding <code class="docutils literal notranslate"><span class="pre">onlyExplicit=False</span></code> to our <code class="docutils literal notranslate"><span class="pre">GetNumAtoms</span></code> function.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">num_methane_h</span> <span class="o">=</span> <span class="n">methane</span><span class="o">.</span><span class="n">GetNumAtoms</span><span class="p">(</span><span class="n">onlyExplicit</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;The number of atoms in methane including hydrogens is </span><span class="si">{</span><span class="n">num_methane_h</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>The number of atoms in methane including hydrogens is 5.
+</pre></div>
+</div>
+</div>
+</div>
+<div class="exercise-this-is-a-title exercise">
+    <p class="exercise-title">Check Your Understanding</p>
+    <p>Create a molecule called ethane and print the number of atoms. The SMILES for ethane is `CC`.</p>
+<div class="dropdown admonition">
+<p class="admonition-title">Answer</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ethane</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">MolFromSmiles</span><span class="p">(</span><span class="s2">&quot;CC&quot;</span><span class="p">)</span>
+<span class="n">num_ethane_h</span> <span class="o">=</span> <span class="n">ethane</span><span class="o">.</span><span class="n">GetNumAtoms</span><span class="p">(</span><span class="n">onlyHeavy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Ethane has </span><span class="si">{</span><span class="n">num_ethane_h</span><span class="si">}</span><span class="s2"> atoms.&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div><div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ethanol</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">MolFromSmiles</span><span class="p">(</span><span class="s2">&quot;CCO&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>We can also get information about atoms or  bonds from RDKit molecules. We can use the <code class="docutils literal notranslate"><span class="pre">GetAtoms()</span></code> function, then use a loop to look at the atoms.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">atom</span> <span class="ow">in</span> <span class="n">ethanol</span><span class="o">.</span><span class="n">GetAtoms</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">atom</span><span class="o">.</span><span class="n">GetSymbol</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>C
+C
+O
+</pre></div>
+</div>
+</div>
+</div>
+<p>or, get information about the bonds.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">bond</span> <span class="ow">in</span> <span class="n">ethanol</span><span class="o">.</span><span class="n">GetBonds</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">bond</span><span class="o">.</span><span class="n">GetBondType</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SINGLE
+SINGLE
+</pre></div>
+</div>
+</div>
+</div>
+<p>In the SMILES format, <code class="docutils literal notranslate"><span class="pre">=</span></code> signifies a double bond, and <code class="docutils literal notranslate"><span class="pre">#</span></code> signifies a triple bond.</p>
+<p>For example, to create ethene or ehtyne</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ethene</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">MolFromSmiles</span><span class="p">(</span><span class="s2">&quot;C=C&quot;</span><span class="p">)</span>
+<span class="n">ethyne</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">MolFromSmiles</span><span class="p">(</span><span class="s2">&quot;C#C&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ethyne</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/rdkit_17_0.png" src="../_images/rdkit_17_0.png" />
+</div>
+</div>
+<p>You can find SMILES for more complicated online on websites like <a class="reference external" href="https://pubchem.ncbi.nlm.nih.gov/">PubChem</a>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">phenylalanine</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">MolFromSmiles</span><span class="p">(</span><span class="s2">&quot;C1=CC=C(C=C1)CC(C(=O)O)N&quot;</span><span class="p">)</span>
+<span class="n">phenylalanine</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/rdkit_19_0.png" src="../_images/rdkit_19_0.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">benzene</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">MolFromSmiles</span><span class="p">(</span><span class="s2">&quot;c1ccccc1&quot;</span><span class="p">)</span>
+<span class="n">benzene</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/rdkit_20_0.png" src="../_images/rdkit_20_0.png" />
+</div>
+</div>
+</section>
+<section id="molecular-descriptors">
+<h2>Molecular Descriptors<a class="headerlink" href="#molecular-descriptors" title="Permalink to this headline">#</a></h2>
+<p>RDKit has a module for retrieving molecular descriptors. Molecular descriptors are properties of molecules which can be analyzed using statistical methods to make predictions about molecular properties.</p>
+<p>To get molecular descriptors from RDKit, we import the <code class="docutils literal notranslate"><span class="pre">Descriptors</span></code> module.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">rdkit.Chem</span> <span class="kn">import</span> <span class="n">Descriptors</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Some molecular descriptors we might be interested in are:</p>
+<ol class="simple">
+<li><p>Heavy Atom Count (<code class="docutils literal notranslate"><span class="pre">HeavyAtomCount</span></code>)</p></li>
+<li><p>Number of hydrogen bond acceptrs (<code class="docutils literal notranslate"><span class="pre">NumHAcceptors</span></code>)</p></li>
+<li><p>Number of hydrogen bond donors (<code class="docutils literal notranslate"><span class="pre">NumHDonors</span></code>)</p></li>
+<li><p>Number of valence electrons (<code class="docutils literal notranslate"><span class="pre">NumValenceElectrons</span></code>)</p></li>
+<li><p>Molecular weight (<code class="docutils literal notranslate"><span class="pre">MolWt</span></code>)</p></li>
+<li><p>Number of aromatic rings (<code class="docutils literal notranslate"><span class="pre">NumAromaticRings</span></code>)
+And many others!</p></li>
+</ol>
+<p>To get the descritpor you’re interested in, the syntax is</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">Descriptors</span><span class="o">.</span><span class="n">DescriptorName</span><span class="p">(</span><span class="n">molecule_variable</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Printing info for benzene&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;The molecular weight is </span><span class="si">{</span><span class="n">Descriptors</span><span class="o">.</span><span class="n">MolWt</span><span class="p">(</span><span class="n">benzene</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;The number of aromatic rings is </span><span class="si">{</span><span class="n">Descriptors</span><span class="o">.</span><span class="n">NumAromaticRings</span><span class="p">(</span><span class="n">benzene</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Printing info for benzene
+The molecular weight is 78.11399999999999
+The number of aromatic rings is 1
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="substructure-search">
+<h2>Substructure Search<a class="headerlink" href="#substructure-search" title="Permalink to this headline">#</a></h2>
+<p>RDKit can do a lot. One thing you can do are substructure searches. You can identify when molecules contain other molecules. Let’s try this with benzene and phenylalanine.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">matches</span> <span class="o">=</span> <span class="n">phenylalanine</span><span class="o">.</span><span class="n">GetSubstructMatches</span><span class="p">(</span><span class="n">benzene</span><span class="p">)</span>
+<span class="n">phenylalanine</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/rdkit_26_0.png" src="../_images/rdkit_26_0.png" />
+</div>
+</div>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./rdkit_descriptors"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="../rdkit_descriptors.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">Molecules and Datasets with RDKit</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="rdkit-analysis.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Generating and analyzing a dataset using RDKit</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By Jessica A. Nash<br/>
+  
+      &copy; Copyright 2022.<br/>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>

@@ -1,4 +1,7 @@
-Workshop Template
+Python for Data Science in Chemistry
 ======================================
 
-This is a MolSSI template for creating a Jupyter book.
+* What is this workshop?
+* Intended audience (should have some Python experience)
+
+
