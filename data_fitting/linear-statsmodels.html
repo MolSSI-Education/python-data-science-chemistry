@@ -9,51 +9,53 @@
     <title>Linear Fitting with statsmodels &#8212; Python for Data Science in Chemistry</title>
     
   <!-- Loaded before other Sphinx assets -->
-  <link href="_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
-<link href="_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+  <link href="../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
 
     
   <link rel="stylesheet"
-    href="_static/vendor/fontawesome/5.13.0/css/all.min.css">
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
   <link rel="preload" as="font" type="font/woff2" crossorigin
-    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
   <link rel="preload" as="font" type="font/woff2" crossorigin
-    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
 
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
-    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
-    <link rel="stylesheet" type="text/css" href="_static/mystnb.css" />
-    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
-    <link rel="stylesheet" type="text/css" href="_static/custom.css" />
-    <link rel="stylesheet" type="text/css" href="_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" />
     
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+  <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
 
-    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-    <script src="_static/jquery.js"></script>
-    <script src="_static/underscore.js"></script>
-    <script src="_static/doctools.js"></script>
-    <script src="_static/clipboard.min.js"></script>
-    <script src="_static/copybutton.js"></script>
-    <script src="_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
     <script>let toggleHintShow = 'Click to show';</script>
     <script>let toggleHintHide = 'Click to hide';</script>
     <script>let toggleOpenOnPrint = 'true';</script>
-    <script src="_static/togglebutton.js"></script>
+    <script src="../_static/togglebutton.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
-    <script src="_static/design-tabs.js"></script>
+    <script src="../_static/design-tabs.js"></script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
 const thebe_selector = ".thebe,.cell"
 const thebe_selector_input = "pre"
 const thebe_selector_output = ".output, .cell_output"
 </script>
-    <script async="async" src="_static/sphinx-thebe.js"></script>
-    <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="search.html" />
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Session 3 Homework" href="homework-linear-fit.html" />
+    <link rel="prev" title="Linear Fitting with SciKit Learn" href="linear-scikitlearn.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -96,19 +98,19 @@ const thebe_selector_output = ".output, .cell_output"
 <div class="bd-sidebar noprint" id="site-navigation">
     <div class="bd-sidebar__content">
         <div class="bd-sidebar__top"><div class="navbar-brand-box">
-    <a class="navbar-brand text-wrap" href="index.html">
+    <a class="navbar-brand text-wrap" href="../index.html">
       
         <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
         
       
       
-      <img src="_static/molssi_main_logo.png" class="logo" alt="logo">
+      <img src="../_static/molssi_main_logo.png" class="logo" alt="logo">
       
       
       <h1 class="site-logo" id="site-title">Python for Data Science in Chemistry</h1>
       
     </a>
-</div><form class="bd-search d-flex align-items-center" action="search.html" method="get">
+</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
   <i class="icon fas fa-search"></i>
   <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
 </form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
@@ -116,19 +118,19 @@ const thebe_selector_output = ".output, .cell_output"
         
         <ul class="nav bd-sidenav bd-sidenav__home-link">
             <li class="toctree-l1">
-                <a class="reference internal" href="intro.html">
+                <a class="reference internal" href="../intro.html">
                     Python for Data Science in Chemistry
                 </a>
             </li>
         </ul>
-        <ul class="nav bd-sidenav">
+        <ul class="current nav bd-sidenav">
  <li class="toctree-l1">
-  <a class="reference internal" href="setup.html">
+  <a class="reference internal" href="../setup.html">
    Set Up
   </a>
  </li>
  <li class="toctree-l1 has-children">
-  <a class="reference internal" href="intro_science_libraries.html">
+  <a class="reference internal" href="../intro_science_libraries.html">
    Introduction to Scientific Python Libraries
   </a>
   <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
@@ -138,29 +140,29 @@ const thebe_selector_output = ".output, .cell_output"
   </label>
   <ul>
    <li class="toctree-l2">
-    <a class="reference internal" href="intro_science_libraries/pandas-dataframes-esol.html">
+    <a class="reference internal" href="../intro_science_libraries/pandas-dataframes-esol.html">
      Working with Pandas DataFrames
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="intro_science_libraries/numpy-arrays.html">
+    <a class="reference internal" href="../intro_science_libraries/numpy-arrays.html">
      Working with NumPy Arrays
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="intro_science_libraries/matplotlib.html">
+    <a class="reference internal" href="../intro_science_libraries/matplotlib.html">
      Plotting with Matplotlib
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="intro_science_libraries/1-homework.html">
+    <a class="reference internal" href="../intro_science_libraries/1-homework.html">
      Section 1 Homework
     </a>
    </li>
   </ul>
  </li>
  <li class="toctree-l1 has-children">
-  <a class="reference internal" href="data_processing_cleaning.html">
+  <a class="reference internal" href="../data_processing_cleaning.html">
    File Processing and Data Cleaning
   </a>
   <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
@@ -170,29 +172,29 @@ const thebe_selector_output = ".output, .cell_output"
   </label>
   <ul>
    <li class="toctree-l2">
-    <a class="reference internal" href="data_processing_cleaning/regex.html">
+    <a class="reference internal" href="../data_processing_cleaning/regex.html">
      Regular Expressions
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="data_processing_cleaning/ocr-tabula.html">
+    <a class="reference internal" href="../data_processing_cleaning/ocr-tabula.html">
      Reading data from PDFs
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="data_processing_cleaning/pandas-datacleaning.html">
+    <a class="reference internal" href="../data_processing_cleaning/pandas-datacleaning.html">
      Data Cleaning with Pandas
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="data_processing_cleaning/2-5-homework.html">
+    <a class="reference internal" href="../data_processing_cleaning/2-5-homework.html">
      Session 2 Homework
     </a>
    </li>
   </ul>
  </li>
  <li class="toctree-l1 has-children">
-  <a class="reference internal" href="visualization.html">
+  <a class="reference internal" href="../visualization.html">
    Statistical and Interactive Visualizations
   </a>
   <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
@@ -202,46 +204,51 @@ const thebe_selector_output = ".output, .cell_output"
   </label>
   <ul>
    <li class="toctree-l2">
-    <a class="reference internal" href="visualization/seaborn.html">
+    <a class="reference internal" href="../visualization/seaborn.html">
      Plotting with seaborn
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="visualization/interactive.html">
+    <a class="reference internal" href="../visualization/interactive.html">
      Interactive Visualizations with plotly
     </a>
    </li>
   </ul>
  </li>
- <li class="toctree-l1 has-children">
-  <a class="reference internal" href="scikitlearn_fitting.html">
-   Fitting Data with SciKitLearn
+ <li class="toctree-l1 current active has-children">
+  <a class="reference internal" href="../data_fitting.html">
+   Fitting Data with Python Libraries
   </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
+  <input checked="" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
   <label for="toctree-checkbox-4">
    <i class="fas fa-chevron-down">
    </i>
   </label>
-  <ul>
+  <ul class="current">
    <li class="toctree-l2">
-    <a class="reference internal" href="scikitlearn_fitting/linear-scikitlearn.html">
+    <a class="reference internal" href="linear-scikitlearn.html">
      Linear Fitting with SciKit Learn
     </a>
    </li>
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
+     Linear Fitting with statsmodels
+    </a>
+   </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="scikitlearn_fitting/homework-linear-fit.html">
+    <a class="reference internal" href="homework-linear-fit.html">
      Session 3 Homework
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="scikitlearn_fitting/random-forest-scikitlearn.html">
+    <a class="reference internal" href="random-forest-scikitlearn.html">
      Fitting with ScikitLearn - Part 2
     </a>
    </li>
   </ul>
  </li>
  <li class="toctree-l1 has-children">
-  <a class="reference internal" href="rdkit_descriptors.html">
+  <a class="reference internal" href="../rdkit_descriptors.html">
    Molecules and Datasets with RDKit
   </a>
   <input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/>
@@ -251,12 +258,12 @@ const thebe_selector_output = ".output, .cell_output"
   </label>
   <ul>
    <li class="toctree-l2">
-    <a class="reference internal" href="rdkit_descriptors/rdkit.html">
+    <a class="reference internal" href="../rdkit_descriptors/rdkit.html">
      Introduction to RDKit
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="rdkit_descriptors/rdkit-analysis.html">
+    <a class="reference internal" href="../rdkit_descriptors/rdkit-analysis.html">
      Generating and analyzing a dataset using RDKit
     </a>
    </li>
@@ -321,7 +328,7 @@ title="Toggle navigation"
   <div class="menu-dropdown__content">
     <ul>
       <li>
-        <a href="https://mybinder.org/v2/gh/MolSSI-Education/python-scripting-level-2/main?urlpath=tree/book/4-linear-statsmodels.ipynb"
+        <a href="https://mybinder.org/v2/gh/MolSSI-Education/python-scripting-level-2/main?urlpath=tree/book/data_fitting/linear-statsmodels.ipynb"
    class="headerbtn"
    data-toggle="tooltip"
 data-placement="left"
@@ -331,7 +338,7 @@ title="Launch on Binder"
 
 <span class="headerbtn__icon-container">
   
-    <img src="_static/images/logo_binder.svg">
+    <img src="../_static/images/logo_binder.svg">
   </span>
 <span class="headerbtn__text-container">Binder</span>
 </a>
@@ -381,7 +388,7 @@ title="Source repository"
       </li>
       
       <li>
-        <a href="https://github.com/MolSSI-Education/python-scripting-level-2/issues/new?title=Issue%20on%20page%20%2F4-linear-statsmodels.html&body=Your%20issue%20content%20here."
+        <a href="https://github.com/MolSSI-Education/python-scripting-level-2/issues/new?title=Issue%20on%20page%20%2Fdata_fitting/linear-statsmodels.html&body=Your%20issue%20content%20here."
    class="headerbtn"
    data-toggle="tooltip"
 data-placement="left"
@@ -409,7 +416,7 @@ title="Open an issue"
   <div class="menu-dropdown__content">
     <ul>
       <li>
-        <a href="_sources/4-linear-statsmodels.ipynb"
+        <a href="../_sources/data_fitting/linear-statsmodels.ipynb"
    class="headerbtn"
    data-toggle="tooltip"
 data-placement="left"
@@ -509,25 +516,18 @@ title="Print to PDF"
                 
   <section class="tex2jax_ignore mathjax_ignore" id="linear-fitting-with-statsmodels">
 <h1>Linear Fitting with statsmodels<a class="headerlink" href="#linear-fitting-with-statsmodels" title="Permalink to this headline">#</a></h1>
-<div class="overview">
-   <p class="overview-title">Overview</p>
-    <p>Questions</p>
-        <ul>
-            <li>How can I fit a linear equation using statsmodels?</li>
-            <li>How can I fit a linear equation with multiple variables using statsmodels?</li>
-        </ul>
-    <p>Objectives:</p>
-        <ul>
-            <li>Use the formula interface of statsmodels to perform a linear fit.</li>
-        </ul>
-    <p>Keypoints:</p>
-        <ul>
-            <li>Statsmodels allows you to specify your equations using dataframe and column names.</li>
-            <li>Calling .summary on the fit gives you a nice summary of the fit and parameters.</li>
-            <li>You can use .predict to predict new values using the fitted model.</li>
-            <li>You must give the predict method a dataframe with the same column names as the original dataframe.</li>
-        </ul>
-    </div>
+<div class="overview admonition">
+<p class="admonition-title">Overview</p>
+<p>Questions:</p>
+<ul class="simple">
+<li><p>How can I fit a linear equation using statsmodels?</p></li>
+<li><p>How can I fit a linear equation with multiple variables using statsmodels?</p></li>
+</ul>
+<p>Objectives:</p>
+<ul class="simple">
+<li><p>Use statsmodels for linear regression.</p></li>
+</ul>
+</div>
 <p>In this module, we are going to use statsmodels to fit our linear model. We are going to use an interface which allows us to use dataframes and text formulas to specify the equations we want to fit. To import statsmodels, use <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">statsmodels.formula.api</span></code> as <code class="docutils literal notranslate"><span class="pre">smf</span></code>.</p>
 <p>First, we’ll use pandas to load the data we cleaned in session 2.</p>
 <div class="cell docutils container">
@@ -916,7 +916,7 @@ dtype: float64
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/4-linear-statsmodels_17_0.png" src="_images/4-linear-statsmodels_17_0.png" />
+<img alt="../_images/linear-statsmodels_17_0.png" src="../_images/linear-statsmodels_17_0.png" />
 </div>
 </div>
 <section id="multiple-regression">
@@ -1031,8 +1031,17 @@ dtype: float64
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/4-linear-statsmodels_23_0.png" src="_images/4-linear-statsmodels_23_0.png" />
+<img alt="../_images/linear-statsmodels_23_0.png" src="../_images/linear-statsmodels_23_0.png" />
 </div>
+</div>
+<div class="key admonition">
+<p class="admonition-title">Key Points</p>
+<ul class="simple">
+<li><p>Statsmodels allows you to specify your equations using data frames and column names.</p></li>
+<li><p>Calling <code class="docutils literal notranslate"><span class="pre">.summary</span></code>. on the fit gives you a summary of the fit and parameters.</p></li>
+<li><p>You can use <code class="docutils literal notranslate"><span class="pre">.predict</span></code> to predict new values using the fitted model.</p></li>
+<li><p>You must give the predict method a dataframe with the same column names as the original dataframe.</p></li>
+</ul>
 </div>
 </section>
 </section>
@@ -1050,7 +1059,7 @@ dtype: float64
         },
         kernelOptions: {
             kernelName: "python3",
-            path: "./."
+            path: "./data_fitting"
         },
         predefinedOutput: true
     }
@@ -1064,6 +1073,20 @@ dtype: float64
                 
     <!-- Previous / next buttons -->
 <div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="linear-scikitlearn.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">Linear Fitting with SciKit Learn</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="homework-linear-fit.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Session 3 Homework</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
 </div>
             </footer>
         </div>
@@ -1085,7 +1108,7 @@ dtype: float64
     </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+  <script src="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
 
 
   </body>
