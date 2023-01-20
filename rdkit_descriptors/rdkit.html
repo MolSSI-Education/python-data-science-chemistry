@@ -479,15 +479,32 @@ title="Print to PDF"
   <a class="reference internal nav-link" href="#creating-molecules-with-rdkit">
    Creating Molecules with RDKit
   </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#creating-molecules-using-strings-smiles">
+     Creating molecules using strings - SMILES
+    </a>
+   </li>
+  </ul>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#retrieving-molecule-information">
-   Retrieving Molecule Information
+  <a class="reference internal nav-link" href="#creating-more-complicated-molecules">
+   Creating More Complicated Molecules
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#working-with-molecules">
+   Working with Molecules
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#molecular-descriptors">
    Molecular Descriptors
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#stereochemistry">
+   Stereochemistry
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
@@ -518,15 +535,32 @@ title="Print to PDF"
   <a class="reference internal nav-link" href="#creating-molecules-with-rdkit">
    Creating Molecules with RDKit
   </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#creating-molecules-using-strings-smiles">
+     Creating molecules using strings - SMILES
+    </a>
+   </li>
+  </ul>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#retrieving-molecule-information">
-   Retrieving Molecule Information
+  <a class="reference internal nav-link" href="#creating-more-complicated-molecules">
+   Creating More Complicated Molecules
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#working-with-molecules">
+   Working with Molecules
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#molecular-descriptors">
    Molecular Descriptors
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#stereochemistry">
+   Stereochemistry
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
@@ -546,6 +580,19 @@ title="Print to PDF"
                 
   <section class="tex2jax_ignore mathjax_ignore" id="introduction-to-rdkit">
 <h1>Introduction to RDKit<a class="headerlink" href="#introduction-to-rdkit" title="Permalink to this headline">#</a></h1>
+<div class="overview admonition">
+<p class="admonition-title">Overview</p>
+<p>Questions:</p>
+<ul class="simple">
+<li><p>What is RDKit?</p></li>
+<li><p>How can I get molecule information in Python?</p></li>
+<li><p>What is a molecular descriptor?</p></li>
+</ul>
+<p>Objectives:</p>
+<ul class="simple">
+<li><p>Use RDKit to create molecules in Python</p></li>
+</ul>
+</div>
 <p>There are also libraries in Python that are made for working just with chemical data. One commonly used library in Python for data science (or cheminformatics) is called RDKit.</p>
 <p>RDKit lets us create variables which represent molecules and retrieve information about the molecules.</p>
 <p>We are going to use a part of RDKit called <code class="docutils literal notranslate"><span class="pre">Chem</span></code>. To use <code class="docutils literal notranslate"><span class="pre">Chem</span></code>, we first have to import it.</p>
@@ -558,8 +605,10 @@ title="Print to PDF"
 </div>
 <section id="creating-molecules-with-rdkit">
 <h2>Creating Molecules with RDKit<a class="headerlink" href="#creating-molecules-with-rdkit" title="Permalink to this headline">#</a></h2>
-<p>To get information about molecules in RDKit, we have to have RDKit retreive the information. The molecule name has to be communicated to RDKit in a way that computers understand. We could open info from molecular file formats like <code class="docutils literal notranslate"><span class="pre">mol</span></code>.</p>
-<p>We are going to use a format called SMILES. SMILES stands for “Simplified Molecular-Input Line-entry System” and is a string representation of a molecule. You usually will be looking up SMILES or having a program generate them for you.</p>
+<p>To get information about molecules in RDKit, we have to first create variables representing molecules. RDKit has molecule object that can be used to retrieve information or calculate properties. First, the molecule name has to be communicated to RDKit in a way that computers understand.</p>
+<section id="creating-molecules-using-strings-smiles">
+<h3>Creating molecules using strings - SMILES<a class="headerlink" href="#creating-molecules-using-strings-smiles" title="Permalink to this headline">#</a></h3>
+<p>We are going to use a format called <a class="reference external" href="https://en.wikipedia.org/wiki/Simplified_molecular-input_line-entry_system">SMILES</a>. SMILES stands for “Simplified Molecular-Input Line-entry System” and is a string representation of a molecule. You usually will be looking up SMILES or having a program generate them for you. We could also open info from molecular file formats like <code class="docutils literal notranslate"><span class="pre">mol</span></code>.</p>
 <p>In SMILES, if we want methane, we specify that with “C”. We can create a representation of methane using RDKit by using the <code class="docutils literal notranslate"><span class="pre">MolFromSmiles</span></code> function in <code class="docutils literal notranslate"><span class="pre">rdkit.Chem</span></code>.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -578,9 +627,63 @@ title="Print to PDF"
 <img alt="../_images/rdkit_4_0.png" src="../_images/rdkit_4_0.png" />
 </div>
 </div>
+<p>You can see more information on this <a class="reference external" href="https://archive.epa.gov/med/med_archive_03/web/html/smiles.html">Guide to SMILES</a>.
+Usually, you will be able to look up the SMILES strings for your molecule of interest using something like <a class="reference external" href="https://pubchem.ncbi.nlm.nih.gov/">PubChem</a>, although you can also write SMILES by hand.</p>
+<div class="exercise admonition">
+<p class="admonition-title">Check Your Understanding</p>
+<p>Create RDKit molecules for the following molecules:</p>
+<ol class="simple">
+<li><p>Propane</p></li>
+<li><p>Ethene</p></li>
+<li><p>Cyclohexane</p></li>
+<li><p>A molecule of your choice.</p></li>
+</ol>
+</div>
 </section>
-<section id="retrieving-molecule-information">
-<h2>Retrieving Molecule Information<a class="headerlink" href="#retrieving-molecule-information" title="Permalink to this headline">#</a></h2>
+</section>
+<section id="creating-more-complicated-molecules">
+<h2>Creating More Complicated Molecules<a class="headerlink" href="#creating-more-complicated-molecules" title="Permalink to this headline">#</a></h2>
+<p>We can look up SMILES of our molecules of choice on websites like <a class="reference external" href="https://pubchem.ncbi.nlm.nih.gov/">PubChem</a>.
+See the examples below for <a class="reference external" href="https://pubchem.ncbi.nlm.nih.gov/compound/6140#section=Canonical-SMILES">phenylalanine</a> and
+<a class="reference external" href="https://pubchem.ncbi.nlm.nih.gov/compound/241#section=Canonical-SMILES">benzene</a>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># this phenylalanine uses canonical smiles (no stereochemistry information)</span>
+<span class="n">phenylalanine</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">MolFromSmiles</span><span class="p">(</span><span class="s2">&quot;C1=CC=C(C=C1)CC(C(=O)O)N&quot;</span><span class="p">)</span>
+<span class="n">phenylalanine</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/rdkit_7_0.png" src="../_images/rdkit_7_0.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># phenyalanine using isomeric smiles</span>
+<span class="n">l_phenylalanine</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">MolFromSmiles</span><span class="p">(</span><span class="s2">&quot;C1=CC=C(C=C1)C[C@@H](C(=O)O)N&quot;</span><span class="p">)</span>
+<span class="n">l_phenylalanine</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/rdkit_8_0.png" src="../_images/rdkit_8_0.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">benzene</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">MolFromSmiles</span><span class="p">(</span><span class="s2">&quot;c1ccccc1&quot;</span><span class="p">)</span>
+<span class="n">benzene</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/rdkit_9_0.png" src="../_images/rdkit_9_0.png" />
+</div>
+</div>
+</section>
+<section id="working-with-molecules">
+<h2>Working with Molecules<a class="headerlink" href="#working-with-molecules" title="Permalink to this headline">#</a></h2>
 <p>RDKit will allow us to access information about our molecule. For example, we can have RDKit tell us the number of atoms in our molecule.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -609,28 +712,42 @@ title="Print to PDF"
 </div>
 </div>
 </div>
-<div class="exercise-this-is-a-title exercise">
-    <p class="exercise-title">Check Your Understanding</p>
-    <p>Create a molecule called ethane and print the number of atoms. The SMILES for ethane is `CC`.</p>
-<div class="dropdown admonition">
-<p class="admonition-title">Answer</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ethane</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">MolFromSmiles</span><span class="p">(</span><span class="s2">&quot;CC&quot;</span><span class="p">)</span>
-<span class="n">num_ethane_h</span> <span class="o">=</span> <span class="n">ethane</span><span class="o">.</span><span class="n">GetNumAtoms</span><span class="p">(</span><span class="n">onlyHeavy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Ethane has </span><span class="si">{</span><span class="n">num_ethane_h</span><span class="si">}</span><span class="s2"> atoms.&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div><div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ethanol</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">MolFromSmiles</span><span class="p">(</span><span class="s2">&quot;CCO&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
 <p>We can also get information about atoms or  bonds from RDKit molecules. We can use the <code class="docutils literal notranslate"><span class="pre">GetAtoms()</span></code> function, then use a loop to look at the atoms.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">atom</span> <span class="ow">in</span> <span class="n">ethanol</span><span class="o">.</span><span class="n">GetAtoms</span><span class="p">():</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ethanol</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">MolFromSmiles</span><span class="p">(</span><span class="s2">&quot;CCO&quot;</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">atom</span> <span class="ow">in</span> <span class="n">ethanol</span><span class="o">.</span><span class="n">GetAtoms</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">atom</span><span class="o">.</span><span class="n">GetSymbol</span><span class="p">(),</span> <span class="n">atom</span><span class="o">.</span><span class="n">GetMass</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>C 12.011
+C 12.011
+O 15.999
+</pre></div>
+</div>
+</div>
+</div>
+<p>Like the previous example, the molecule does not have hydrogens by default.
+If you need to work with the hydrogens, you can use a function to add them.
+Now, when we look through the atoms, we get the hydrogens as well.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ethanol_h</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">AddHs</span><span class="p">(</span><span class="n">ethanol</span><span class="p">)</span>
+
+<span class="n">ethanol_h</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/rdkit_17_0.png" src="../_images/rdkit_17_0.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">atom</span> <span class="ow">in</span> <span class="n">ethanol_h</span><span class="o">.</span><span class="n">GetAtoms</span><span class="p">():</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">atom</span><span class="o">.</span><span class="n">GetSymbol</span><span class="p">())</span>
 </pre></div>
 </div>
@@ -639,11 +756,17 @@ title="Print to PDF"
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>C
 C
 O
+H
+H
+H
+H
+H
+H
 </pre></div>
 </div>
 </div>
 </div>
-<p>or, get information about the bonds.</p>
+<p>Similarly, you can use the <code class="docutils literal notranslate"><span class="pre">GetBonds</span></code> method to get the bonds in a molecule.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">bond</span> <span class="ow">in</span> <span class="n">ethanol</span><span class="o">.</span><span class="n">GetBonds</span><span class="p">():</span>
@@ -658,53 +781,199 @@ SINGLE
 </div>
 </div>
 </div>
-<p>In the SMILES format, <code class="docutils literal notranslate"><span class="pre">=</span></code> signifies a double bond, and <code class="docutils literal notranslate"><span class="pre">#</span></code> signifies a triple bond.</p>
-<p>For example, to create ethene or ehtyne</p>
+<p>You can see the methods available on atoms and bonds by using the <code class="docutils literal notranslate"><span class="pre">dir</span></code> method in Python.
+The <code class="docutils literal notranslate"><span class="pre">dir</span></code> method is built-in and will tell you what attributes and methods are available on an object.</p>
+<p>Note that the <code class="docutils literal notranslate"><span class="pre">atom</span></code> and <code class="docutils literal notranslate"><span class="pre">bond</span></code> variables used in the code blocks below are from our previous <code class="docutils literal notranslate"><span class="pre">for</span></code> loops.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ethene</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">MolFromSmiles</span><span class="p">(</span><span class="s2">&quot;C=C&quot;</span><span class="p">)</span>
-<span class="n">ethyne</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">MolFromSmiles</span><span class="p">(</span><span class="s2">&quot;C#C&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ethyne</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">dir</span><span class="p">(</span><span class="n">atom</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/rdkit_17_0.png" src="../_images/rdkit_17_0.png" />
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&#39;ClearProp&#39;,
+ &#39;DescribeQuery&#39;,
+ &#39;GetAtomMapNum&#39;,
+ &#39;GetAtomicNum&#39;,
+ &#39;GetBonds&#39;,
+ &#39;GetBoolProp&#39;,
+ &#39;GetChiralTag&#39;,
+ &#39;GetDegree&#39;,
+ &#39;GetDoubleProp&#39;,
+ &#39;GetExplicitBitVectProp&#39;,
+ &#39;GetExplicitValence&#39;,
+ &#39;GetFormalCharge&#39;,
+ &#39;GetHybridization&#39;,
+ &#39;GetIdx&#39;,
+ &#39;GetImplicitValence&#39;,
+ &#39;GetIntProp&#39;,
+ &#39;GetIsAromatic&#39;,
+ &#39;GetIsotope&#39;,
+ &#39;GetMass&#39;,
+ &#39;GetMonomerInfo&#39;,
+ &#39;GetNeighbors&#39;,
+ &#39;GetNoImplicit&#39;,
+ &#39;GetNumExplicitHs&#39;,
+ &#39;GetNumImplicitHs&#39;,
+ &#39;GetNumRadicalElectrons&#39;,
+ &#39;GetOwningMol&#39;,
+ &#39;GetPDBResidueInfo&#39;,
+ &#39;GetProp&#39;,
+ &#39;GetPropNames&#39;,
+ &#39;GetPropsAsDict&#39;,
+ &#39;GetQueryType&#39;,
+ &#39;GetSmarts&#39;,
+ &#39;GetSymbol&#39;,
+ &#39;GetTotalDegree&#39;,
+ &#39;GetTotalNumHs&#39;,
+ &#39;GetTotalValence&#39;,
+ &#39;GetUnsignedProp&#39;,
+ &#39;HasOwningMol&#39;,
+ &#39;HasProp&#39;,
+ &#39;HasQuery&#39;,
+ &#39;InvertChirality&#39;,
+ &#39;IsInRing&#39;,
+ &#39;IsInRingSize&#39;,
+ &#39;Match&#39;,
+ &#39;NeedsUpdatePropertyCache&#39;,
+ &#39;SetAtomMapNum&#39;,
+ &#39;SetAtomicNum&#39;,
+ &#39;SetBoolProp&#39;,
+ &#39;SetChiralTag&#39;,
+ &#39;SetDoubleProp&#39;,
+ &#39;SetExplicitBitVectProp&#39;,
+ &#39;SetFormalCharge&#39;,
+ &#39;SetHybridization&#39;,
+ &#39;SetIntProp&#39;,
+ &#39;SetIsAromatic&#39;,
+ &#39;SetIsotope&#39;,
+ &#39;SetMonomerInfo&#39;,
+ &#39;SetNoImplicit&#39;,
+ &#39;SetNumExplicitHs&#39;,
+ &#39;SetNumRadicalElectrons&#39;,
+ &#39;SetPDBResidueInfo&#39;,
+ &#39;SetProp&#39;,
+ &#39;SetUnsignedProp&#39;,
+ &#39;UpdatePropertyCache&#39;,
+ &#39;__class__&#39;,
+ &#39;__copy__&#39;,
+ &#39;__delattr__&#39;,
+ &#39;__dict__&#39;,
+ &#39;__dir__&#39;,
+ &#39;__doc__&#39;,
+ &#39;__eq__&#39;,
+ &#39;__format__&#39;,
+ &#39;__ge__&#39;,
+ &#39;__getattribute__&#39;,
+ &#39;__getstate__&#39;,
+ &#39;__gt__&#39;,
+ &#39;__hash__&#39;,
+ &#39;__init__&#39;,
+ &#39;__init_subclass__&#39;,
+ &#39;__instance_size__&#39;,
+ &#39;__le__&#39;,
+ &#39;__lt__&#39;,
+ &#39;__module__&#39;,
+ &#39;__ne__&#39;,
+ &#39;__new__&#39;,
+ &#39;__reduce__&#39;,
+ &#39;__reduce_ex__&#39;,
+ &#39;__repr__&#39;,
+ &#39;__setattr__&#39;,
+ &#39;__sizeof__&#39;,
+ &#39;__str__&#39;,
+ &#39;__subclasshook__&#39;,
+ &#39;__weakref__&#39;]
+</pre></div>
 </div>
 </div>
-<p>You can find SMILES for more complicated online on websites like <a class="reference external" href="https://pubchem.ncbi.nlm.nih.gov/">PubChem</a>.</p>
+</div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">phenylalanine</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">MolFromSmiles</span><span class="p">(</span><span class="s2">&quot;C1=CC=C(C=C1)CC(C(=O)O)N&quot;</span><span class="p">)</span>
-<span class="n">phenylalanine</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">dir</span><span class="p">(</span><span class="n">bond</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/rdkit_19_0.png" src="../_images/rdkit_19_0.png" />
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">benzene</span> <span class="o">=</span> <span class="n">Chem</span><span class="o">.</span><span class="n">MolFromSmiles</span><span class="p">(</span><span class="s2">&quot;c1ccccc1&quot;</span><span class="p">)</span>
-<span class="n">benzene</span>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&#39;ClearProp&#39;,
+ &#39;DescribeQuery&#39;,
+ &#39;GetBeginAtom&#39;,
+ &#39;GetBeginAtomIdx&#39;,
+ &#39;GetBondDir&#39;,
+ &#39;GetBondType&#39;,
+ &#39;GetBondTypeAsDouble&#39;,
+ &#39;GetBoolProp&#39;,
+ &#39;GetDoubleProp&#39;,
+ &#39;GetEndAtom&#39;,
+ &#39;GetEndAtomIdx&#39;,
+ &#39;GetIdx&#39;,
+ &#39;GetIntProp&#39;,
+ &#39;GetIsAromatic&#39;,
+ &#39;GetIsConjugated&#39;,
+ &#39;GetOtherAtom&#39;,
+ &#39;GetOtherAtomIdx&#39;,
+ &#39;GetOwningMol&#39;,
+ &#39;GetProp&#39;,
+ &#39;GetPropNames&#39;,
+ &#39;GetPropsAsDict&#39;,
+ &#39;GetSmarts&#39;,
+ &#39;GetStereo&#39;,
+ &#39;GetStereoAtoms&#39;,
+ &#39;GetUnsignedProp&#39;,
+ &#39;GetValenceContrib&#39;,
+ &#39;HasOwningMol&#39;,
+ &#39;HasProp&#39;,
+ &#39;HasQuery&#39;,
+ &#39;IsInRing&#39;,
+ &#39;IsInRingSize&#39;,
+ &#39;Match&#39;,
+ &#39;SetBondDir&#39;,
+ &#39;SetBondType&#39;,
+ &#39;SetBoolProp&#39;,
+ &#39;SetDoubleProp&#39;,
+ &#39;SetIntProp&#39;,
+ &#39;SetIsAromatic&#39;,
+ &#39;SetIsConjugated&#39;,
+ &#39;SetProp&#39;,
+ &#39;SetStereo&#39;,
+ &#39;SetStereoAtoms&#39;,
+ &#39;SetUnsignedProp&#39;,
+ &#39;__class__&#39;,
+ &#39;__delattr__&#39;,
+ &#39;__dict__&#39;,
+ &#39;__dir__&#39;,
+ &#39;__doc__&#39;,
+ &#39;__eq__&#39;,
+ &#39;__format__&#39;,
+ &#39;__ge__&#39;,
+ &#39;__getattribute__&#39;,
+ &#39;__getstate__&#39;,
+ &#39;__gt__&#39;,
+ &#39;__hash__&#39;,
+ &#39;__init__&#39;,
+ &#39;__init_subclass__&#39;,
+ &#39;__le__&#39;,
+ &#39;__lt__&#39;,
+ &#39;__module__&#39;,
+ &#39;__ne__&#39;,
+ &#39;__new__&#39;,
+ &#39;__reduce__&#39;,
+ &#39;__reduce_ex__&#39;,
+ &#39;__repr__&#39;,
+ &#39;__setattr__&#39;,
+ &#39;__sizeof__&#39;,
+ &#39;__str__&#39;,
+ &#39;__subclasshook__&#39;,
+ &#39;__weakref__&#39;]
 </pre></div>
 </div>
-</div>
-<div class="cell_output docutils container">
-<img alt="../_images/rdkit_20_0.png" src="../_images/rdkit_20_0.png" />
 </div>
 </div>
 </section>
 <section id="molecular-descriptors">
 <h2>Molecular Descriptors<a class="headerlink" href="#molecular-descriptors" title="Permalink to this headline">#</a></h2>
-<p>RDKit has a module for retrieving molecular descriptors. Molecular descriptors are properties of molecules which can be analyzed using statistical methods to make predictions about molecular properties.</p>
+<p>Molecular descriptors are properties of molecules which can be analyzed using statistical methods to make predictions about molecular properties. You can see a <a class="reference external" href="https://www.rdkit.org/docs/GettingStartedInPython.html#list-of-available-descriptors">full list of RDKit descriptors</a> or <a class="reference external" href="https://www.rdkit.org/docs/source/rdkit.Chem.Descriptors.html">see the module documentation</a>.
+RDKit has a module which can be used to retrieve and calculate molecular descriptors.</p>
 <p>To get molecular descriptors from RDKit, we import the <code class="docutils literal notranslate"><span class="pre">Descriptors</span></code> module.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -729,14 +998,14 @@ And many others!</p></li>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Printing info for benzene&quot;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Printing info for benzene:&quot;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;The molecular weight is </span><span class="si">{</span><span class="n">Descriptors</span><span class="o">.</span><span class="n">MolWt</span><span class="p">(</span><span class="n">benzene</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;The number of aromatic rings is </span><span class="si">{</span><span class="n">Descriptors</span><span class="o">.</span><span class="n">NumAromaticRings</span><span class="p">(</span><span class="n">benzene</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Printing info for benzene
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Printing info for benzene:
 The molecular weight is 78.11399999999999
 The number of aromatic rings is 1
 </pre></div>
@@ -744,9 +1013,78 @@ The number of aromatic rings is 1
 </div>
 </div>
 </section>
+<section id="stereochemistry">
+<h2>Stereochemistry<a class="headerlink" href="#stereochemistry" title="Permalink to this headline">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Can tell us how many stereocenters</span>
+<span class="n">Chem</span><span class="o">.</span><span class="n">rdMolDescriptors</span><span class="o">.</span><span class="n">CalcNumAtomStereoCenters</span><span class="p">(</span><span class="n">phenylalanine</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Can tell us the atom number and the orientation</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">Chem</span><span class="o">.</span><span class="n">FindMolChiralCenters</span><span class="p">(</span><span class="n">phenylalanine</span><span class="p">,</span> <span class="n">includeUnassigned</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">Chem</span><span class="o">.</span><span class="n">FindMolChiralCenters</span><span class="p">(</span><span class="n">l_phenylalanine</span><span class="p">,</span> <span class="n">includeUnassigned</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[(7, &#39;?&#39;)]
+[(7, &#39;S&#39;)]
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Can generate stereoisomers</span>
+<span class="kn">from</span> <span class="nn">rdkit.Chem.EnumerateStereoisomers</span> <span class="kn">import</span> <span class="n">EnumerateStereoisomers</span><span class="p">,</span> <span class="n">StereoEnumerationOptions</span>
+
+<span class="n">stereo</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">EnumerateStereoisomers</span><span class="p">(</span><span class="n">phenylalanine</span><span class="p">))</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Generated </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">stereo</span><span class="p">)</span><span class="si">}</span><span class="s2"> stereoisomers.&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Generated 2 stereoisomers.
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">stereo</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/rdkit_32_0.png" src="../_images/rdkit_32_0.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">stereo</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/rdkit_33_0.png" src="../_images/rdkit_33_0.png" />
+</div>
+</div>
+</section>
 <section id="substructure-search">
 <h2>Substructure Search<a class="headerlink" href="#substructure-search" title="Permalink to this headline">#</a></h2>
-<p>RDKit can do a lot. One thing you can do are substructure searches. You can identify when molecules contain other molecules. Let’s try this with benzene and phenylalanine.</p>
+<p>RDKit can do a lot that is beyond the scope of this workshop, including calculating molecular fingerprints, similarity scores, and chemical reactions.
+One thing you can do are substructure searches. You can identify when molecules contain other molecules. Let’s try this with benzene and phenylalanine.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">matches</span> <span class="o">=</span> <span class="n">phenylalanine</span><span class="o">.</span><span class="n">GetSubstructMatches</span><span class="p">(</span><span class="n">benzene</span><span class="p">)</span>
@@ -755,8 +1093,31 @@ The number of aromatic rings is 1
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/rdkit_26_0.png" src="../_images/rdkit_26_0.png" />
+<img alt="../_images/rdkit_35_0.png" src="../_images/rdkit_35_0.png" />
 </div>
+</div>
+<p>The returned value is a tuple of atom indices which represent the match(es) found.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">matches</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>((0, 1, 2, 3, 4, 5),)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="exercise admonition">
+<p class="admonition-title">Exercise</p>
+<p>Buckminsterfullerene, with chemical formula C60, is made up entirely of five membered and six-membered rings.</p>
+<p>For this exercise, you should</p>
+<ol class="simple">
+<li><p>Create a molecule representing buckminsterfullerene (Find the SMILES on PubChem).</p></li>
+<li><p>Perform a substructure search to find the number of benzenes in the molecule.</p></li>
+<li><p>Calculate the number of aromatic bonds.</p></li>
+</ol>
 </div>
 </section>
 </section>
