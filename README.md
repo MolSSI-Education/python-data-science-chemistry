@@ -1,6 +1,6 @@
-# MolSSI Workshop
+# Python for Data Science in Chemistry
 
-This is a Jupyter book template for molssi workshops
+This Jupyter book covers processing and analyzing chemistry data using Python Data libraries such as pandas, numpy, matplotlib, seaborn, and scikitlearn.
 
 ## Usage
 

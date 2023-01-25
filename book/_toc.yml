@@ -21,11 +21,12 @@ chapters:
   sections:
     - file: visualization/seaborn
     - file: visualization/interactive
-- file: scikitlearn_fitting
+- file: data_fitting
   sections:
-    - file: scikitlearn_fitting/linear-scikitlearn
-    - file: scikitlearn_fitting/homework-linear-fit
-    - file: scikitlearn_fitting/random-forest-scikitlearn
+    - file: data_fitting/linear-scikitlearn
+    - file: data_fitting/linear-statsmodels
+    - file: data_fitting/homework-linear-fit
+    - file: data_fitting/random-forest-scikitlearn
 - file: rdkit_descriptors
   sections:
     - file: rdkit_descriptors/rdkit
